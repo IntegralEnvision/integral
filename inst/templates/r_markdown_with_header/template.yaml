@@ -1,0 +1,4 @@
+name: Integral RMarkdown with Header
+description: >
+   Open a new RMarkdown file with standard Integral header
+create_dir: FALSE
