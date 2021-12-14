@@ -10,7 +10,13 @@
     <loc>https://integralenvision.github.io/integral/index.html</loc>
   </url>
   <url>
+    <loc>https://integralenvision.github.io/integral/news/index.html</loc>
+  </url>
+  <url>
     <loc>https://integralenvision.github.io/integral/reference/ic_new_r_file.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/reference/idf.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral/reference/ig_new_rmd_file.html</loc>
@@ -23,6 +29,12 @@
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/reference/si_news.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/reference/si_update.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral/reference/state_locations.html</loc>
