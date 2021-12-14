@@ -1,6 +1,6 @@
 #' idf
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' This is a shortcut for interactive data exploration that makes it easy to
 #' filter rows that match a value in the key column of a tibble.
 #'

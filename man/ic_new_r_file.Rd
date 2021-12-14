@@ -2,7 +2,8 @@
 % Please edit documentation in R/templates.R
 \name{ic_new_r_file}
 \alias{ic_new_r_file}
-\title{Start a new R script with header}
+\title{Start a new R script with header
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}}
 \usage{
 ic_new_r_file(filepath)
 }

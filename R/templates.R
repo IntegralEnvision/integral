@@ -1,4 +1,5 @@
 #' Start a new R script with header
+#' `r lifecycle::badge('experimental')`
 #' @description Creates a new R script with header
 #' @param filepath File to be created. If path is not included, it will be created in the current working directory.
 #' @examples
@@ -14,6 +15,7 @@ ic_new_r_file <- function(filepath) {
 
 #' Start a new RMarkdown document with Integral header
 #' @description Drafts a new RMarkdown document with Integral header
+#' `r lifecycle::badge('experimental')`
 #' @param filepath File to be created. If path isn't provided, working directory is used.
 #' @examples
 #' \dontrun{
