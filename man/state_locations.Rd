@@ -13,6 +13,6 @@ state_locations(albers = TRUE)
 Table with relative location of each state
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Returns a table of state names, state abbreviations, and the location of each state.
 }

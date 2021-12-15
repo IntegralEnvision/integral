@@ -3,7 +3,7 @@
 #' `r lifecycle::badge('experimental')`
 #' Automatically unloads, updates, and reloads the integral package.
 #' @export
-si_update <- function() {
+ic_update <- function() {
   old_version <- packageVersion("integral")
 
   if(remotes:::local_sha("integral") == remotes:::remote_sha(structure(remotes:::package2remote("integral"), class = "github_remote"))) return(cli::cli_alert_success("Package is already up to date."))
@@ -17,7 +17,7 @@ si_update <- function() {
   new_version <- packageVersion("integral")
 
   if(old_version != new_version) {
-    #integral::si_news() #Removed for now.
+    #integral::ic_news() #Removed for now.
     #See: https://github.com/jimhester/devtools/commit/f2f077b6c8c8180ae71c53d6fb6744368c5225b7
     #and: https://github.com/r-lib/devtools/issues/942
     cli::cat_line()
@@ -26,9 +26,9 @@ si_update <- function() {
       center = paste0("Major Update"),
       line_col = "red"
     ))
-    #cli::cli_alert_info("New features added. Run \`si_news()\` to view notes.")
-    si_news()
-    cli::cli_alert_info("Run \`si_news(all = T)\` to view previous update news.")
+    #cli::cli_alert_info("New features added. Run \`ic_news()\` to view notes.")
+    ic_news()
+    cli::cli_alert_info("Run \`ic_news(all = T)\` to view previous update news.")
 
   } else {
     cli::cat_line()
@@ -74,7 +74,7 @@ get_os <- function(){
 #' Shows the news for the package
 #' @param all Logical. Show all previous news in viewer. Defaults to FALSE.
 #' @export
-si_news <- function(all = FALSE) {
+ic_news <- function(all = FALSE) {
 
   if(all) {
     news(package = "integral")

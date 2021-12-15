@@ -1,6 +1,6 @@
 #' Identify the location of states to facilitate direction of popups.
 #' @description
-#' \lifecycle{experimental}
+#'`r lifecycle::badge('experimental')`
 #' Returns a table of state names, state abbreviations, and the location of each state.
 #' @param albers specify whether the map being used is shifted to albers. Defaults to TRUE.
 #' @return Table with relative location of each state
