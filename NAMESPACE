@@ -2,6 +2,7 @@
 
 export("%>%")
 export(cheat)
+export(huck)
 export(ic_new_r_file)
 export(ic_news)
 export(ic_update)
