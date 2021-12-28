@@ -6,7 +6,7 @@
 #' @export
 cheat <- function(sheet = NULL) {
 
-  if(!UseMethod(hasArg(sheet))) {
+  if (!methods::hasArg(fpath)) {
     cli::cli_alert_info("Please select cheetsheet:")
     sheet <- utils::select.list(choices = dir(system.file("extdata/cheatsheets", package = "integral")))
   }
