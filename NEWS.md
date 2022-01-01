@@ -1,6 +1,4 @@
-# integral (development version)
-
-# integral 0.0.2.9000
+# integral 0.0.2.9001
 
 * Added `%ni%` (not in), the opposite of %in%
 * Added `xview()` which opens a table in Excel.  
