@@ -39,7 +39,7 @@ ic_update <- function() {
     ))
 
     cli::cat_line()
-    cli::cli_alert_info("Minor update, no new features added.  Run \'integral_news(all = T)\` to view changelog for previous major updates.")
+    cli::cli_alert_info("Minor update, no new features added.  Run \'ic_news(all = T)\` to view changelog for previous major updates.")
     cli::cat_line()
   }
 }
