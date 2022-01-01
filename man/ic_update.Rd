@@ -7,6 +7,6 @@
 ic_update()
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\lifecycle{experimental}
 Automatically unloads, updates, and reloads the integral package.
 }

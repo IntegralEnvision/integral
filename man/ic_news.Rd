@@ -10,6 +10,6 @@ ic_news(all = FALSE)
 \item{all}{Logical. Show all previous news in viewer. Defaults to FALSE.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\lifecycle{experimental}
 Shows the news for the package
 }

@@ -1,6 +1,6 @@
 #' idf
 #' @description
-#' `r lifecycle::badge('experimental')`
+#' \lifecycle{experimental}
 #' This is a shortcut for interactive data exploration that makes it easy to
 #' filter rows that match a value in the key column of a tibble.
 #'
@@ -64,3 +64,51 @@ idf <- function(.data, id = .last_id, glimpse = F) {
   else result
 
 }
+
+
+
+#' common_vars
+#' @description
+#' \lifecycle{experimental}
+#' Shows the variable names that are in common between two or more tibbles.
+#' @param ... Bare, unquoted tibble object names.
+#' @export
+common_vars <- function(...) {
+
+  objects <- lst(...)
+
+  if(length(objects) < 2) stop("At least two objects required.")
+
+  varnames <- map(objects, function(var) {
+    enframe(names(var), name = NULL, value = "name")
+  }) %>% bind_rows(.id = "object")
+
+  varnames %>%
+    add_column(present = T) %>%
+    complete(name, object) %>%
+    pivot_wider(names_from = object, values_from = present)
+}
+
+
+#' View selected data frame
+#'
+#' The RStudio Environment pane variable name column is too narrow for long
+#' names, so it can be difficult to find the right data frame in long list of similar
+#' names. Select the variable and use shortcut to use data viewer on it.
+#'
+#' Stolen from: https://github.com/dracodoc/mischelper/blob/master/R/misc.R
+#' @export
+
+view_df <- function(){
+  context <- rstudioapi::getActiveDocumentContext()
+  selection_start <- context$selection[[1]]$range$start
+  selection_end <- context$selection[[1]]$range$end
+  if (any(selection_start != selection_end)) { # text selected
+    selected <- context$selection[[1]]$text
+    # this will show "View(get(selected))" in viewer, not optimal
+    # View(get(selected))
+    formated <- stringr::str_c("View(", selected, ')')
+    rstudioapi::sendToConsole(formated, execute = TRUE)
+  }
+}
+

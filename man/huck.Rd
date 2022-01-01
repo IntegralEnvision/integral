@@ -4,12 +4,17 @@
 \alias{huck}
 \title{Remove a named list element}
 \usage{
-huck(.x, element)
+huck(.data, ...)
 }
 \arguments{
-\item{element_name}{Name of the element to remove}
+\item{...}{Unquoted variable names to search for duplicates. This takes a tidyselect specification (starts_with, contains, ends_with, etc).}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\lifecycle{experimental}
 Opposite of \code{purrr::pluck()}.  Returns the original list without the element.
+}
+\examples{
+x <- lst(a = mtcars, b = diamonds, aaa = mtcars)
+x \%>\% huck(a)
+x \%>\% huck(starts_with("a"))
 }

@@ -19,7 +19,7 @@ object and does not need to be specified again.}
 The data filtered by the key value on the key column stored in options("idf_data_key")
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\lifecycle{experimental}
 This is a shortcut for interactive data exploration that makes it easy to
 filter rows that match a value in the key column of a tibble.
 
