@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">integral</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,10 +39,31 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9000" id="integral-0009000">integral 0.0.0.9000<a class="anchor" aria-label="anchor" href="#integral-0009000"></a></h2>
-<ul><li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+<h2 class="pkg-version" data-toc-text="0.0.2.9000" id="integral-0029000">integral 0.0.2.9000<a class="anchor" aria-label="anchor" href="#integral-0029000"></a></h2>
+<ul><li>Added <code>%ni%</code> (not in), the opposite of %in%</li>
+<li>Added <code><a href="../reference/xview.html">xview()</a></code> which opens a table in Excel.<br></li>
+<li>Added interactive helper <code><a href="../reference/common_vars.html">common_vars()</a></code>, which shows common variable names between two or more tibbles.</li>
+<li>Added interactive helper <code><a href="../reference/wc.html">wc()</a></code> (write clip) which copies an object to the clipboard. If no object is passed, it defaults to <code>.Last.value</code>.</li>
+<li>Added <code><a href="../reference/huck.html">huck()</a></code>, a negation of <code><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">purrr::pluck()</a></code> which discards an element from a list using tidyselect specifications.</li>
+<li>Added <code><a href="../reference/deselect.html">deselect()</a></code>, a negation of <code>dplyr::select()</code> (ie <code>select(-c(...))</code>) since wrapping tidyselect vars in c() annoys me.</li>
+<li>Added <code><a href="../reference/fct_case_when.html">fct_case_when()</a></code>, an implementation of <code>dplyr::case_when()</code> where the output is an ordered factor in the order of the conditions.</li>
+<li>Added <code><a href="../reference/zscore.html">zscore()</a></code> as a convenience function wrapper around <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code> that returns a vector instead of a matrix.</li>
 </ul></div>
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.1.9000" id="integral-0019000">integral 0.0.1.9000<a class="anchor" aria-label="anchor" href="#integral-0019000"></a></h2>
+<ul><li>Added beta version of interactive helper <code><a href="../reference/cheat.html">cheat()</a></code> which lists cheatsheets and opens the selected one.</li>
+<li>Added interactive helper <code><a href="../reference/idf.html">idf()</a></code> (ID filter). This function makes it easy to filter on a key column in multiple tables from the same dataset. The key column is set in options (function will ask for it if it is not set already) so that it isn’t necessary to type it with each call, and the previous key value is is used until it is updated. See ?idf for details.</li>
+<li>Added <code><a href="../reference/state_locations.html">state_locations()</a></code> which returns a tibble of the location of U.S. states on a map (top, middle, bottom) and can handle Albers. Useful for dynamically adjusting pop-up directions (above/below) on maps to prevent panning.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.0.9000" id="integral-0009000">integral 0.0.0.9000<a class="anchor" aria-label="anchor" href="#integral-0009000"></a></h2>
+<ul><li>Added <code>ic_update</code> which checks for a new dev version of <code>integral</code> on github, and if found automatically unloads <code>integral</code>, downloads the new version and installs it, and reloads <code>integral</code>.</li>
+<li>Added loading message that informs the user if there is a new version of <code>integral</code>
+</li>
+<li>Added <code><a href="../reference/ic_news.html">ic_news()</a></code> which shows news updates for version bumps</li>
+</ul></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
