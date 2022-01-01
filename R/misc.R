@@ -10,7 +10,7 @@ wc <- function(x = .Last.value) {
 
 #' Not In: Inverse Value Matching
 #' @description
-#' \lifecycle{stable}
+#' `r lifecycle::badge('stable')`
 #' Returns a logical vector indicating if there is NOT a match for the LHS vector anywhere in the RHS vector. Opposide of \code{\%in\%}.
 #' @usage x %ni% y
 #' @param x vector or NULL: the values to check for non-match
