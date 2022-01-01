@@ -1,6 +1,6 @@
-#' idf
+#' Interactive filter helper
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('stable')`
 #' This is a shortcut for interactive data exploration that makes it easy to
 #' filter rows that match a value in the key column of a tibble.
 #'
@@ -69,7 +69,7 @@ idf <- function(.data, id = .last_id, glimpse = F) {
 
 #' common_vars
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' Shows the variable names that are in common between two or more tibbles.
 #' @param ... Bare, unquoted tibble object names.
 #' @export

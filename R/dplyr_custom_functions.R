@@ -1,7 +1,7 @@
 
 #' Tibble Preview
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' Show a sample of all tibble data without hiding columns.
 #' @importFrom magrittr "%>%"
 #' @return A preview of a tibble.
@@ -13,7 +13,7 @@ tp <- function(data, rows = 10) {
 
 #' Ordered Factor case_when()
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' Can replace `case_when()` syntax and outputs an ordered factor in the same order as the cases, useful for meaningful ordering in plots and tables.  This is because for `case_when()` the arguments are evaluated in order, so you must proceed from the most specific to the most general. Tables and plots will therefor be ordered by the evaluation order.
 #' @param ... A sequence of two-sided formulas. See ?dplyr::case_when for details
 #' @return An ordered factor vector of length 1 or n, matching the length of the logical input or output vectors, with the type (and attributes) of the first RHS. Inconsistent lengths or types will generate an error.
@@ -28,7 +28,7 @@ fct_case_when <- function(...) {
 
 #' Remove variables from tibble
 #' @description
-#' \lifecycle{stable}
+#' `r lifecycle::badge('stable')`
 #' This is a simple negation of `dplyr::select`.
 #' @param .data A data frame, data frame extension (e.g. a tibble), or a lazy data frame (e.g. from dbplyr or dtplyr). See Methods, below, for more details.
 #' @param ... \<tidy-select\> One or more unquoted expressions separated by commas. Variable names can be used as if they were positions in the data frame, so expressions like x:y can be used to select a range of variables.

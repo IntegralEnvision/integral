@@ -21,6 +21,7 @@ corresponding to APA-format statistical significance labels.
 \description{
 This function will add a new column with significance labels to
 a dataframe containing \emph{p}-values.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 }
 \examples{
 # preparing a new dataframe

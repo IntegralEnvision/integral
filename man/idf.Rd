@@ -2,7 +2,7 @@
 % Please edit documentation in R/interactive_helpers.R
 \name{idf}
 \alias{idf}
-\title{idf}
+\title{Interactive filter helper}
 \usage{
 options(idf_data_key = "your_data_key_column")
 
@@ -19,7 +19,7 @@ object and does not need to be specified again.}
 The data filtered by the key value on the key column stored in options("idf_data_key")
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 This is a shortcut for interactive data exploration that makes it easy to
 filter rows that match a value in the key column of a tibble.
 

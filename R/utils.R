@@ -1,6 +1,6 @@
 #' Update the integral package
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' Automatically unloads, updates, and reloads the integral package.
 #' @export
 ic_update <- function() {
@@ -70,7 +70,7 @@ get_os <- function(){
 
 #' Show news for new version
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' Shows the news for the package
 #' @param all Logical. Show all previous news in viewer. Defaults to FALSE.
 #' @export

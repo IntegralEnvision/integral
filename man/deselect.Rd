@@ -15,6 +15,6 @@ deselect(.data, ...)
 An object of the same type as .data, with the specified columns removed.
 }
 \description{
-\lifecycle{stable}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 This is a simple negation of \code{dplyr::select}.
 }

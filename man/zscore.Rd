@@ -18,6 +18,7 @@ A vector of scaled values.
 }
 \description{
 Wrapper for scale() that returns a vector.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 # 1:20 \%>\% zscore()

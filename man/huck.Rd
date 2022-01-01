@@ -10,7 +10,7 @@ huck(.data, ...)
 \item{...}{Unquoted variable names to search for duplicates. This takes a tidyselect specification (starts_with, contains, ends_with, etc).}
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Opposite of \code{purrr::pluck()}.  Returns the original list without the element.
 }
 \examples{

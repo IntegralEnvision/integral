@@ -12,7 +12,7 @@ xview(.data, add_rownames = TRUE)
 \item{add_rownames}{Logical. Convert rownames to column? Default: TRUE}
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Opens the table in a temporary file in excel.  Currently only works on Mac OS.
 }
 \examples{

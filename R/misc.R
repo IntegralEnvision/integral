@@ -1,6 +1,6 @@
 #' Write Clip shortcut
 #' @description
-#' \lifecycle{stable}
+#' `r lifecycle::badge('stable')`
 #' Copies an object to the clipboard. Defaults to .Last.value
 #' @export
 wc <- function(x = .Last.value) {
@@ -27,6 +27,7 @@ wc <- function(x = .Last.value) {
 #' @author Indrajeet Patil
 #' @description This function will add a new column with significance labels to
 #'   a dataframe containing *p*-values.
+#' `r lifecycle::badge('maturing')`
 #' @return Returns the dataframe in tibble format with an additional column
 #'   corresponding to APA-format statistical significance labels.
 #'
@@ -75,6 +76,7 @@ signif_column <- function(data, p, ...) {
 #' @title Convenience wrapper for scale that returns a vector instead of a matrix / array
 #' @name zscore
 #' @description Wrapper for scale() that returns a vector.
+#' `r lifecycle::badge('stable')`
 #' @return A vector of scaled values.
 #'
 #' @param .data numeric vector of values to be scaled

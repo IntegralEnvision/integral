@@ -1,6 +1,6 @@
 #' Show a table in Excel
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' Opens the table in a temporary file in excel.  Currently only works on Mac OS.
 #' @param .data A table.
 #' @param add_rownames Logical. Convert rownames to column? Default: TRUE

@@ -10,6 +10,6 @@ common_vars(...)
 \item{...}{Bare, unquoted tibble object names.}
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Shows the variable names that are in common between two or more tibbles.
 }

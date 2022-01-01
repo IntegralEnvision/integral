@@ -1,6 +1,6 @@
 #' Remove a named list element
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' Opposite of `purrr::pluck()`.  Returns the original list without the element.
 #' @param ... Unquoted variable names to search for duplicates. This takes a tidyselect specification (starts_with, contains, ends_with, etc).
 #' @examples
