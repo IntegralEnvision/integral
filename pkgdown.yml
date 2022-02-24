@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-01-01T23:57Z
+last_built: 2022-02-24T17:23Z
 urls:
   reference: https://integralenvision.github.io/integral/reference
   article: https://integralenvision.github.io/integral/articles
