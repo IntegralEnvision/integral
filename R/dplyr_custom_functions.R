@@ -3,10 +3,13 @@
 #' @description
 #' `r lifecycle::badge('experimental')`
 #' Show a sample of all tibble data without hiding columns.
+#' @param .data a tibble or data frame.  If NULL, uses .Last.value
+#' @param rows number of rows to print (default: 10)
 #' @importFrom magrittr "%>%"
 #' @return A preview of a tibble.
 #' @export
-tp <- function(data, rows = 10) {
+tp <- function(.data = NULL, rows = 10) {
+  if(is.null(.data)) .data <- .Last.value
   data <- dplyr::sample_n(data, size = rows)
   print(data, n = Inf, width = Inf)
 }

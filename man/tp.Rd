@@ -4,7 +4,12 @@
 \alias{tp}
 \title{Tibble Preview}
 \usage{
-tp(data, rows = 10)
+tp(.data = NULL, rows = 10)
+}
+\arguments{
+\item{.data}{a tibble or data frame.  If NULL, uses .Last.value}
+
+\item{rows}{number of rows to print (default: 10)}
 }
 \value{
 A preview of a tibble.
