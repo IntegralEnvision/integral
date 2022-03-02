@@ -11,10 +11,18 @@
 #' @export
 
 xview <- function (.data, add_rownames = TRUE) {
-  tempFilePath = paste(tempfile(), ".xlsx")
-  tempPath = dirname(tempFilePath)
-  preferredFile = paste(deparse(substitute(.data)), ".xlsx", sep = "")
-  preferredFilePath = file.path(tempPath, preferredFile)
+
+  unique_filename_addition <- paste0(sample(c(letters, as.character(1:9)), 4), collapse = "") #Makes it so that excel will open a new window if this is run multiple times in a way that generates the same file name.
+
+  tempFilePath <- paste(tempfile(), ".xlsx")
+  tempPath <- dirname(tempFilePath)
+
+  preferredFile <- paste(deparse(substitute(.data)), "_", unique_filename_addition, ".xlsx", sep = "")
+
+  preferredFile <- stringr::str_remove(preferredFile, "^\\._") #in case this was an unnamed object (ie piped)
+
+  preferredFilePath <- file.path(tempPath, preferredFile)
+
 
   if(length(dim(.data))>2){
     stop('Too many dimensions')
@@ -32,7 +40,7 @@ xview <- function (.data, add_rownames = TRUE) {
 
   if(add_rownames & tibble::has_rownames(data)) .data <- .data %>% tibble::rownames_to_column()
 
-  WriteAttempt = try(
+  WriteAttempt <- try(
     WriteXLS::WriteXLS(as.character(bquote(.data)), ExcelFileName=preferredFilePath, FreezeRow=1, FreezeCol=1, BoldHeaderRow=T, AdjWidth=F, AutoFilter=T, row.names=F),
     silent = TRUE)
   if ("try-error" %in% class(WriteAttempt)) {
