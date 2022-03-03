@@ -74,56 +74,56 @@ xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
   }
 
   if(add_rownames & tibble::has_rownames(.data)) .data <- .data %>% tibble::rownames_to_column() else
-    .data <- .data %>% mutate(rownum = row_number(), .before = 1)
+    .data <- .data %>% mutate(rownum = dplyr::row_number(), .before = 1)
 
 
 
   if(add_rownames & tibble::has_rownames(data)) .data <- .data %>% tibble::rownames_to_column()
 
-  wb <- createWorkbook()
+  wb <- openxlsx::createWorkbook()
 
-  addWorksheet(wb, "xview")
+  openxlsx::addWorksheet(wb, "xview")
 
 
-  writeData(wb, "xview", .data)
+  openxlsx::writeData(wb, "xview", .data)
 
-  addFilter(wb, 1, rows = 1, cols = 1:ncol(.data))
+  openxlsx::addFilter(wb, 1, rows = 1, cols = 1:ncol(.data))
 
-  freezePane(wb, 1, firstRow = T, firstCol = T)
+  openxlsx::freezePane(wb, 1, firstRow = T, firstCol = T)
 
   if(auto_conditional) {
     colclasses <- lapply(.data, class) %>%
       as_tibble %>%
-      slice(1) %>%
-      pivot_longer(everything()) %>%
-      mutate(colnum = row_number()) %>%
-      filter(name != "rowname") %>%
-      filter(name != "rownum")
+      dplyr::slice(1) %>%
+      tidyr::pivot_longer(tidyselect::everything()) %>%
+      dplyr::mutate(colnum = dplyr::row_number()) %>%
+      dplyr::filter(name != "rowname") %>%
+      dplyr::filter(name != "rownum")
 
     colclasses %>%
-      rowwise() %>%
-      group_split() %>%
-      walk(function(x) {
+      dplyr::rowwise() %>%
+      dplyr::group_split() %>%
+      purrr::walk(function(x) {
         switch(x$value,
-               numeric = conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
+               numeric = openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
                                                type = "colourScale",
                                                style = c("cyan", "white", "darkorchid1")),
 
-               integer = conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
+               integer = openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
                                                type = "colourScale",
                                                style = c("cyan", "white", "darkorchid1")),
 
-               ordered = conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
+               ordered = openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
                                                type = "colourScale",
                                                style = c("#edf8b1", "#7fcdbb", "#2c7fb8")),
         )
       })
   }
 
-  openxl_temp <- temp_xlsx()
-  saveWorkbook(wb, openxl_temp)
+  openxl_temp <- openxlsx::temp_xlsx()
+  openxlsx::saveWorkbook(wb, openxl_temp)
 
-  openXL(openxl_temp)
+  openxlsx::openXL(openxl_temp)
 
 
 }
