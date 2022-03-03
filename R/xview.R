@@ -51,7 +51,18 @@ xview <- function (.data, add_rownames = TRUE) {
   }
 }
 
-
+#' Show a table in Excel
+#' @description
+#' `r lifecycle::badge('experimental')`
+#' Opens the table in a temporary file in excel.
+#' @param .data A table.
+#' @param add_rownames Logical. Convert rownames to column? Default: TRUE
+#' @param auto_conditional Automatically add conditional formatting. Default: TRUE
+#' @examples
+#' \dontrun{
+#' diamonds %>% xview2()
+#' }
+#' @export
 xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
 
 
