@@ -1,10 +1,9 @@
 Package: integral
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.2.9003
+Title: Integral Consulting Public Package
+Version: 0.0.2.9004
 Authors@R: 
-    person("Jonathan", "Zadra", , "jzadra@integral-corp.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Jonathan", "Zadra", , "jzadra@integral-corp.com", role = c("aut", "cre"))
+Description: This package contains convenience functions used by Integral Consulting
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8

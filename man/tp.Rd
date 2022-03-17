@@ -4,10 +4,10 @@
 \alias{tp}
 \title{Tibble Preview}
 \usage{
-tp(.data = NULL, rows = 10)
+tp(.data = .Last.value, rows = 10)
 }
 \arguments{
-\item{.data}{a tibble or data frame.  If NULL, uses .Last.value}
+\item{.data}{a tibble or data frame (default: .Last.value)}
 
 \item{rows}{number of rows to print (default: 10)}
 }

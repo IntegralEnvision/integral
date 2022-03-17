@@ -4,9 +4,9 @@
 \name{integral-package}
 \alias{integral}
 \alias{integral-package}
-\title{integral: What the Package Does (One Line, Title Case)}
+\title{integral: Integral Consulting Public Package}
 \description{
-What the package does (one paragraph).
+This package contains convenience functions used by Integral Consulting
 }
 \seealso{
 Useful links:
@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jonathan Zadra \email{jzadra@integral-corp.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Jonathan Zadra \email{jzadra@integral-corp.com}
 
 }
 \keyword{internal}

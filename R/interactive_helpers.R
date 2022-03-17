@@ -71,6 +71,7 @@ idf <- function(.data, id = .last_id, glimpse = F) {
 #' @description
 #' `r lifecycle::badge('experimental')`
 #' Shows the variable names that are in common between two or more tibbles.
+#' Considering deprecating this as janitor::compare_df_cols() does something similar.
 #' @param ... Bare, unquoted tibble object names.
 #' @export
 common_vars <- function(...) {

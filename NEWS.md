@@ -1,3 +1,8 @@
+# integral 0.0.2.9004
+
+* Added `ic_scale_si_unit()` which converts numeric values to International System units
+* Added `ic_scale_big_dollar()` which converts numeric values to dollar units using suffixes, ie: 1000 becomes $1k.
+
 # integral 0.0.2.9003
 
 * Added `%ni%` (not in), the opposite of %in%
