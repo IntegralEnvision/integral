@@ -3,6 +3,8 @@
 
 # integral
 
+# integral <a href='https://github.com/IntegralEnvision/integral'><img src='integral.png' align="right" height="138.5" /></a>
+
 <!-- badges: start -->
 
 [![Lifecycle:
