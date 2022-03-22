@@ -2,7 +2,7 @@ Package: integral
 Title: Integral Consulting Public Package
 Version: 0.0.2.9004
 Authors@R: 
-    person("Jonathan", "Zadra", , "jzadra@integral-corp.com", role = c("aut", "cre")),
+    person("Jonathan", "Zadra", email = "jzadra@integral-corp.com", role = c("aut", "cre")),
     person("Eben", "Pendleton", email = "ependleton@integral-corp.com", role = c("aut", "cre"))
 Description: This package contains convenience functions used by Integral Consulting
 License: MIT + file LICENSE
