@@ -1,3 +1,8 @@
+# integral 0.0.2.9005
+
+* Added `quote_values()` which converts a series of comma separated values into a vector input format.  Copy of `Hmisc::Cs()` for convenience.
+* Added `ic_visdat_grouped()` which extends visdat to allow separate plots grouped by a variable in the data. This is very useful for annual data or other groupings that may explain missinginess.
+
 # integral 0.0.2.9004
 
 * Added `ic_scale_si_unit()` which converts numeric values to International System units

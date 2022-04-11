@@ -1,3 +1,30 @@
+#' Convert raw comma separated values into a vector
+#' @description
+#' `r lifecycle::badge('experimental')`
+#' Converts a series of comma-separated values into vector input format for R.
+#' (Note, this is identical to Hmisc::Cs).
+#' @param ... any number of names separated by commas
+#' @return character string vector
+#' @examples
+#' \dontrun{
+#' quote_values(a, b, c, d, e, f)
+#' }
+#' @export
+quote_values <- function(...) {
+  as.character(sys.call())[-1]
+}
+
+
+#' Write Clip shortcut
+#' @description
+#' `r lifecycle::badge('stable')`
+#' Copies an object to the clipboard. Defaults to .Last.value
+#' @export
+wc <- function(x = .Last.value) {
+  clipr::write_clip(x)
+  cli::cli_alert_success("Value copied to clipboard")
+}
+
 #' Interactive filter helper
 #' @description
 #' `r lifecycle::badge('stable')`

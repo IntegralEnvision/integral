@@ -1,13 +1,3 @@
-#' Write Clip shortcut
-#' @description
-#' `r lifecycle::badge('stable')`
-#' Copies an object to the clipboard. Defaults to .Last.value
-#' @export
-wc <- function(x = .Last.value) {
-  clipr::write_clip(x)
-  cli::cli_alert_success("Value copied to clipboard")
-}
-
 #' Not In: Inverse Value Matching
 #' @description
 #' `r lifecycle::badge('stable')`

@@ -15,4 +15,8 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Jonathan Zadra \email{jzadra@integral-corp.com}
+
+}
 \keyword{internal}
