@@ -21,6 +21,7 @@ You can install the development version of integral from
 
 ``` r
 # install.packages("use_this", "remotes")
+# Use the no reply email if you chose
 # usethis::use_git_config(user.name = <GitHub Username>, user.email = <GitHub Email>)
 # usethis::create_github_token()
 # credentials::set_github_pat()
