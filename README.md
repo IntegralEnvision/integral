@@ -12,7 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 <!-- badges: end -->
 
-This is a beta package for **PUBLIC** Integral functions.
+This is a beta package for **PRIVATE** Integral functions.
 
 ## Installation
 
@@ -21,5 +21,5 @@ You can install the development version of integral from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("IntegralEnvision/integral")
+devtools::install_github("IntegralEnvision/integral-private")
 ```

@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-This is a beta package for **PUBLIC** Integral functions.
+This is a beta package for **PRIVATE** Integral functions.
 
 ## Installation
 
@@ -31,5 +31,5 @@ You can install the development version of integral from [GitHub](https://github
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("IntegralEnvision/integral")
+devtools::install_github("IntegralEnvision/integral-private")
 ```
