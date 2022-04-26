@@ -82,3 +82,23 @@ signif_column <- function(data, p, ...) {
 zscore <- function(.data, center = TRUE, scale = TRUE) {
   scale(.data, center = center, scale = scale)[,1]
 }
+
+#' @title Select string between two strings
+#' @name str_between
+#' @description A stringr-like function to pull out a string between two string anchors
+#' `r lifecycle::badge('stable')`
+#' @return string or vector of strings
+#'
+#' @param string Input vector. Either a character vector, or something coercible to one.
+#' @param pattern1 Pattern that will act as starting anchor in extraction, and be excluded. The default interpretation is a regular expression, as described in stringi::stringi-search-regex. Control options with regex().
+#' @param pattern2 Pattern that will act as ending anchor in extraction, and be excluded.
+#'
+#' @examples
+#' # str_between(stringr::fruit, "ap", "e")
+str_between <- function(string, pattern1, pattern2){
+  string1 <- stringr::str_extract(fruit,  paste0("(?<=", pattern1,").+(?<=", pattern2, ")"))
+  return(string1)
+}
+
+
+
