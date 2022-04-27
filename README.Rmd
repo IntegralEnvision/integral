@@ -31,9 +31,18 @@ You can install the development version of integral from [GitHub](https://github
 
 ``` r
 # install.packages("use_this", "remotes")
-# Use the no reply email if you chose
+# Use the GitHub no reply email if you choose
 # usethis::use_git_config(user.name = <GitHub Username>, user.email = <GitHub Email>)
 # usethis::create_github_token()
 # credentials::set_github_pat()
 remotes::install_github('IntegralEnvision/integral-private')
 ```
+
+## License
+
+Although the repository is private to encourage code updates the code is MIT licensed.
+
+
+## Contributing
+
+Please contribute issues and Pull Requests (PRs). [Here's](https://community.rstudio.com/t/faq-whats-a-reproducible-example-reprex-and-how-do-i-create-one/5219) some info on creating reproducible examples in issues. 
