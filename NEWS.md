@@ -1,10 +1,11 @@
 # integral 0.0.2.9006
 
--   Added experimental helper functions for searching Stack Overflow and Google:
+* Added experimental helper functions for searching Stack Overflow and Google
 
-    -   `stackoverflow()` and alias `so()` search Stack Overflow for the terms you pass. Automatically adds the "\[r\]" tag.
-    -   `google()` searches Google for the terms you pass. Automatically adds the required "R" tag and omits results from web sites that provide the same information as the help documentation in R.
-    -   `so_last_error()` and `google_last_error()` collect the traceback of the most recent error and searches for it using Stack Overflow and Google, respectively. Automatically adds the R tag and (for google) omits results from web sites that have duplicated the R manual.
+  * `stackoverflow()` and alias `so()` search Stack Overflow for the terms you pass. Automatically adds the "\[r\]" tag.
+
+  * `google()` searches Google for the terms you pass. Automatically adds the required "R" tag and omits results from web sites that provide the same information as the help documentation in R.
+  * `so_last_error()` and `google_last_error()` collect the traceback of the most recent error and searches for it using Stack Overflow and Google, respectively. Automatically adds the R tag and (for google) omits results from web sites that have duplicated the R manual.
 
 # integral 0.0.2.9005
 
