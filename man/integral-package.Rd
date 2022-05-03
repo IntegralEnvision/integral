@@ -21,6 +21,7 @@ Useful links:
 Authors:
 \itemize{
   \item Eben Pendleton \email{ependleton@integral-corp.com}
+  \item Katherine Heal \email{kheal@integral-corp.com}
 }
 
 }
