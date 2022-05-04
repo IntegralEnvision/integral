@@ -9,8 +9,7 @@
 #' Creates a new R Project and populates with Integral standards
 #' @export
 
-create_project <- function(path = readline("What is the directory path to create the project in?: ")
-                        ,create_dirs = ask("Would you like to create input, output and QA folders?")
+create_project <- function(create_dirs = ask("Would you like to create input, output and QA folders?")
                         ,create_rproj = ask("Would you like to create an Rproj file?")
                         ,create_rscript = ask("Would you like to creat an R script file?")
                         ,create_rmarkdown = ask("Would you like to create an Rmarkdown file?")
@@ -21,7 +20,8 @@ create_project <- function(path = readline("What is the directory path to create
 
   	# create the directory at the path.
   # Warns if the directory already exists
-  if (path) {dir.create(path)}
+  path = readline("What is the directory path to create the project in?: ")
+  dir.create(path)
 
   # get the files to copy over
   # if the package is installed
@@ -51,8 +51,10 @@ create_project <- function(path = readline("What is the directory path to create
   if (create_rscript) {
     rename <- readline(paste("What would you like to name the file?"
                        ,"Don't include the file extension.: "))
-    file.copy(paste(extpath,"example_script.R", sep = '/')
-              , paste(path, paste0(rename, ".R")), overwrite=F)
+    #file.copy(paste(extpath,"example_script.R", sep = '/')
+    #          , paste(path, paste0(rename, ".R")), overwrite=F)
+
+    ic_new_r_file(paste(path, paste0(rename, ".R"), sep = "/"), open = F)
   }
 
   if (create_rmarkdown) {
