@@ -5,7 +5,7 @@
 \title{Start a new R script with header
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}}
 \usage{
-ic_new_r_file(filepath)
+ic_new_r_file(filepath, open = open)
 }
 \arguments{
 \item{filepath}{File to be created. If path is not included, it will be created in the current working directory.}

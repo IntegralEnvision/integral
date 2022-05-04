@@ -2,8 +2,10 @@
 
 export("%>%")
 export("%ni%")
+export(ask)
 export(cheat)
 export(common_vars)
+export(create_project)
 export(deselect)
 export(fct_case_when)
 export(huck)

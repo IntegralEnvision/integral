@@ -8,6 +8,7 @@
 #' }
 #' @export
 ic_new_r_file <- function(filepath, open = open) {
+  # only works at project root
   usethis::use_template("rfile_w_header.R", save_as = filepath, open = open, package = "integral")
 }
 
