@@ -18,7 +18,8 @@ create_project <- function(path = readline("What is the directory path to create
                         ,create_git = ask("Would you like to create a git repository?")
                         ,create_renv = ask("Would you like to create an renv?")
                         ,swtich_proj = ask("Would you like to switch to the newly created project?")) {
-	# create the directory at the path.
+
+  	# create the directory at the path.
   # Warns if the directory already exists
   if (path) {dir.create(path)}
 
