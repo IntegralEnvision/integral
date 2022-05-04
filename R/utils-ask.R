@@ -8,7 +8,6 @@
 #' @examples
 #' ask("Do you like coding?")
 #' @export
-
 # from renv. MIT License
 ask <- function(question, default = TRUE) {
   selection <- if (default) "[Y/n]" else "[y/N]"

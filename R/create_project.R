@@ -8,7 +8,6 @@
 
 #' Creates a new R Project and populates with Integral standards
 #' @export
-
 create_project <- function(create_dirs = ask("Would you like to create input, output and QA folders?")
                         ,create_rproj = ask("Would you like to create an Rproj file?")
                         ,create_rscript = ask("Would you like to creat an R script file?")
