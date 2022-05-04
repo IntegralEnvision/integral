@@ -12,5 +12,7 @@ RoxygenNote: 7.1.2
 Imports: 
     lifecycle,
     magrittr,
+    readr,
+    rstudioapi,
     tidyselect (>= 1.0)
 URL: https://integralenvision.github.io/integral
