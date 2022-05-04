@@ -7,8 +7,8 @@
 #' ic_new_r_file("myfile.R")
 #' }
 #' @export
-ic_new_r_file <- function(filepath) {
-  use_template("r_header/r file with header.R", save_as = filepath, open = TRUE, package = "integral")
+ic_new_r_file <- function(filepath, open = open) {
+  usethis::use_template("rfile_w_header.R", save_as = filepath, open = open, package = "integral")
 }
 
 

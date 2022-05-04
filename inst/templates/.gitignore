@@ -1,0 +1,93 @@
+# files associated with html outputs
+**/crosstalk-1.2.0/*
+**/htmlwidgets-1.5.4/*
+**/jquery-3.5.1/*
+**/plotly-binding-4.10.0/*
+**/plotly-htmlwidgets-css-2.5.1/*
+**/plotly-main-2.5.1/*
+**/typedarray-0.1/*
+
+# renv folder
+renv/*
+
+# archive folder
+Output/Archive/*
+
+# .hg folder
+.hg*
+
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# User-specific files
+.Ruserdata
+
+# Top level outputs
+/*.xlsx
+#/*.csv
+
+# All temporary office docs
+~$*
+
+# All .png files
+*.png
+*.PNG
+
+# All docx, PDF and pptx and gifsf
+*.docx
+*.pptx
+*.gif
+
+# QA folder
+QA/*
+
+# Access database
+*.accdb
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# RStudio files
+.Rproj.user/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
+
+# knitr and R markdown default cache directories
+*_cache/
+/cache/
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
+
+# R Environment Variables
+.Renviron
+
+# pkgdown site
+docs/
+
+# translation temp files
+po/*~
+
+# python specific files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Selenium files
+*geckodriver.log

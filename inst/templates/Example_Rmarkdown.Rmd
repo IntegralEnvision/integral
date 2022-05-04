@@ -1,0 +1,65 @@
+---
+title: "Penguin Analysis"
+author: "Copyright 2022, Integral Consulting Inc. All rights reserved."
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# PURPOSE
+Add your text here.
+
+# PROJECT INFORMATION
+Name:
+Number:
+
+# HISTORY
+08/13/2021 - Exploratory look at penguin bill length and body mass. - L.Mudge
+
+# SETUP
+```{r setup, include=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+
+```
+
+# DATA
+Load the `palmerpenguins` data set directly from the package.
+```{r data}
+data(package = 'palmerpenguins')
+
+```
+
+# ANALYSIS
+Code from: https://allisonhorst.github.io/palmerpenguins/articles/intro.html 
+
+## Data summary
+ 
+```{r summary_table}
+penguins %>%
+  group_by(species) %>%
+  summarize(across(where(is.numeric), mean, na.rm = TRUE))
+```
+
+## Plots {.tabset}
+
+### Bill Length by Species
+```{r barplot}
+# Jitter plot example: bill length by species
+ggplot(data = penguins, aes(x = species, y = bill_length_mm)) +
+  geom_jitter(aes(color = species),
+              width = 0.1,
+              alpha = 0.7,
+              show.legend = FALSE) +
+  scale_color_manual(values = c("darkorange","darkorchid","cyan4"))
+```
+
+### Body Mass vs. Bill Length
+```{r mass_scatterplot}
+# Scatterplot example 1: penguin flipper length versus body mass
+ggplot(data = penguins, aes(x = bill_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species,
+                 shape = species),
+             size = 2) +
+  scale_color_manual(values = c("darkorange","darkorchid","cyan4"))
+```
+
