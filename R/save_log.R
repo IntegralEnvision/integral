@@ -9,7 +9,9 @@
 #' @param ... Additional arguments from readr::write_csv()
 #'
 #' @examples
-#' # write_csv_wlog(stringr::fruit, "ap", "e")
+#' df <- data.frame(fishes <- c("red", "white", "blue"))
+#' write_csv_wlog(df, tempfile())
+
 write_csv_wlog <- function(x, file, ...){
   readr::write_csv(x, file, ...)
 
