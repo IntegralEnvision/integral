@@ -94,12 +94,15 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
   setwd(path)
   # create git
   if (create_git) {
-    system("git init -b main")
+    system("git init")
+    system("git checkout --orphan main")
     suppressWarnings(file.copy(paste(extpath,".gitignore", sep = '/')
               ,paste(path, ".gitignore", sep = "/"), overwrite=F))
   }
 
   if (create_renv) {
+
+    renv::init(project = path, bare = T, restart = F)
 
     # copy renv contents
     suppressWarnings(dir.create(paste(path, "renv", sep = "/")))
@@ -115,6 +118,14 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
                                , paste(path, "Rprofile", sep = "/")
                                , overwrite=F))
 
+    # renv::activate(project = path)
+    # hydrate
+    renv::hydrate(project = path, sources = c("~/mnt/Departments/DataAnalysis/11_R/03_Renv_Source_Managment"
+                                              ,"M:/DataAnalysis/11_R/03_Renv_Source_Managment/"
+                                 ,.libPaths()))
+    # try to reset the renv
+    setwd(w)
+    renv::autoload()
   }
 
   if (switch_proj) {
@@ -122,7 +133,7 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
   , newSession = ask("Would you like to open the project in a new session?"))
   }
 
-  #reset the working directory to whatever we can in with
+  #reset the working directory to whatever we came in with
   setwd(w)
   # return the path
   return(path)
