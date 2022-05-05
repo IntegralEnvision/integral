@@ -10,6 +10,9 @@
 # renv folder
 renv/*
 !renv/cellar
+!renv/.gitignore
+!renv/activate.R
+!renv/settings.dcf
 
 # archive folder
 Output/Archive/*
