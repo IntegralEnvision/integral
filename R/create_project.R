@@ -119,10 +119,15 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
                                , overwrite=F))
 
     # renv::activate(project = path)
-    # hydrate
+    # hydrate using example file
     renv::hydrate(project = path, sources = c("~/mnt/Departments/DataAnalysis/11_R/03_Renv_Source_Managment"
                                               ,"M:/DataAnalysis/11_R/03_Renv_Source_Managment/"
                                  ,.libPaths()))
+
+    # snapshot
+
+    # remove example file
+
     # try to reset the renv
     setwd(w)
     renv::autoload()
