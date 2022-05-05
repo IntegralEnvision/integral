@@ -7,9 +7,10 @@
 #' ic_new_r_file("myfile.R")
 #' }
 #' @export
-ic_new_r_file <- function(filepath, open = open) {
+ic_new_r_file <- function(filepath, open = T) {
   # only works at project root
-  usethis::use_template("rfile_w_header.R", save_as = filepath, open = open, package = "integral")
+  usethis::use_template("example_project/rfile_w_header.R", save_as = filepath
+                        , open = open, package = "integral")
 }
 
 

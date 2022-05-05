@@ -9,6 +9,7 @@
 
 # renv folder
 renv/*
+!renv/cellar
 
 # archive folder
 Output/Archive/*

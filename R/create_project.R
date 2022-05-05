@@ -1,16 +1,31 @@
-
 # History
 # 2022-03-31. Created Eben Pendleton.
 # 2022-04-01. Added git and file pattern
 
-# Notes: .gitignore is created when git is run. Only copies folders one level
-# deep
+#' @title Create a new project and R files following Integral standards
+#' @name create_project
+#' @description Function to create a new R project and files following integral
+#' standards
+#' `r lifecycle::badge('experimental')`
+#' @return path to new project
 
+#' @param create_dirs Y/n whether to create input, output and QA folders
+#' @param create_rproj Y/n whether to create a .Rproj file
+#' @param create_rscript Y/n whether to create a R script file
+#' @param create_rmarkdown Y/n whether to create a R Markdown file
+#' @param create_qa Y/n whether to create a QA file
+#' @param create_git Y/n whether to create a git repository
+#' @param create_renv Y/n whether to create a renv
+#'
 #' Creates a new R Project and populates with Integral standards
+#' @examples
+#' \dontrun{
+#' create_project()
+#' }
 #' @export
 create_project <- function(create_dirs = ask("Would you like to create input, output and QA folders?")
                         ,create_rproj = ask("Would you like to create an Rproj file?")
-                        ,create_rscript = ask("Would you like to creat an R script file?")
+                        ,create_rscript = ask("Would you like to create an R script file?")
                         ,create_rmarkdown = ask("Would you like to create an Rmarkdown file?"
                                                 , default = F)
                         ,create_qa = ask("Would you like to create a QA file?")
@@ -19,7 +34,7 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
                         ,switch_proj = ask("Would you like to switch to the newly created project?")) {
 
   # create the directory at the path.
-  path = readline("What is the directory path to create the project in?: ")
+  path = convert_winpath(readline("What is the directory path to create the project in?: "))
   suppressWarnings(dir.create(path))
 
   # get the files to copy over
@@ -37,7 +52,7 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
   d <- list.dirs(path = extpath)
   d <- basename(d[2:length(d)])
   # remove renv if present
-  d[!d %in% c("renv")]
+  d <- d[!d %in% c("renv", "cellar")]
 
   func <- function(x) {suppressWarnings(dir.create(paste(path
                       ,x, sep='/')))}
@@ -61,7 +76,7 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
   if (create_rmarkdown) {
     rename <- readline(paste("What would you like to name the file?"
                              ,"Don't include the file extension.: "))
-    suppressWarnings(file.copy(paste(extpath,"example_markdown.Rmd", sep = '/')
+    suppressWarnings(file.copy(paste(extpath,"example_Rmarkdown.Rmd", sep = '/')
               ,paste(path, paste0(rename, ".Rmd")
               ,sep = "/"), overwrite=F))
   }
@@ -106,6 +121,9 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
     rstudioapi::openProject(path = path
   , newSession = ask("Would you like to open the project in a new session?"))
   }
+
+  #reset the working directory to whatever we can in with
+  setwd(w)
   # return the path
   return(path)
 }
