@@ -13,7 +13,7 @@
 #' @examples
 #' \dontrun{
 #' convert_winpath(<path>)
-#' )
+#' }
 #' @export
 # from renv. MIT License
 convert_winpath <- function(x) {

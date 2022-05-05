@@ -13,7 +13,7 @@
 #' @examples
 #' \dontrun{
 #' ask("Do you like coding?")
-#' )
+#' }
 #' @export
 # from renv. MIT License
 ask <- function(question, default = TRUE) {
