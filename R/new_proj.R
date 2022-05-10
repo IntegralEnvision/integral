@@ -3,7 +3,7 @@
 # 2022-04-01. Added git and file pattern
 
 #' @title Create a new project and R files following Integral standards
-#' @name create_project
+#' @name new_proj
 #' @description Function to create a new R project and files following integral
 #' standards
 #' `r lifecycle::badge('experimental')`
@@ -20,10 +20,10 @@
 #' Creates a new R Project and populates with Integral standards
 #' @examples
 #' \dontrun{
-#' create_project()
+#' new_proj()
 #' }
 #' @export
-create_project <- function(create_dirs = ask("Would you like to create input, output and QA folders?")
+new_proj <- function(create_dirs = ask("Would you like to create input, output and QA folders?")
                         ,create_rproj = ask("Would you like to create an Rproj file?")
                         ,create_rscript = ask("Would you like to create an R script file?")
                         ,create_rmarkdown = ask("Would you like to create an Rmarkdown file?"
