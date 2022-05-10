@@ -102,33 +102,28 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
 
   if (create_renv) {
 
+    # initialize with a bare repository so we don't over populate the library
     renv::init(project = path, bare = T, restart = F)
 
-    # copy renv contents
-    suppressWarnings(dir.create(paste(path, "renv", sep = "/")))
-    suppressWarnings(file.copy(list.files(paste(extpath, "renv", sep = "/")
-              ,full.names = T), paste(path, "renv", sep ="/")
-              ,recursive=T ))
-    # copy lock file
-    suppressWarnings(file.copy(paste(extpath,"renv.lock", sep = '/')
-              , paste(path, "renv.lock", sep = "/")
-              , overwrite=F))
-    # copy .RProfile
-    suppressWarnings(file.copy(paste(extpath,".Rprofile", sep = '/')
-                               , paste(path, "Rprofile", sep = "/")
+    # copy DESCRIPTION
+    suppressWarnings(file.copy(paste(extpath,"DESCRIPTION", sep = '/')
+                               , paste(path, "DESCRIPTION", sep = "/")
                                , overwrite=F))
 
-    # renv::activate(project = path)
-    # hydrate using example file
-    renv::hydrate(project = path, sources = c("~/mnt/Departments/DataAnalysis/11_R/03_Renv_Source_Managment"
-                                              ,"M:/DataAnalysis/11_R/03_Renv_Source_Managment/"
-                                 ,.libPaths()))
+    # renv install from the DESCRIPTION FILE copied above
+    renv::install()
 
     # snapshot
+    renv::snapshot(prompt = F)
 
-    # remove example file
+    # remove DESCRIPTION
+    unlink(paste(path, "DESCRIPTION", sep = "/"))
 
-    # try to reset the renv
+    # remove build file as we don't need one for analysis projects
+    unlink(paste(path, ".Rbuildignore", sep = "/"))
+
+    # try to reset the renv to the current project renv if found.
+    # This is to try and exit the function not in the new renv
     setwd(w)
     renv::autoload()
   }
@@ -140,6 +135,7 @@ create_project <- function(create_dirs = ask("Would you like to create input, ou
 
   #reset the working directory to whatever we came in with
   setwd(w)
-  # return the path
+
+  # return the project path
   return(path)
 }
