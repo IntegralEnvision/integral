@@ -46,9 +46,6 @@ Output/Archive/*
 *.pptx
 *.gif
 
-# QA folder
-QA/*
-
 # Access database
 *.accdb
 
