@@ -20,9 +20,10 @@ You can install the development version of integral from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("use_this", "remotes")
+# install.packages(c("usethis", "remotes"))
 # Use the GitHub no reply email if you choose
 # usethis::use_git_config(user.name = <GitHub Username>, user.email = <GitHub Email>)
+# This is run once per GitHub user
 # usethis::create_github_token()
 # credentials::set_github_pat()
 remotes::install_github('IntegralEnvision/integral-private')
