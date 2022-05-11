@@ -84,9 +84,16 @@ new_proj <- function(create_dirs = ask("Would you like to create input, output a
   if (create_qa) {
     rename <- readline(paste("What would you like to name the file?"
                              ,"Don't include the file extension.: "))
+
+    if (dir.exists(paste(path, "QA"))) {
     suppressWarnings(file.copy(paste(extpath,"QA/QA_Template_Coded_Analysis.xlsx", sep = '/')
               ,paste(path, "QA", paste0(rename, ".xlsx")
               ,sep = "/"), overwrite=F))
+  } else {
+    suppressWarnings(file.copy(paste(extpath,"QA/QA_Template_Coded_Analysis.xlsx", sep = '/')
+                               ,paste(path, paste0(rename, ".xlsx")
+                                      ,sep = "/"), overwrite=F))
+  }
   }
 
   # switch the working drectory to the path
