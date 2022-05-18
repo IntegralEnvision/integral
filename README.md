@@ -17,7 +17,7 @@ This is a beta package for **PRIVATE** Integral functions.
 ## Installation
 
 You can install the development version of integral from
-[GitHub](https://github.com/) with:
+GitHub with:
 
 ``` r
 # install.packages(c("usethis", "remotes"))
