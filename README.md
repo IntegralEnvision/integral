@@ -23,8 +23,9 @@ GitHub with:
 # install.packages(c("usethis", "remotes"))
 # Use the GitHub no reply email if you choose
 # usethis::use_git_config(user.name = <GitHub Username>, user.email = <GitHub Email>)
-# This is run once per GitHub user
+# This is run once per GitHub user. Store the token in a safe place.
 # usethis::create_github_token()
+# This you will likely have to run everytime on Citrix, Linux and locally before running the remotes command
 # credentials::set_github_pat()
 remotes::install_github('IntegralEnvision/integral-private')
 ```
