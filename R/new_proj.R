@@ -96,7 +96,7 @@ new_proj <- function(create_dirs = ask("Would you like to create input, output a
   }
   }
 
-  # switch the working drectory to the path
+  # switch the working directory to the path
   w <- getwd()
   setwd(path)
   # create git
@@ -105,34 +105,6 @@ new_proj <- function(create_dirs = ask("Would you like to create input, output a
     system("git checkout --orphan main")
     suppressWarnings(file.copy(paste(extpath,".gitignore", sep = '/')
               ,paste(path, ".gitignore", sep = "/"), overwrite=F))
-  }
-
-  if (create_renv) {
-
-    # initialize with a bare repository so we don't over populate the library
-    renv::init(project = path, bare = T, restart = F)
-
-    # copy DESCRIPTION
-    suppressWarnings(file.copy(paste(extpath,"DESCRIPTION", sep = '/')
-                               , paste(path, "DESCRIPTION", sep = "/")
-                               , overwrite=F))
-
-    # renv install from the DESCRIPTION FILE copied above
-    renv::install()
-
-    # snapshot
-    renv::snapshot(prompt = F)
-
-    # remove DESCRIPTION
-    unlink(paste(path, "DESCRIPTION", sep = "/"))
-
-    # remove build file as we don't need one for analysis projects
-    unlink(paste(path, ".Rbuildignore", sep = "/"))
-
-    # try to reset the renv to the current project renv if found.
-    # This is to try and exit the function not in the new renv
-    setwd(w)
-    renv::autoload()
   }
 
   if (switch_proj) {
@@ -144,5 +116,6 @@ new_proj <- function(create_dirs = ask("Would you like to create input, output a
   setwd(w)
 
   # return the project path
+  # Should return parameters
   return(path)
 }
