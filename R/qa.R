@@ -8,7 +8,7 @@ qa <- function(filepath) {
 
   if(!fs::file_exists(filepath)) stop(cli::cli_alert_danger(paste0("File `", filepath, "` does not exist. If it is not in the root project directory, specify the path relative to the root project directory.")))
 
-  if(!str_detect(str_to_lower(filepath), ".*\\.(r|rmd)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R or .Rmd file.")))
+  if(!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R or .Rmd file.")))
 
 
   qafile <- qa_file(filepath)
@@ -55,9 +55,9 @@ qa_parse <- function(filepath) {
 
       all_code <- all_code %>%
         dplyr::mutate(has_qa = stringr::str_detect(code, "QA:")) %>%
-        mutate(has_id = stringr::str_detect(code, "(QA: )(\\d+)(.*)")) %>%
-        mutate(missing_id = stringr::str_detect(code, "#\\s?QA:\\s(?=\\D)")) %>%
-        rowwise() %>%
+        dplyr::mutate(has_id = stringr::str_detect(code, "(QA: )(\\d+)(.*)")) %>%
+        dplyr::mutate(missing_id = stringr::str_detect(code, "#\\s?QA:\\s(?=\\D)")) %>%
+        dplyr::rowwise() %>%
         dplyr::mutate(code = dplyr::if_else(has_qa & !has_id & missing_id, stringr::str_replace(code, "#\\s?QA:\\s(?=\\D)", paste0("# QA: ", round(runif(1, 1, 10000)), " | ")), code)) %>%
         dplyr::ungroup() %>%
         dplyr::select(-c(has_qa, has_id, missing_id))
@@ -99,7 +99,7 @@ qa_parse <- function(filepath) {
 
   for(i in seq(section_depth)) {
     wh <- wh %>%
-      fill(paste0("level_", i), .direction = "down") %>%
+      tidyr::fill(paste0("level_", i), .direction = "down") %>%
       dplyr::group_by_at(paste0("level_", i), .add = T)
   }
 
@@ -164,10 +164,10 @@ qa_file <- function(filepath) { #TODO add status messages as to what is happenin
 
     fs::dir_create(fs::path_dir(qa_file)) #function ignores command if dir already exists
 
-  } else if(str_detect(code_path, project_path)) { #If the script is in a subdir of project root, it gets a QA sheet with the name of the subdir.
+  } else if(stringr::str_detect(code_path, project_path)) { #If the script is in a subdir of project root, it gets a QA sheet with the name of the subdir.
 
-    code_subfolder <- str_remove(code_path, project_path) %>%
-      str_remove("/")
+    code_subfolder <- stringr::str_remove(code_path, project_path) %>%
+      stringr::str_remove("/")
 
     qa_file <- fs::path(code_path, "QA", paste0("QA_", code_subfolder, ".xlsx"))
 
