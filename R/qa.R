@@ -4,11 +4,12 @@
 
 qa <- function(filepath) {
 
+  filepath <- fs::path_real(filepath)
+
   if(!fs::file_exists(filepath)) stop(cli::cli_alert_danger(paste0("File `", filepath, "` does not exist. If it is not in the root project directory, specify the path relative to the root project directory.")))
 
   if(!str_detect(str_to_lower(filepath), ".*\\.(r|rmd)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R or .Rmd file.")))
 
-  filepath <- path_real(filepath)
 
   qafile <- qa_file(filepath)
 
