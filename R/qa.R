@@ -29,6 +29,41 @@ qa_parse <- function(filepath) {
     tibble::enframe(name = "line", value = "code") %>%
     tibble::add_column(file_full = as.character(script_qa))
 
+  #Check for QA tags and QA tags without IDs
+  has_qa_tags <- any(all_code %>%
+                       mutate(has_qa = stringr::str_detect(code, "QA:")) %>%
+                       pull(has_qa))
+  missing_qa_ids <- any(all_code %>%
+                          mutate(has_id = stringr::str_detect(code, "(QA: )(\\d+)(.*)")) %>%
+                          mutate(missing_id = stringr::str_detect(code, "#\\s?QA:\\s(?=\\D)")) %>%
+                          mutate(doublecheck = !has_id & missing_id) %>%
+                          pull(doublecheck))
+
+  if(!has_qa_tags) stop("The file does not contain any QA tags.")
+
+  if(has_qa_tags & missing_qa_ids) { #TODO: Danger zone, editing script source.  Backup method is temporary
+    add_ids <- usethis::ui_yeah("The file is missing QA ID numbers for one or more QA tags.  Would you like them to be added automatically? This will modify your script file.", shuffle = F)
+    if(add_ids) {
+
+      #Temporary backup solution
+      if(!fs::dir_exists(path(path_dir(filepath), "backup"))) fs::dir_create(path(path_dir(filepath), "backup"))
+      fs::file_copy(filepath, path(path_dir(filepath), "backup", paste0(fs::path_sanitize(lubridate::now()), " - ", path_file(filepath))))
+      #/Temporary backup solution
+
+      all_code <- all_code %>%
+        mutate(has_qa = stringr::str_detect(code, "QA:")) %>%
+        mutate(has_id = stringr::str_detect(code, "(QA: )(\\d+)(.*)")) %>%
+        mutate(missing_id = stringr::str_detect(code, "#\\s?QA:\\s(?=\\D)")) %>%
+        rowwise() %>%
+        mutate(code = if_else(has_qa & !has_id & missing_id, str_replace(code, "#\\s?QA:\\s(?=\\D)", paste0("# QA: ", round(runif(1, 1, 10000)), " | ")), code)) %>%
+        ungroup() %>%
+        select(-c(has_qa, has_id, missing_id))
+
+      write_lines(all_code$code, filepath)
+      cli::cli_alert_success("Your script has been modified to include QA ID tags. If it is currently open, you will be prompted to reload it. A backup has been created in the 'backups' subdirectory.")
+    }
+  }
+
   if(filetype == "rmd") {
     all_code <- all_code %>% #Add flag to indicate whether the lines are in a text chunk. We use this later when parsing section headers
       mutate(chunk_deliniator = str_detect(code, "^```")) %>%
@@ -80,7 +115,7 @@ qa_parse <- function(filepath) {
     select(-c(qa_comment_V2, qa_comment_V1, code)) %>%
     mutate(comment = str_remove(comment, " \\| "))
 
-
+  #Determine the location of QA lines within sections
   m_ind <- qa_lines %>%
     select(line) %>%
     add_column(table = "qa") %>%
@@ -111,24 +146,24 @@ qa_parse <- function(filepath) {
 qa_wb_load <- function(filepath) {
 
 
-  code_file_only <- path_file(filepath)
+  code_file <- path_file(filepath)
 
-  code_path_only <- path_dir(filepath)
+  code_path <- path_dir(filepath)
 
   project_path <- rstudioapi::getActiveProject()
 
   project_name <- str_extract(project_path, "(?!(.*\\/)).*")
 
-  if(path_only == project_path) { #If we're working with a script in the project root, it gets a QA sheet with the same name as the project
+  if(code_path == project_path) { #If we're working with a script in the project root, it gets a QA sheet with the same name as the project
 
-    maybe_qa_file <- path(code_path_only, "QA", paste0("QA_", project_name, ".xlsx"))
+    maybe_qa_file <- path(code_path, "QA", paste0("QA_", project_name, ".xlsx"))
 
-  } else if(str_detect(code_path_only, project_path)) { #If the script is in a subdir of project root, it gets a QA sheet with the name of the subdir.
+  } else if(str_detect(code_path, project_path)) { #If the script is in a subdir of project root, it gets a QA sheet with the name of the subdir.
 
-    code_subfolder <- str_remove(code_path_only, project_path) %>%
+    code_subfolder <- str_remove(code_path, project_path) %>%
       str_remove("/")
 
-    maybe_qa_file <- path(code_path_only, "QA", paste0("QA_", code_subfolder, ".xlsx"))
+    maybe_qa_file <- path(code_path, "QA", paste0("QA_", code_subfolder, ".xlsx"))
   }
 
   has_existing_qa_file <- fs::file_exists(maybe_qa_file)
@@ -137,29 +172,94 @@ qa_wb_load <- function(filepath) {
 
     if(maybe_qa_sheet %in% getSheetNames(maybe_qa_file)) {
 
-      cli::cli_alert_info("A QA file and code review worksheet for this script already exists. It will be updated")
+      cli::cli_alert_warning("A QA file and code review worksheet for this script already exists. If you continue, the worksheet code review section will be over-written (checklist will not be affected).") #TODO: Check if there is any user-entered changes that will be deleted, and either make sure they aren't by lining up the QA tags, or prompt the user about this.  For now we are prompting every time regarding overwrite.
 
-      qawb <- loadWorkbook(maybe_qa_file)
+      user_overwrite <- usethis::ui_yeah("Do you want to proceed and overwrite the existing QA code review section?", shuffle = F)
 
-    } else {
-      #TODO: The new worksheet will need to be a copy of the one from the template file, not blank.  Could either load it from template, or have the initial template with a hidden sheet that is used as the template.
+      if(user_overwrite) {
+
+        qawb <- loadWorkbook(maybe_qa_file)
+
+        backup_sheet <- paste(code_file, lubridate::now()) %>% str_remove_all("-|:") #TODO: Need to limit chars to 31, so need better naming
+        backup_sheet <- abbreviate(backup_sheet, 31) #FIXME temporary until above is fixed!
+
+        cloneWorksheet(qawb, backup_sheet, clonedSheet = code_file)
+
+        sheetVisibility(qawb)[sheetNamesIndex(qawb, backup_sheet)] <- "hidden"
+
+
+        } else stop("User exited.") #TODO Do something better here
+
+    } else { #Sheet does not exist but QA file does
       cli::cli_alert_info('A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named "{maybe_qa_sheet}") in the file: {maybe_qa_file}')
 
       qawb <- loadWorkbook(maybe_qa_file)
 
-      addWorksheet(qawb, code_file_only) #TODO: as above, need to start with the template, not a blank worksheet.
-
+      cloneWorksheet(qawb, code_file, clonedSheet = "Code_Review_Template")
+      sheetVisibility(qawb)[sheetNamesIndex(qawb, code_file)] <- "visible"
     }
 
-  } else {
-    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {maybe_qa_file}, and a worksheet for the script will be added")
+  } else { #No QA sheet exists yet
+
+    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {maybe_qa_file}, and a worksheet for the script {code_file} will be added.")
+
     qawb <- loadWorkbook(fs::path_package("integral", "extdata/QA_Template_Coded_Analysis.xlsx"))
+
+    cloneWorksheet(qawb, code_file, clonedSheet = "Code_Review_Template")
+    sheetVisibility(qawb)[sheetNamesIndex(qawb, code_file)] <- "visible"
+
   }
 
   return(qawb)
 }
 
 qawb <- qa_wb_load(filepath)
+
+
+#Internal function to translate sheet name to sheet index for openxlsx functions that don't accept names.
+sheetNamesIndex <- function(qawb, lookup) {
+
+  name_ind <- enframe(names(qawb), name = "index", value = "name")
+
+  if(is.character(lookup)) {
+    name_ind %>%
+      filter(name == !!lookup) %>%
+      pull(index)
+  } else
+  if(is.numeric(lookup)) {
+    name_ind %>%
+      filter(index == name_ind) %>%
+      pull(name)
+  } else stop("Sheet name or index number does not exist in workbook.")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
