@@ -255,7 +255,7 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qa_file) {
 
   openxlsx::writeData(qawb, code_file, parsed_qa, startRow = 14, colNames = F)
 
-  openxlsx::saveWorkbook(qawb, qa_file)
+  openxlsx::saveWorkbook(qawb, qa_file, overwrite = TRUE)
 }
 
 #
