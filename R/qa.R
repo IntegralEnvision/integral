@@ -42,6 +42,8 @@ qa <- function(filepath) {
 
   qa_update_sheet(qawb, parsed_qa, filepath, qafile)
 
+  openXL(qawb)
+
   }
 
 qa_file <- function(filepath) { #TODO add status messages as to what is happening
