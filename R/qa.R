@@ -176,7 +176,8 @@ qa_parse <- function(filepath) {
       dplyr::mutate(chunk_deliniator = stringr::str_detect(code, "^```")) %>%
       dplyr::mutate(chunk_num = cumsum(chunk_deliniator)) %>%
       dplyr::mutate(is_text_chunk = chunk_num %% 2 == 0 & !chunk_deliniator) %>%
-      dplyr::select(-c(chunk_deliniator, chunk_num))
+      dplyr::select(-c(chunk_deliniator, chunk_num)) %>%
+      dplyr::mutate(code = dplyr::if_else(stringr::str_detect(code, "^<!--"), "", code)) # NOTE: decision made here to ignore all HTML commented out lines. They are replaced with blanks so that the row numbers don't shift.
   } else if(filetype == "r") all_code <- all_code %>% tibble::add_column(is_text_chunk = F)
 
   headers <- all_code %>%
@@ -246,6 +247,9 @@ qa_parse <- function(filepath) {
   parsed_qa <- wh %>%
     dplyr::left_join(qa_lines, by = "grouping") %>%
     dplyr::select(-grouping)
+
+  parsed_qa <- parsed_qa %>%
+    dplyr::filter(!is.na(line)) #remove any sections that don't have QA tags
 
   return(parsed_qa)
 
