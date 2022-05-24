@@ -156,9 +156,11 @@ qa_file <- function(filepath) { #TODO add status messages as to what is happenin
 
   project_path <- rstudioapi::getActiveProject()
 
+  if(is.null(project_path)) project_path <- code_path #if outside of an Rproj, we just use the parent dir name.
+
   project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
 
-  if(code_path == project_path) { #If we're working with a script in the project root, it gets a QA sheet with the same name as the project
+    if(code_path == project_path) { #If we're working with a script in the project root, it gets a QA sheet with the same name as the project
 
     qa_file <- fs::path(code_path, "QA", paste0("QA_", project_name, ".xlsx"))
 
