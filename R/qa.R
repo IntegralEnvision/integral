@@ -5,17 +5,20 @@
 #' Scrape an .R or .Rmd file for QA tags, and populate the Integral QA sheet for scripted analyses.
 #'
 #' To use, tag QA review items by commenting:
-#' `r # QA: Review comment / request`
+#'
+#'    QA: Review comment / request"
+#'
+#' @section Function Process:
 #'
 #' The function will perform the following actions:
+#'
 #' \itemize{
-#' \item Scrape the file for section headers and '# QA:' tags
+#' \item Scrape the file for section headers and '# QA:' comment tags
 #' \item Assign unique ID's to QA tags in the code (the file will be modified) if they do not have one.
 #' \item Create a QA subdirectory and a QA excel workbook if one does not exist
 #' \item Add a code review spreadsheet for the file if one does not exist; update the spreadsheet for the file if one already exists
 #' }
 #'
-#' You can use relative paths (including "~" home references) or absolute paths.
 #'
 #' @usage qa(filepath = "youfile.R")
 #'
