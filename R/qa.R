@@ -21,6 +21,87 @@ qa <- function(filepath) {
 
   }
 
+qa_file <- function(filepath) { #TODO add status messages as to what is happening
+
+  code_file <- fs::path_file(filepath)
+
+  code_path <- fs::path_dir(filepath)
+
+  project_path <- rstudioapi::getActiveProject()
+
+  if(is.null(project_path)) project_path <- code_path #if outside of an Rproj, we just use the parent dir name.
+
+  project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
+
+  if(code_path == project_path) { #If we're working with a script in the project root, it gets a QA sheet with the same name as the project
+
+    qa_file <- fs::path(code_path, "QA", paste0("QA_", project_name, ".xlsx"))
+
+    fs::dir_create(fs::path_dir(qa_file)) #function ignores command if dir already exists
+
+  } else if(stringr::str_detect(code_path, project_path)) { #If the script is in a subdir of project root, it gets a QA sheet with the name of the subdir.
+
+    code_subfolder <- stringr::str_remove(code_path, project_path) %>%
+      stringr::str_remove("/")
+
+    qa_file <- fs::path(code_path, "QA", paste0("QA_", code_subfolder, ".xlsx"))
+
+    fs::dir_create(fs::path_dir(qa_file)) #function ignores command if dir already exists
+  }
+
+  return(qa_file)
+}
+
+qa_wb <- function(filepath, qa_file) {
+
+  code_file <- fs::path_file(filepath)
+
+  has_existing_qa_file <- fs::file_exists(qa_file)
+
+  if(has_existing_qa_file) {
+
+    if(code_file %in% openxlsx::getSheetNames(qa_file)) {
+
+      cli::cli_alert_warning("A QA file and code review worksheet for this script already exists. If you continue, the worksheet code review section will be over-written (checklist and other sheets will not be affected).") #TODO: Check if there is any user-entered changes that will be deleted, and either make sure they aren't by lining up the QA tags, or prompt the user about this.  For now we are prompting every time regarding overwrite.
+
+      user_overwrite <- usethis::ui_yeah("Do you want to proceed and overwrite the existing QA code review section?", shuffle = F)
+
+      if(user_overwrite) {
+
+        qawb <- openxlsx::loadWorkbook(qa_file)
+
+        backup_sheet <- paste(code_file, lubridate::now()) %>% stringr::str_remove_all("-|:") #TODO: Need to limit chars to 31, so need better naming
+        backup_sheet <- abbreviate(backup_sheet, 31) #FIXME temporary until above is fixed!
+
+        openxlsx::cloneWorksheet(qawb, backup_sheet, clonedSheet = code_file)
+
+        openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, backup_sheet)] <- "hidden"
+
+
+      } else stop("User exited.") #TODO Do something better here
+
+    } else { #Sheet does not exist but QA file does
+      cli::cli_alert_info('A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named "{maybe_qa_sheet}") in the file: {qa_file}')
+
+      qawb <- openxlsx::loadWorkbook(qa_file)
+
+      openxlsx::cloneWorksheet(qawb, code_file, clonedSheet = "Code_Review_Template")
+      openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, code_file)] <- "visible"
+    }
+
+  } else { #No QA sheet exists yet
+
+    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {qa_file}, and a worksheet for the script {code_file} will be added.")
+
+    qawb <- openxlsx::loadWorkbook(fs::path_package("integral", "extdata/QA_Template_Coded_Analysis.xlsx"))
+
+    openxlsx::cloneWorksheet(qawb, code_file, clonedSheet = "Code_Review_Template")
+    openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, code_file)] <- "visible"
+
+  }
+
+  return(qawb)
+}
 
 qa_parse <- function(filepath) {
 
@@ -147,87 +228,15 @@ qa_parse <- function(filepath) {
 
 }
 
-
-qa_file <- function(filepath) { #TODO add status messages as to what is happening
-
-  code_file <- fs::path_file(filepath)
-
-  code_path <- fs::path_dir(filepath)
-
-  project_path <- rstudioapi::getActiveProject()
-
-  if(is.null(project_path)) project_path <- code_path #if outside of an Rproj, we just use the parent dir name.
-
-  project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
-
-    if(code_path == project_path) { #If we're working with a script in the project root, it gets a QA sheet with the same name as the project
-
-    qa_file <- fs::path(code_path, "QA", paste0("QA_", project_name, ".xlsx"))
-
-    fs::dir_create(fs::path_dir(qa_file)) #function ignores command if dir already exists
-
-  } else if(stringr::str_detect(code_path, project_path)) { #If the script is in a subdir of project root, it gets a QA sheet with the name of the subdir.
-
-    code_subfolder <- stringr::str_remove(code_path, project_path) %>%
-      stringr::str_remove("/")
-
-    qa_file <- fs::path(code_path, "QA", paste0("QA_", code_subfolder, ".xlsx"))
-
-    fs::dir_create(fs::path_dir(qa_file)) #function ignores command if dir already exists
-  }
-
-  return(qa_file)
-}
-
-qa_wb <- function(filepath, qa_file) {
+qa_update_sheet <- function(qawb, parsed_qa, filepath, qa_file) {
 
   code_file <- fs::path_file(filepath)
 
-  has_existing_qa_file <- fs::file_exists(qa_file)
+  qa_file <- qa_file(filepath)
 
-  if(has_existing_qa_file) {
+  openxlsx::writeData(qawb, code_file, parsed_qa, startRow = 14, colNames = F)
 
-    if(code_file %in% openxlsx::getSheetNames(qa_file)) {
-
-      cli::cli_alert_warning("A QA file and code review worksheet for this script already exists. If you continue, the worksheet code review section will be over-written (checklist and other sheets will not be affected).") #TODO: Check if there is any user-entered changes that will be deleted, and either make sure they aren't by lining up the QA tags, or prompt the user about this.  For now we are prompting every time regarding overwrite.
-
-      user_overwrite <- usethis::ui_yeah("Do you want to proceed and overwrite the existing QA code review section?", shuffle = F)
-
-      if(user_overwrite) {
-
-        qawb <- openxlsx::loadWorkbook(qa_file)
-
-        backup_sheet <- paste(code_file, lubridate::now()) %>% stringr::str_remove_all("-|:") #TODO: Need to limit chars to 31, so need better naming
-        backup_sheet <- abbreviate(backup_sheet, 31) #FIXME temporary until above is fixed!
-
-        openxlsx::cloneWorksheet(qawb, backup_sheet, clonedSheet = code_file)
-
-        openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, backup_sheet)] <- "hidden"
-
-
-        } else stop("User exited.") #TODO Do something better here
-
-    } else { #Sheet does not exist but QA file does
-      cli::cli_alert_info('A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named "{maybe_qa_sheet}") in the file: {qa_file}')
-
-      qawb <- openxlsx::loadWorkbook(qa_file)
-
-      openxlsx::cloneWorksheet(qawb, code_file, clonedSheet = "Code_Review_Template")
-      openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, code_file)] <- "visible"
-    }
-
-  } else { #No QA sheet exists yet
-
-    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {qa_file}, and a worksheet for the script {code_file} will be added.")
-
-    qawb <- openxlsx::loadWorkbook(fs::path_package("integral", "extdata/QA_Template_Coded_Analysis.xlsx"))
-
-    openxlsx::cloneWorksheet(qawb, code_file, clonedSheet = "Code_Review_Template")
-    openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, code_file)] <- "visible"
-
-  }
-
-  return(qawb)
+  openxlsx::saveWorkbook(qawb, qa_file, overwrite = TRUE)
 }
 
 
@@ -247,53 +256,6 @@ sheetNamesIndex <- function(qawb, lookup) {
       dplyr::pull(name)
   } else stop("Sheet name or index number does not exist in workbook.")
 }
-
-
-
-qa_update_sheet <- function(qawb, parsed_qa, filepath, qa_file) {
-
-  code_file <- fs::path_file(filepath)
-
-  qa_file <- qa_file(filepath)
-
-  openxlsx::writeData(qawb, code_file, parsed_qa, startRow = 14, colNames = F)
-
-  openxlsx::saveWorkbook(qawb, qa_file, overwrite = TRUE)
-}
-
-#
-# merge_cols <-  enframe(which(str_detect(names(four), "\\.Q")), name = NULL, value = "end") %>%
-#   mutate(start = end - 1, .before = end) %>%
-#   array_tree(margin = 1)
-#
-#
-# parsed_qa %>%
-#   mutate(lvl1 = dense_rank(level_1))
-#
-# parsed_qa %>% mutate(row = row_number())
-#
-#
-#
-#
-#
-#
-#
-#
-#
-
-
-
-
-#prefixer::prefixer()
-
-
-
-
-
-
-
-
-
 
 
 
