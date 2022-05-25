@@ -1,7 +1,6 @@
 #' vis_dat for grouped data
-#' @description
-#' \lifecycle{experimental}
-#' Produce a vis_dat plot for ipeds data split by year with optional sampling.
+#' @description Produce a vis_dat plot for ipeds data split by year with optional sampling.
+#' `r lifecycle::badge('maturing')`
 #'
 #' Note that parallel processing is built in if a `future::plan()` is set
 #' @importFrom magrittr "%>%"
