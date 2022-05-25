@@ -188,21 +188,22 @@ qa_parse <- function(filepath) {
     dplyr::mutate(code = stringr::str_remove_all(code, "-{2,}")) %>%
     dplyr::filter(is_code_header | is_text_header) %>%
     dplyr::mutate(section = stringr::str_match(code, "(#+)\\s(.*)")) %>%
+    dplyr::mutate(section = magrittr::set_colnames(section, c("full_string", "hash", "title"))) %>%
     dplyr::mutate(section = dplyr::as_tibble(section)) %>%
     tidyr::unnest_wider(section, names_sep = "_") %>%
-    dplyr::rename(full_string = section_V1,
-           hash = section_V2,
-           title = section_V3) %>%
-    dplyr::mutate(full_string = stringr::str_squish(full_string),
-           title = stringr::str_squish(title)) %>%
-    dplyr::mutate(section_level = stringr::str_count(hash, "#")) %>%
-    dplyr::select(-c(is_text_header, is_code_header, full_string, hash, is_text_chunk))
+    # dplyr::rename(full_string = section_V1,
+    #        hash = section_V2,
+    #        title = section_V3) %>%
+    # dplyr::mutate(full_string = stringr::str_squish(full_string),
+    #        title = stringr::str_squish(title)) %>%
+    dplyr::mutate(section_level = stringr::str_count(section_hash, "#")) %>%
+    dplyr::select(-c(is_text_header, is_code_header, section_full_string, section_hash, is_text_chunk))
 
   section_depth <- headers %>% dplyr::summarize(section_depth = max(section_level)) %>% dplyr::pull(section_depth)
 
   wh <- headers %>% #wide headers
     dplyr::select(-file_full) %>%
-    tidyr::pivot_wider(names_from = section_level, values_from = title, names_prefix = "level_")
+    tidyr::pivot_wider(names_from = section_level, values_from = section_title, names_prefix = "level_")
 
   for(i in seq(section_depth)) {
     wh <- wh %>%
@@ -211,6 +212,12 @@ qa_parse <- function(filepath) {
   }
 
   wh <- wh %>% dplyr::ungroup()
+
+
+  for(missingcol in setdiff(c("level_1", "level_2", "level_3", "level_4"), names(wh))) { #add empty columns to keep column alignment in worksheet
+    wh <- wh %>% add_column(!!sym(missingcol) := NA_character_)
+  }
+
 
   qa_lines <- all_code %>%
     dplyr::select(-c(is_text_chunk, file_full)) %>%
