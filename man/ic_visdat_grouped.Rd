@@ -17,7 +17,7 @@ ic_visdat_grouped(.data, ..., method = "vis_dat", .sample_frac = "auto")
 visdat plot separated by grouping variable.
 }
 \description{
-\lifecycle{experimental}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 Produce a vis_dat plot for ipeds data split by year with optional sampling.
 
 Note that parallel processing is built in if a \code{future::plan()} is set
