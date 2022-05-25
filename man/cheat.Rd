@@ -7,7 +7,7 @@
 cheat(sheet = NULL)
 }
 \arguments{
-\item{sheet}{Name of the cheatsheet, if known. If NULL (default) a list is presented.}
+\item{sheet}{Name of the cheatsheet, if known. Partial matches work as well. If NULL (default) a list is presented.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
