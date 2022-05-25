@@ -45,11 +45,6 @@ ic_update <- function() {
 }
 
 
-
-
-
-
-
 #Internal only. Get OS (from https://conjugateprior.org/2015/06/identifying-the-os-from-r/)
 get_os <- function(){
   sysinf <- Sys.info()
@@ -65,6 +60,25 @@ get_os <- function(){
       os <- "linux"
   }
   tolower(os)
+}
+
+#Internal: Logical for on citrix or not.
+is_citrix <- function() {
+  x <- Sys.info()["nodename"]
+
+  cli::cli_alert_info("R appears to be running on: {current_r_location()}")
+
+  stringr::str_detect(x, "APP\\d+")
+}
+
+#Internal: where is r running
+get_system <- function() {
+  x <- Sys.info()["nodename"]
+
+  if(stringr::str_detect(x, "APP\\d+")) return("citrix") else
+    if(stringr::str_detect(x, "rstudio")) return("linux") else
+      return("local")
+
 }
 
 
