@@ -1,6 +1,6 @@
 #' vis_dat for grouped data
 #' @description
-#' \lifecycle{experimental}
+#' `r lifecycle::badge('experimental')`
 #' Produce a vis_dat plot for ipeds data split by year with optional sampling.
 #'
 #' Note that parallel processing is built in if a `future::plan()` is set
