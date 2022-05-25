@@ -45,29 +45,6 @@ ic_update <- function() {
 }
 
 
-
-
-
-
-
-#Internal only. Get OS (from https://conjugateprior.org/2015/06/identifying-the-os-from-r/)
-get_os <- function(){
-  sysinf <- Sys.info()
-  if (!is.null(sysinf)){
-    os <- sysinf['sysname']
-    if (os == 'Darwin')
-      os <- "osx"
-  } else { ## mystery machine
-    os <- .Platform$OS.type
-    if (grepl("^darwin", R.version$os))
-      os <- "osx"
-    if (grepl("linux-gnu", R.version$os))
-      os <- "linux"
-  }
-  tolower(os)
-}
-
-
 #' Show news for new version
 #' @description
 #' `r lifecycle::badge('experimental')`
@@ -103,3 +80,46 @@ ic_news <- function(all = FALSE) {
   }
 
 }
+
+
+
+
+
+#Internal only. Get OS (from https://conjugateprior.org/2015/06/identifying-the-os-from-r/)
+get_os <- function(){
+  sysinf <- Sys.info()
+  if (!is.null(sysinf)){
+    os <- sysinf['sysname']
+    if (os == 'Darwin')
+      os <- "osx"
+  } else { ## mystery machine
+    os <- .Platform$OS.type
+    if (grepl("^darwin", R.version$os))
+      os <- "osx"
+    if (grepl("linux-gnu", R.version$os))
+      os <- "linux"
+  }
+  tolower(os)
+}
+
+
+
+#Internal: Logical for on citrix or not.
+is_citrix <- function() {
+  x <- Sys.info()["nodename"]
+
+  cli::cli_alert_info("R appears to be running on: {current_r_location()}")
+
+  stringr::str_detect(x, "APP\\d+")
+}
+
+#Internal: where is r running
+get_system <- function() {
+  x <- Sys.info()["nodename"]
+
+  if(stringr::str_detect(x, "APP\\d+")) return("citrix") else
+    if(stringr::str_detect(x, "rstudio")) return("linux") else
+      return("local")
+
+}
+
