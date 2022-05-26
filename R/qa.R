@@ -268,9 +268,27 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qa_file) {
 
   code_file <- fs::path_file(filepath)
 
-  qa_file <- qa_file(filepath)
 
   openxlsx::writeData(qawb, code_file, parsed_qa, startRow = 14, colNames = F)
+
+  for(levcol in c("level_1", "level_2", "level_3", "level_4")) {
+
+    merge_rows <- index_identical_rows(parsed_qa, !!sym(levcol), startRow = 14)
+    colnum <- readr::parse_number(levcol)
+
+    for(i in seq(merge_rows)) {
+      openxlsx::mergeCells(qawb, code_file, rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum)
+      openxlsx::addStyle(qawb, code_file, style = openxlsx::createStyle(valign = "center"), rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum, stack = T)
+    }
+
+    unborder_rows <- parsed_qa %>% summarize(!!sym(levcol) := which(is.na(!!sym(levcol)))) %>% pull(!!sym(levcol))
+    unborder_rows <- unborder_rows + 13
+    openxlsx::addStyle(qawb, code_file, style = createStyle(border = "TopBottomLeftRight", borderStyle = c("thin", "thin", "none", "none")), rows = unborder_rows, cols = colnum, gridExpand = T)
+
+  }
+
+
+  openxlsx::activeSheet(qawb) <- code_file
 
   openxlsx::saveWorkbook(qawb, qa_file, overwrite = TRUE)
 }
