@@ -12,6 +12,7 @@
 #'
 #' History
 #' 2022-05 Eben Pendleton written.
+#' @export
 
 letnum <- function(x) {
 
@@ -26,7 +27,7 @@ letnum <- function(x) {
   # combine all possible letter combination
   lets <- c(LETTERS, l2, l3)
 
-  each_let <-function(x) {
+  each_let <-function(x, lets) {
     # see if we match a letter
     result <- which(lets %in% toupper(x))
     # if there is no letter match integer(0) is returned. Check and provide an
@@ -40,6 +41,6 @@ letnum <- function(x) {
     return(result)
   }
   # try and return a number match for each letter
-  return(sapply(x, each_let, USE.NAMES = F))
+  return(sapply(x, each_let, lets=lets, USE.NAMES = F))
 
 }
