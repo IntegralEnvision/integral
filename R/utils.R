@@ -111,7 +111,6 @@ ic_news <- function(all = FALSE) {
 is_citrix <- function() {
   x <- Sys.info()["nodename"]
 
-  cli::cli_alert_info("R appears to be running on: {current_r_location()}")
 
   stringr::str_detect(x, "APP\\d+")
 }
