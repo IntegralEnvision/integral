@@ -11,6 +11,8 @@
 #' letnum("A")
 #'
 letnum <- function(x) {
+
+  # Current Max column reference is XFD
   if (any(nchar(x) > 1, length(x) > 1, x == "")) {
     return(cli::cli_alert_danger("Error in letnum(): values must be single letters"))
   }
