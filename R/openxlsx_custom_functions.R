@@ -9,6 +9,6 @@ index_identical_rows <- function(.data, column, startRow = 1) {
               end = which(end)) %>%
     dplyr::filter(start != end) %>%
     dplyr::mutate(dplyr::across(tidyselect::everything(), ~ . + startRow - 1)) %>%
-    array_tree(margin = 1)
+    purrr::array_tree(margin = 1)
 }
 
