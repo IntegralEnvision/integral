@@ -22,10 +22,20 @@
 #'
 #' @usage qa(filepath = "youfile.R")
 #'
-#' @param filepath The file to QA. Can include either an absolute path or a relative path (including "~" home references).
+#' @param filepath The file to QA. Can include either an absolute path or a relative path (including "~" home references). If omitted, a file selection dialog box will appear.
 #' @export
 
 qa <- function(filepath) {
+
+  if(rlang::is_missing(filepath)) {
+    filepath <- rstudioapi::selectFile(
+      caption = "Select File",
+      label = "Run QA",
+      path = rstudioapi::getActiveProject(),
+      filter = "R files (*.R | *.Rmd)",
+      existing = TRUE
+    )
+  }
 
   filepath <- fs::path_real(filepath)
 
