@@ -29,7 +29,7 @@ qa <- function(filepath) {
 
   if(rlang::is_missing(filepath)) {
     filepath <- rstudioapi::selectFile(
-      caption = "Select File",
+      caption = "Select File to QA",
       label = "Run QA",
       path = rstudioapi::getActiveProject(),
       filter = "R files (*.R | *.Rmd)",
@@ -89,13 +89,13 @@ qa_file <- function(filepath) { #TODO add status messages as to what is happenin
 
 qa_wb <- function(filepath, qa_file) {
 
-  code_file <- fs::path_file(filepath)
+  sheet <- fs::path_file(filepath)
 
   has_existing_qa_file <- fs::file_exists(qa_file)
 
   if(has_existing_qa_file) {
 
-    if(code_file %in% openxlsx::getSheetNames(qa_file)) {
+    if(sheet %in% openxlsx::getSheetNames(qa_file)) {
 
       cli::cli_alert_warning("A QA file and code review worksheet for this script already exists. If you continue, the worksheet code review section will be over-written (checklist and other sheets will not be affected).") #TODO: Check if there is any user-entered changes that will be deleted, and either make sure they aren't by lining up the QA tags, or prompt the user about this.  For now we are prompting every time regarding overwrite.
 
@@ -105,10 +105,10 @@ qa_wb <- function(filepath, qa_file) {
 
         qawb <- openxlsx::loadWorkbook(qa_file)
 
-        backup_sheet <- paste(code_file, lubridate::now()) %>% stringr::str_remove_all("-|:") #TODO: Need to limit chars to 31, so need better naming
+        backup_sheet <- paste(sheet, lubridate::now()) %>% stringr::str_remove_all("-|:") #TODO: Need to limit chars to 31, so need better naming
         backup_sheet <- abbreviate(backup_sheet, 31) #FIXME temporary until above is fixed!
 
-        openxlsx::cloneWorksheet(qawb, backup_sheet, clonedSheet = code_file)
+        openxlsx::cloneWorksheet(qawb, backup_sheet, clonedSheet = sheet)
 
         openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, backup_sheet)] <- "hidden"
 
@@ -120,18 +120,18 @@ qa_wb <- function(filepath, qa_file) {
 
       qawb <- openxlsx::loadWorkbook(qa_file)
 
-      openxlsx::cloneWorksheet(qawb, code_file, clonedSheet = "Code_Review_Template")
-      openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, code_file)] <- "visible"
+      openxlsx::cloneWorksheet(qawb, sheet, clonedSheet = "Code_Review_Template")
+      openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, sheet)] <- "visible"
     }
 
   } else { #No QA sheet exists yet
 
-    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {qa_file}, and a worksheet for the script {code_file} will be added.")
+    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {qa_file}, and a worksheet for the script {sheet} will be added.")
 
     qawb <- openxlsx::loadWorkbook(fs::path_package("integral", "extdata/QA_Template_Coded_Analysis.xlsx"))
 
-    openxlsx::cloneWorksheet(qawb, code_file, clonedSheet = "Code_Review_Template")
-    openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, code_file)] <- "visible"
+    openxlsx::cloneWorksheet(qawb, sheet, clonedSheet = "Code_Review_Template")
+    openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, sheet)] <- "visible"
 
   }
 
@@ -168,6 +168,9 @@ qa_parse <- function(filepath) {
       if(!fs::dir_exists(fs::path(fs::path_dir(filepath), "backup"))) fs::dir_create(fs::path(fs::path_dir(filepath), "backup"))
       fs::file_copy(filepath, fs::path(fs::path_dir(filepath), "backup", paste0(fs::path_sanitize(lubridate::now()), " - ", fs::path_file(filepath))))
       #/Temporary backup solution
+
+      #TODO: handle missing | and make sure if it's there it isn't doubled.
+      #TODO: look into how usethis::use_get_ignore opens a file and adds to it.
 
       all_code <- all_code %>%
         dplyr::mutate(has_qa = stringr::str_detect(code, "QA:")) %>%
@@ -225,7 +228,7 @@ qa_parse <- function(filepath) {
 
 
   for(missingcol in setdiff(c("level_1", "level_2", "level_3", "level_4"), names(wh))) { #add empty columns to keep column alignment in worksheet
-    wh <- wh %>% add_column(!!sym(missingcol) := NA_character_)
+    wh <- wh %>% tibble::add_column(!!rlang::sym(missingcol) := NA_character_)
   }
 
 
@@ -276,29 +279,31 @@ qa_parse <- function(filepath) {
 
 qa_update_sheet <- function(qawb, parsed_qa, filepath, qa_file) {
 
-  code_file <- fs::path_file(filepath)
+  sheet <- fs::path_file(filepath)
 
+  openxlsx::removeCellMerge(qawb, sheet, )
 
-  openxlsx::writeData(qawb, code_file, parsed_qa, startRow = 14, colNames = F)
+  openxlsx::writeData(qawb, sheet, parsed_qa, startRow = 14, colNames = F)
+
 
   for(levcol in c("level_1", "level_2", "level_3", "level_4")) {
 
-    merge_rows <- index_identical_rows(parsed_qa, !!sym(levcol), startRow = 14)
+    merge_rows <- index_identical_rows(parsed_qa, !!rlang::sym(levcol), startRow = 14)
     colnum <- readr::parse_number(levcol)
 
     for(i in seq(merge_rows)) {
-      openxlsx::mergeCells(qawb, code_file, rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum)
-      openxlsx::addStyle(qawb, code_file, style = openxlsx::createStyle(valign = "center"), rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum, stack = T)
+      openxlsx::mergeCells(qawb, sheet, rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum)
+      openxlsx::addStyle(qawb, sheet, style = openxlsx::createStyle(valign = "center"), rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum, stack = T)
     }
 
-    unborder_rows <- parsed_qa %>% summarize(!!sym(levcol) := which(is.na(!!sym(levcol)))) %>% pull(!!sym(levcol))
-    unborder_rows <- unborder_rows + 13
-    openxlsx::addStyle(qawb, code_file, style = createStyle(border = "TopBottomLeftRight", borderStyle = c("thin", "thin", "none", "none")), rows = unborder_rows, cols = colnum, gridExpand = T)
+    border_sections <- parsed_qa %>% dplyr::summarize(!!rlang::sym(levcol) := which(is.na(!!rlang::sym(levcol)))) %>% dplyr::pull(!!rlang::sym(levcol))
+    border_sections <- border_sections + 13
+    openxlsx::addStyle(qawb, sheet, style = openxlsx::createStyle(border = "TopBottomLeftRight", borderStyle = c("thin", "thin", "thin", "thin")), rows = border_sections, cols = colnum, gridExpand = T)
 
   }
 
 
-  openxlsx::activeSheet(qawb) <- code_file
+  openxlsx::activeSheet(qawb) <- sheet
 
   openxlsx::saveWorkbook(qawb, qa_file, overwrite = TRUE)
 }
