@@ -41,7 +41,7 @@ qa <- function(filepath) {
 
   if(!fs::file_exists(filepath)) stop(cli::cli_alert_danger(paste0("File `", filepath, "` does not exist. If it is not in the root project directory, specify the path relative to the root project directory.")))
 
-  if(!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R or .Rmd file.")))
+  if(!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R, .Rmd, or .py file.")))
 
 
   qafile <- qa_file(filepath)
@@ -70,32 +70,32 @@ qa_file <- function(filepath) { #TODO add status messages as to what is happenin
 
   if(code_path == project_path) { #If we're working with a script in the project root, it gets a QA sheet with the same name as the project
 
-    qa_file <- fs::path(code_path, "QA", paste0("QA_", project_name, ".xlsx"))
+    qafile <- fs::path(code_path, "QA", paste0("QA_", project_name, ".xlsx"))
 
-    fs::dir_create(fs::path_dir(qa_file)) #function ignores command if dir already exists
+    fs::dir_create(fs::path_dir(qafile)) #function ignores command if dir already exists
 
   } else if(stringr::str_detect(code_path, project_path)) { #If the script is in a subdir of project root, it gets a QA sheet with the name of the subdir.
 
     code_subfolder <- stringr::str_remove(code_path, project_path) %>%
       stringr::str_remove("/")
 
-    qa_file <- fs::path(code_path, "QA", paste0("QA_", code_subfolder, ".xlsx"))
+    qafile <- fs::path(code_path, "QA", paste0("QA_", code_subfolder, ".xlsx"))
 
-    fs::dir_create(fs::path_dir(qa_file)) #function ignores command if dir already exists
+    fs::dir_create(fs::path_dir(qafile)) #function ignores command if dir already exists
   }
 
-  return(qa_file)
+  return(qafile)
 }
 
-qa_wb <- function(filepath, qa_file) {
+qa_wb <- function(filepath, qafile) {
 
   sheet <- fs::path_file(filepath)
 
-  has_existing_qa_file <- fs::file_exists(qa_file)
+  has_existing_qafile <- fs::file_exists(qafile)
 
-  if(has_existing_qa_file) {
+  if(has_existing_qafile) {
 
-    if(sheet %in% openxlsx::getSheetNames(qa_file)) {
+    if(sheet %in% openxlsx::getSheetNames(qafile)) {
 
       cli::cli_alert_warning("A QA file and code review worksheet for this script already exists. If you continue, the worksheet code review section will be over-written (checklist and other sheets will not be affected).") #TODO: Check if there is any user-entered changes that will be deleted, and either make sure they aren't by lining up the QA tags, or prompt the user about this.  For now we are prompting every time regarding overwrite.
 
@@ -103,7 +103,7 @@ qa_wb <- function(filepath, qa_file) {
 
       if(user_overwrite) {
 
-        qawb <- openxlsx::loadWorkbook(qa_file)
+        qawb <- openxlsx::loadWorkbook(qafile)
 
         backup_sheet <- paste(sheet, lubridate::now()) %>% stringr::str_remove_all("-|:") #TODO: Need to limit chars to 31, so need better naming
         backup_sheet <- abbreviate(backup_sheet, 31) #FIXME temporary until above is fixed!
@@ -116,9 +116,9 @@ qa_wb <- function(filepath, qa_file) {
       } else stop("User exited.") #TODO Do something better here
 
     } else { #Sheet does not exist but QA file does
-      cli::cli_alert_info('A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named "{maybe_qa_sheet}") in the file: {qa_file}')
+      cli::cli_alert_info('A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named "{maybe_qa_sheet}") in the file: {qafile}')
 
-      qawb <- openxlsx::loadWorkbook(qa_file)
+      qawb <- openxlsx::loadWorkbook(qafile)
 
       openxlsx::cloneWorksheet(qawb, sheet, clonedSheet = "Code_Review_Template")
       openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, sheet)] <- "visible"
@@ -126,7 +126,7 @@ qa_wb <- function(filepath, qa_file) {
 
   } else { #No QA sheet exists yet
 
-    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {qa_file}, and a worksheet for the script {sheet} will be added.")
+    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {qafile}, and a worksheet for the script {sheet} will be added.")
 
     qawb <- openxlsx::loadWorkbook(fs::path_package("integral", "extdata/QA_Template_Coded_Analysis.xlsx"))
 
@@ -277,7 +277,7 @@ qa_parse <- function(filepath) {
 
 }
 
-qa_update_sheet <- function(qawb, parsed_qa, filepath, qa_file) {
+qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
 
   sheet <- fs::path_file(filepath)
 
@@ -305,7 +305,7 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qa_file) {
 
   openxlsx::activeSheet(qawb) <- sheet
 
-  openxlsx::saveWorkbook(qawb, qa_file, overwrite = TRUE)
+  openxlsx::saveWorkbook(qawb, qafile, overwrite = TRUE)
 }
 
 
