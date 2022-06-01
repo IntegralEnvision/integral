@@ -7,7 +7,7 @@
 qa(filepath = "youfile.R")
 }
 \arguments{
-\item{filepath}{The file to QA. Can include either an absolute path or a relative path (including "~" home references).}
+\item{filepath}{The file to QA. Can include either an absolute path or a relative path (including "~" home references). If omitted, a file selection dialog box will appear.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
