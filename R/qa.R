@@ -24,7 +24,6 @@
 #'
 #' @param filepath The file to QA. Can include either an absolute path or a relative path (including "~" home references). If omitted, a file selection dialog box will appear.
 #' @export
-
 qa <- function(filepath) {
 
   if(rlang::is_missing(filepath)) {
@@ -151,7 +150,7 @@ qa_parse <- function(filepath) {
 
   #Detect QA tags
   all_code <- all_code %>%
-    mutate(is_qa = str_detect(code, "\\s*#\\s?QA"))
+    dplyr::mutate(is_qa = stringr::str_detect(code, "\\s*#\\s?QA"))
 
   original_code <- all_code
 
@@ -160,13 +159,13 @@ qa_parse <- function(filepath) {
 
   #Format QA tags.  See https://regex101.com/r/W68Elc/1
   all_code <- all_code %>%
-    mutate(code = ifelse(is_qa,
-                         str_replace(code, "(\\s*)(#\\s?QA)(:?\\s?)\\s?(\\d{0,5}\\s?)(\\|?\\s?)(\\s?.*)", "\\1# QA: \\4\\| \\6"), code)) %>%
-    mutate(qa_id = stringr::str_extract(code, "(?<=# QA: )\\d+") %>% as.numeric()) %>%
+    dplyr::mutate(code = dplyr::if_else(is_qa,
+                         stringr::str_replace(code, "(\\s*)(#\\s?QA)(:?\\s?)\\s?(\\d{0,5}\\s?)(\\|?\\s?)(\\s?.*)", "\\1# QA: \\4\\| \\6"), code)) %>%
+    dplyr::mutate(qa_id = stringr::str_extract(code, "(?<=# QA: )\\d+") %>% as.numeric()) %>%
     dplyr::mutate(is_missing_id = is.na(qa_id) & is_qa) %>%
-    add_count(qa_id, name = "duplicates") %>%
-    mutate(is_duplicate = duplicates > 1 & is_qa & !is_missing_id) %>%
-    mutate(duplicates = duplicates * is_duplicate)  #set non-dupes value to 0 by multiplying by FALSE
+    dplyr::add_count(qa_id, name = "duplicates") %>%
+    dplyr::mutate(is_duplicate = duplicates > 1 & is_qa & !is_missing_id) %>%
+    dplyr::mutate(duplicates = duplicates * is_duplicate)  #set non-dupes value to 0 by multiplying by FALSE
 
 
   #Check for duplicate QA IDs and fix if user approves
@@ -175,24 +174,24 @@ qa_parse <- function(filepath) {
 
     cli::cli_alert_danger("Duplicate QA ID's detected.  Would you like to automatically replace them with unique IDs? Doing so may unlink responses to QA if they exist.\n\n\n", wrap = T) #TODO: Once I pull data from an existing sheet, should check on existence of responses to existing IDs that would be changed.
 
-    print(all_code %>% mutate(code = str_squish(code)) %>% filter(is_duplicate) %>% select(line, code, qa_id, duplicates) %>% arrange(qa_id, line)) #Show duplicates and counts
+    print(all_code %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::filter(is_duplicate) %>% dplyr::select(line, code, qa_id, duplicates) %>% dplyr::arrange(qa_id, line)) #Show duplicates and counts
 
     replace_dupes <- usethis::ui_yeah("\n\nReplace duplicate QA ID's?", shuffle = F, yes = "Yes, automatically replace IDs", no = "No, do not change IDs (I will change them manually")
 
     if(replace_dupes) {
-      available_ids <- setdiff(seq(1000, 9999), all_code$qa_id) #don't suggest ids that exist
-      new_ids <- enframe(sample(available_ids, nrow(all_code %>% filter(is_duplicate)), replace = F), name = "dupe_join_id", value = "qa_id")
+      available_ids <- dplyr::setdiff(seq(1000, 9999), all_code$qa_id) #don't suggest ids that exist
+      new_ids <- tibble::enframe(sample(available_ids, nrow(all_code %>% dplyr::filter(is_duplicate)), replace = F), name = "dupe_join_id", value = "qa_id")
 
       all_code <- all_code %>%
-        group_by(is_duplicate) %>%
-        mutate(dupe_join_id = cumsum(is_duplicate)) %>%
-        ungroup() %>%
+        dplyr::group_by(is_duplicate) %>%
+        dplyr::mutate(dupe_join_id = cumsum(is_duplicate)) %>%
+        dplyr::ungroup() %>%
         dplyr::rows_update(new_ids, by = "dupe_join_id") %>%
-        mutate(code = if_else(is_duplicate, str_replace(code, "\\d* \\|", paste0(qa_id, " \\|")), code))
+        dplyr::mutate(code = dplyr::if_else(is_duplicate, stringr::str_replace(code, "\\d* \\|", paste0(qa_id, " \\|")), code))
 
       cli::cli_alert_success("Duplicate QA ID's have been replaced with unique IDs.", wrap = T)
 
-      print(all_code %>% mutate(code = str_squish(code)) %>% filter(is_duplicate) %>% select(line, code, qa_id))
+      print(all_code %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::filter(is_duplicate) %>% dplyr::select(line, code, qa_id))
 
       rewrite_code <- T #Set flag for if the file needs to be written to.
 
@@ -204,29 +203,29 @@ qa_parse <- function(filepath) {
   if(any(all_code$is_missing_id)) {
 
     missing_qa_ids <- all_code %>%
-      filter(is_qa & is_missing_id) %>%
-      mutate(code = str_squish(code)) %>%
-      select(line, code)
+      dplyr::filter(is_qa & is_missing_id) %>%
+      dplyr::mutate(code = stringr::str_squish(code)) %>%
+      dplyr::select(line, code)
 
     cli::cli_alert_danger("The file is missing QA ID numbers for one or more QA tags.  Would you like them to be added automatically? This will modify your script.\n\n", wrap = T)
 
-    print(all_code %>% filter(is_qa & is_missing_id) %>% mutate(code = str_squish(code)) %>% select(line, code, qa_id))
+    print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
 
     add_ids <- usethis::ui_yeah("\n\nAdd QA ID numbers to {crayon::bold(fs::path_file(script_qa))}?", yes = "Yes, add QA ID numbers.", no = "No, do not add QA ID numbers.", shuffle = F)
     if(add_ids) {
-      available_ids <- setdiff(seq(1000, 9999), all_code$qa_id)
-      new_ids <- enframe(sample(available_ids, nrow(missing_qa_ids), replace = F), name = "missing_join_id", value = "qa_id")
+      available_ids <- dplyr::setdiff(seq(1000, 9999), all_code$qa_id)
+      new_ids <- tibble::enframe(sample(available_ids, nrow(missing_qa_ids), replace = F), name = "missing_join_id", value = "qa_id")
 
       all_code <- all_code %>%
-        group_by(is_missing_id) %>%
-        mutate(missing_join_id = cumsum(is_missing_id)) %>%
-        ungroup() %>%
+        dplyr::group_by(is_missing_id) %>%
+        dplyr::mutate(missing_join_id = cumsum(is_missing_id)) %>%
+        dplyr::ungroup() %>%
         dplyr::rows_update(new_ids, by = "missing_join_id") %>%
-        mutate(code = if_else(is_missing_id, str_replace(code, "\\|", paste0(qa_id, " \\|")), code))
+        dplyr::mutate(code = dplyr::if_else(is_missing_id, stringr::str_replace(code, "\\|", paste0(qa_id, " \\|")), code))
 
       cli::cli_alert_success("QA ID numbers have been added.", wrap = T)
 
-      print(all_code %>% filter(is_qa & is_missing_id) %>% mutate(code = str_squish(code)) %>% select(line, code, qa_id))
+      print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
 
       rewrite_code <- T #Set flag for if the file needs to be written to.
 
@@ -234,9 +233,9 @@ qa_parse <- function(filepath) {
   }
 
   all_code <- all_code %>%
-    select(-matches(c("is_duplicate", "duplicates", "is_missing_id", "dupe_join_id", "missing_join_id")))
+    dplyr::select(-dplyr::matches(c("is_duplicate", "duplicates", "is_missing_id", "dupe_join_id", "missing_join_id")))
 
-  if(rewrite_code) { #If any changes have been made to the code that need to be written back to the file
+  if(exists("rewrite_code") && rewrite_code) { #If any changes have been made to the code that need to be written back to the file
     if(!fs::dir_exists(fs::path(fs::path_dir(filepath), "backup"))) fs::dir_create(fs::path(fs::path_dir(filepath), "backup"))
     fs::file_copy(filepath, fs::path(fs::path_dir(filepath), "backup", paste0(fs::path_sanitize(lubridate::now()), " - ", fs::path_file(filepath))))
 
@@ -286,7 +285,7 @@ qa_parse <- function(filepath) {
   wh <- wh %>% dplyr::ungroup()
 
 
-  for(missingcol in setdiff(c("level_1", "level_2", "level_3", "level_4"), names(wh))) { #add empty columns to keep column alignment in worksheet
+  for(missingcol in dplyr::setdiff(c("level_1", "level_2", "level_3", "level_4"), names(wh))) { #add empty columns to keep column alignment in worksheet
     wh <- wh %>% tibble::add_column(!!rlang::sym(missingcol) := NA_character_)
   }
 
@@ -384,6 +383,5 @@ sheetNamesIndex <- function(qawb, lookup) {
       dplyr::pull(name)
   } else stop("Sheet name or index number does not exist in workbook.")
 }
-
 
 
