@@ -42,13 +42,14 @@ qa <- function(filepath) {
 
   if(!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R, .Rmd, or .py file."), wrap = T))
 
+
   #TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags.
 
   qafile <- qa_file(filepath)
 
   qawb <- qa_wb(filepath, qafile)
 
-  parsed_qa <- qa_parse(filepath)
+  parsed_qa <- qa_parse(filepath, include_empty_sections = T) #TODO: maybe add to args?
 
   qa_update_sheet(qawb, parsed_qa, filepath, qafile)
 
@@ -138,21 +139,18 @@ qa_wb <- function(filepath, qafile) {
   return(qawb)
 }
 
-qa_parse <- function(filepath) {
+qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
   filetype <- tools::file_ext(filepath) %>% stringr::str_to_lower()
 
   script_qa <- fs::path_expand(filepath)
 
   all_code <- readr::read_lines(script_qa) %>%
-    tibble::enframe(name = "line", value = "code") %>%
-    tibble::add_column(file_full = as.character(script_qa))
+    tibble::enframe(name = "line", value = "code")
 
   #Detect QA tags
   all_code <- all_code %>%
     dplyr::mutate(is_qa = stringr::str_detect(code, "\\s*#\\s?QA"))
-
-  original_code <- all_code
 
   if(!any(all_code %>%
           dplyr::pull(is_qa))) stop("The file does not contain any recognized QA tags. Tags should start with '# QA' or `#QA`.")
@@ -202,11 +200,6 @@ qa_parse <- function(filepath) {
   #Check for QA tags and QA tags without IDs
   if(any(all_code$is_missing_id)) {
 
-    missing_qa_ids <- all_code %>%
-      dplyr::filter(is_qa & is_missing_id) %>%
-      dplyr::mutate(code = stringr::str_squish(code)) %>%
-      dplyr::select(line, code)
-
     cli::cli_alert_danger("The file is missing QA ID numbers for one or more QA tags.  Would you like them to be added automatically? This will modify your script.\n\n", wrap = T)
 
     print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
@@ -214,7 +207,7 @@ qa_parse <- function(filepath) {
     add_ids <- usethis::ui_yeah("\n\nAdd QA ID numbers to {crayon::bold(fs::path_file(script_qa))}?", yes = "Yes, add QA ID numbers.", no = "No, do not add QA ID numbers.", shuffle = F)
     if(add_ids) {
       available_ids <- dplyr::setdiff(seq(1000, 9999), all_code$qa_id)
-      new_ids <- tibble::enframe(sample(available_ids, nrow(missing_qa_ids), replace = F), name = "missing_join_id", value = "qa_id")
+      new_ids <- tibble::enframe(sample(available_ids, nrow(all_code %>% dplyr::filter(is_missing_id)), replace = F), name = "missing_join_id", value = "qa_id")
 
       all_code <- all_code %>%
         dplyr::group_by(is_missing_id) %>%
@@ -243,7 +236,6 @@ qa_parse <- function(filepath) {
     cli::cli_alert_success("Your script has been modified. If it is currently open, you will be prompted to reload it. A backup has been created in the 'backups' subdirectory.", wrap = T)
   }
 
-
   if(filetype == "rmd") {
     all_code <- all_code %>% #Add flag to indicate whether the lines are in a text chunk. We use this later when parsing section headers
       dplyr::mutate(chunk_deliniator = stringr::str_detect(code, "^```")) %>%
@@ -251,29 +243,21 @@ qa_parse <- function(filepath) {
       dplyr::mutate(is_text_chunk = chunk_num %% 2 == 0 & !chunk_deliniator) %>%
       dplyr::select(-c(chunk_deliniator, chunk_num)) %>%
       dplyr::mutate(code = dplyr::if_else(stringr::str_detect(code, "^<!--"), "", code)) # NOTE: decision made here to ignore all HTML commented out lines. They are replaced with blanks so that the row numbers don't shift.
-  } else if(filetype == "r") all_code <- all_code %>% tibble::add_column(is_text_chunk = F)
+  } else all_code <- all_code %>% tibble::add_column(is_text_chunk = F)
 
   headers <- all_code %>%
     dplyr::mutate(is_code_header = stringr::str_detect(code, "(#+)[^\\t]([a-zA-Z0-9\\(\\)&\\s]*)(?=-+)")) %>%
     dplyr::mutate(is_text_header = is_text_chunk & stringr::str_detect(code, "(#+)\\s(.*?)")) %>%
-    dplyr::mutate(code = stringr::str_remove_all(code, "-{2,}")) %>%
     dplyr::filter(is_code_header | is_text_header) %>%
-    dplyr::mutate(section = stringr::str_match(code, "(#+)\\s(.*)")) %>%
-    dplyr::mutate(section = magrittr::set_colnames(section, c("full_string", "hash", "title"))) %>%
-    dplyr::mutate(section = dplyr::as_tibble(section)) %>%
-    tidyr::unnest_wider(section, names_sep = "_") %>%
-    # dplyr::rename(full_string = section_V1,
-    #        hash = section_V2,
-    #        title = section_V3) %>%
-    # dplyr::mutate(full_string = stringr::str_squish(full_string),
-    #        title = stringr::str_squish(title)) %>%
-    dplyr::mutate(section_level = stringr::str_count(section_hash, "#")) %>%
-    dplyr::select(-c(is_text_header, is_code_header, section_full_string, section_hash, is_text_chunk))
+    dplyr::mutate(code = stringr::str_remove_all(code, "-{4,}") %>%
+                    stringr::str_squish()) %>%
+    dplyr::mutate(section_title = stringr::str_extract(code, "(?<=#\\s).*")) %>%
+    dplyr::mutate(section_level = stringr::str_count(code, "#")) %>%
+    dplyr::select(line, section_title, section_level)
 
   section_depth <- headers %>% dplyr::summarize(section_depth = max(section_level)) %>% dplyr::pull(section_depth)
 
   wh <- headers %>% #wide headers
-    dplyr::select(-file_full) %>%
     tidyr::pivot_wider(names_from = section_level, values_from = section_title, names_prefix = "level_")
 
   for(i in seq(section_depth)) {
@@ -291,18 +275,9 @@ qa_parse <- function(filepath) {
 
 
   qa_lines <- all_code %>%
-    dplyr::select(-c(is_text_chunk, file_full)) %>%
-    dplyr::filter(stringr::str_detect(code, "QA:"))
-
-  qa_lines <- qa_lines %>%
-    dplyr::mutate(qa_comment = stringr::str_match(code, "(QA: )(\\d+)(.*)")) %>%
-    dplyr::mutate(qa_comment = dplyr::as_tibble(qa_comment)) %>%
-    tidyr::unnest_wider(qa_comment, names_sep = "_") %>%
-    dplyr::rename(qa_id = qa_comment_V3,
-           comment = qa_comment_V4) %>%
-    dplyr::select(-c(qa_comment_V2, qa_comment_V1, code)) %>%
-    dplyr::mutate(comment = stringr::str_remove(comment, " \\| ")) %>%
-    dplyr::mutate(qa_id = as.numeric(qa_id))
+    dplyr::select(-c(is_text_chunk)) %>% #TODO: check that the new code for dupes and missings works with RMD, we didn't filter text chunks
+    dplyr::filter(is_qa) %>%
+    dplyr::mutate(comment = stringr::str_extract(code, "(?<=\\|\\s).*"))
 
   #Determine the location of QA lines within sections
   m_ind <- qa_lines %>%
@@ -317,7 +292,7 @@ qa_parse <- function(filepath) {
   wh <- wh %>%
     dplyr::left_join(m_ind %>%
                 dplyr::filter(table == "section"), by = "line") %>%
-    dplyr::select(-c(code, line, table))
+    dplyr::select(tidyselect::starts_with("level_"), grouping)
 
   qa_lines <- qa_lines %>%
     dplyr::left_join(m_ind %>%
@@ -326,10 +301,12 @@ qa_parse <- function(filepath) {
 
   parsed_qa <- wh %>%
     dplyr::left_join(qa_lines, by = "grouping") %>%
-    dplyr::select(-grouping)
+    dplyr::select(tidyselect::starts_with("level_"), line, qa_id, comment)
 
-  parsed_qa <- parsed_qa %>%
-    dplyr::filter(!is.na(line)) #remove any sections that don't have QA tags
+  if(include_empty_sections) {
+    parsed_qa <- parsed_qa %>%
+      dplyr::filter(!is.na(line)) #remove any sections that don't have QA tags
+  }
 
   return(parsed_qa)
 
@@ -339,7 +316,7 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
 
   sheet <- fs::path_file(filepath)
 
-  openxlsx::removeCellMerge(qawb, sheet, )
+  openxlsx::removeCellMerge(qawb, sheet, rows = 14:100, cols = 1:4) #TODO: finish this with the sheetNamesIndex?
 
   openxlsx::writeData(qawb, sheet, parsed_qa, startRow = 14, colNames = F)
 
