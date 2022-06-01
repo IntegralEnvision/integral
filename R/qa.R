@@ -43,6 +43,7 @@ qa <- function(filepath) {
 
   if(!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R, .Rmd, or .py file."), wrap = T))
 
+  #TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags.
 
   qafile <- qa_file(filepath)
 
@@ -193,6 +194,7 @@ qa_parse <- function(filepath) {
 
       print(all_code %>% mutate(code = str_squish(code)) %>% filter(is_duplicate) %>% select(line, code, qa_id))
 
+      rewrite_code <- T #Set flag for if the file needs to be written to.
 
     } else stop("User exited") #TODO Exit without error
   }
@@ -225,11 +227,23 @@ qa_parse <- function(filepath) {
       cli::cli_alert_success("QA ID numbers have been added.", wrap = T)
 
       print(all_code %>% filter(is_qa & is_missing_id) %>% mutate(code = str_squish(code)) %>% select(line, code, qa_id))
+
+      rewrite_code <- T #Set flag for if the file needs to be written to.
+
     } else stop("User exited") #TODO exit but not error
   }
 
   all_code <- all_code %>%
-    select(-c(is_duplicate, duplicates, is_missing_id, dupe_join_id, missing_join_id))
+    select(-matches(c("is_duplicate", "duplicates", "is_missing_id", "dupe_join_id", "missing_join_id")))
+
+  if(rewrite_code) { #If any changes have been made to the code that need to be written back to the file
+    if(!fs::dir_exists(fs::path(fs::path_dir(filepath), "backup"))) fs::dir_create(fs::path(fs::path_dir(filepath), "backup"))
+    fs::file_copy(filepath, fs::path(fs::path_dir(filepath), "backup", paste0(fs::path_sanitize(lubridate::now()), " - ", fs::path_file(filepath))))
+
+    readr::write_lines(all_code$code, filepath)
+    cli::cli_alert_success("Your script has been modified. If it is currently open, you will be prompted to reload it. A backup has been created in the 'backups' subdirectory.", wrap = T)
+  }
+
 
   if(filetype == "rmd") {
     all_code <- all_code %>% #Add flag to indicate whether the lines are in a text chunk. We use this later when parsing section headers
