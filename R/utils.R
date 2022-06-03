@@ -45,29 +45,6 @@ ic_update <- function() {
 }
 
 
-
-
-
-
-
-#Internal only. Get OS (from https://conjugateprior.org/2015/06/identifying-the-os-from-r/)
-get_os <- function(){
-  sysinf <- Sys.info()
-  if (!is.null(sysinf)){
-    os <- sysinf['sysname']
-    if (os == 'Darwin')
-      os <- "osx"
-  } else { ## mystery machine
-    os <- .Platform$OS.type
-    if (grepl("^darwin", R.version$os))
-      os <- "osx"
-    if (grepl("linux-gnu", R.version$os))
-      os <- "linux"
-  }
-  tolower(os)
-}
-
-
 #' Show news for new version
 #' @description
 #' `r lifecycle::badge('experimental')`
@@ -103,3 +80,52 @@ ic_news <- function(all = FALSE) {
   }
 
 }
+
+
+
+
+# Currently removed because I don't know what it's used for - JZ 5/25/22
+# #Internal only. Get OS (from https://conjugateprior.org/2015/06/identifying-the-os-from-r/)
+# get_os <- function(){
+#   sysinf <- Sys.info()
+#   if (!is.null(sysinf)){
+#     os <- sysinf['sysname']
+#     if (os == 'Darwin')
+#       os <- "osx"
+#   } else { ## mystery machine
+#     os <- .Platform$OS.type
+#     if (grepl("^darwin", R.version$os))
+#       os <- "osx"
+#     if (grepl("linux-gnu", R.version$os))
+#       os <- "linux"
+#   }
+#   tolower(os)
+# }
+
+
+#' Check whether R is running on Citrix
+#' @description
+#' `r lifecycle::badge('experimental')`
+#' Returns TRUE if the current system is Citrix.
+#' @export
+is_citrix <- function() {
+  x <- Sys.info()["nodename"]
+
+
+  stringr::str_detect(x, "APP\\d+")
+}
+
+#' Determine which system R is running on
+#' @description
+#' `r lifecycle::badge('experimental')`
+#' Returns one of: "citrix", "linux", "local" depending on which integral environment R is being run on.
+#' @export
+get_system <- function() {
+  x <- Sys.info()["nodename"]
+
+  if(stringr::str_detect(x, "APP\\d+")) return("citrix") else
+    if(stringr::str_detect(x, "rstudio")) return("linux") else
+      return("local")
+
+}
+
