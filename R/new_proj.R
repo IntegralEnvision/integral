@@ -3,7 +3,7 @@
 # 2022-04-01. Added git and file pattern
 
 #' @title Create a new project and R files following Integral standards
-#' @name new_proj
+#' @name ic_new_proj
 #' @description Function to create a new R project and files following integral
 #' standards
 #' `r lifecycle::badge('experimental')`
@@ -13,7 +13,8 @@
 #' @param create_rproj Y/n whether to create a .Rproj file
 #' @param create_rscript Y/n whether to create a R script file
 #' @param create_rmarkdown Y/n whether to create a R Markdown file
-#' @param create_qa Y/n whether to create a QA file
+#' @param create_pyscript Y/n whether to create a Python file
+#' @param create_files vector of files to create
 #' @param create_git Y/n whether to create a git repository
 #' @param create_renv Y/n whether to create a renv
 #'
@@ -23,99 +24,78 @@
 #' new_proj()
 #' }
 #' @export
-new_proj <- function(create_dirs = ask("Would you like to create input, output and QA folders?")
-                        ,create_rproj = ask("Would you like to create an Rproj file?")
-                        ,create_rscript = ask("Would you like to create an R script file?")
-                        ,create_rmarkdown = ask("Would you like to create an Rmarkdown file?"
-                                                , default = F)
-                        ,create_qa = ask("Would you like to create a QA file?")
-                        ,create_git = ask("Would you like to create a git repository?")
-                        ,create_renv = ask("Would you like to create an renv?")
-                        ,switch_proj = ask("Would you like to switch to the newly created project?")) {
+ic_new_proj <- function(path = "", create_dirs = T,
+                        create_rproj = T,
+                        create_git = ask("Would you like to create a git repository?"),
+                        switch_proj = ask("Would you like to switch to the newly created project?")) {
+  proj_setup <- "ic_new_proj("
 
-  # create the directory at the path.
-  path = convert_winpath(readline("What is the directory path to create the project in?: "))
+  # if no path is supplied than ask for it
+  if (path == "") {
+    path <- convert_winpath(readline("What is the directory path to create the project in?: "))
+  }
+  # create the path
   suppressWarnings(dir.create(path))
 
-  # get the files to copy over
-  # if the package is installed
-  extpath <- system.file("templates", "example_project", package = "integral")
-
-  # if we are running a check on an uninstalled package use here::here() to
-  # get the Rcheck directory
-  if (extpath == "") {
-    extpath <- here::here("integral", "templates", "example_project")
-  }
+  proj_setup <- paste0("ic_new_proj(path = ", "'", path, "'")
 
   if (create_dirs) {
-  # get the directories
-  d <- list.dirs(path = extpath)
-  d <- basename(d[2:length(d)])
-  # remove renv if present
-  d <- d[!d %in% c("renv", "cellar")]
+    d <- c("input", "output")
+    func <- function(x) {
+      suppressWarnings(dir.create(paste(path,
+        x,
+        sep = "/"
+      )))
+    }
+    lapply(d, func)
 
-  func <- function(x) {suppressWarnings(dir.create(paste(path
-                      ,x, sep='/')))}
-  lapply(d, func)
+    proj_setup <- paste(proj_setup, "create_dirs = T", sep = ", ")
+
+    cli::cli_alert_success("Input, output folders created")
   }
 
   if (create_rproj) {
-    suppressWarnings(file.copy(paste(extpath,"example_proj.Rproj", sep = '/')
-              ,paste(path, paste0(basename(path), ".Rproj")
-              ,sep = "/"), overwrite=F))
-    }
+    rprojfile_path <- fs::path_package(
+      "integral",
+      "templates/example_project/example_proj.Rproj"
+    )
 
-  if (create_rscript) {
-    rename <- readline(paste("What would you like to name the file?"
-                       ,"Don't include the file extension.: "))
-    suppressWarnings(file.copy(paste(extpath,"rfile_w_header.R", sep = '/')
-              ,paste(path, paste0(rename, ".R")
-              ,sep = "/"), overwrite=F))
+    ic_copy_file(paste(path, paste0(basename(path), ".Rproj"), sep = "/"),
+      rprojfile_path,
+      open = F
+    )
+
+    proj_setup <- paste(proj_setup, "create_rproj = T", sep = ", ")
+
+    cli::cli_alert_success(".RProj file created")
   }
 
-  if (create_rmarkdown) {
-    rename <- readline(paste("What would you like to name the file?"
-                             ,"Don't include the file extension.: "))
-    suppressWarnings(file.copy(paste(extpath,"example_Rmarkdown.Rmd", sep = '/')
-              ,paste(path, paste0(rename, ".Rmd")
-              ,sep = "/"), overwrite=F))
-  }
-
-  if (create_qa) {
-    rename <- readline(paste("What would you like to name the file?"
-                             ,"Don't include the file extension.: "))
-
-    if (dir.exists(paste(path, "QA"))) {
-    suppressWarnings(file.copy(paste(extpath,"QA/QA_Template_Coded_Analysis.xlsx", sep = '/')
-              ,paste(path, "QA", paste0(rename, ".xlsx")
-              ,sep = "/"), overwrite=F))
-  } else {
-    suppressWarnings(file.copy(paste(extpath,"QA/QA_Template_Coded_Analysis.xlsx", sep = '/')
-                               ,paste(path, paste0(rename, ".xlsx")
-                                      ,sep = "/"), overwrite=F))
-  }
-  }
-
-  # switch the working directory to the path
-  w <- getwd()
-  setwd(path)
   # create git
   if (create_git) {
-    system("git init")
-    system("git checkout --orphan main")
-    suppressWarnings(file.copy(paste(extpath,".gitignore", sep = '/')
-              ,paste(path, ".gitignore", sep = "/"), overwrite=F))
+    ic_new_git(path)
+
+    proj_setup <- paste(proj_setup, "create_git = T", sep = ", ")
+
+    cli::cli_alert_success("git repository created")
   }
 
   if (switch_proj) {
-    rstudioapi::openProject(path = path
-  , newSession = ask("Would you like to open the project in a new session?"))
+    rstudioapi::openProject(
+      path = path,
+      newSession = ask("Would you like to open the project in a new session?")
+    )
+    proj_setup <- paste(proj_setup, "switch_proj = T",
+      "newSession = ", newSession,
+      sep = ", "
+    )
+  } else {
+    proj_setup <- paste(proj_setup, "switch_proj = F",
+      sep = ", "
+    )
   }
 
-  #reset the working directory to whatever we came in with
-  setwd(w)
-
-  # return the project path
-  # Should return parameters
-  return(path)
+  # return parameters
+  cli::cli_alert("This project can be recreated with the following function: ")
+  proj_setup <- paste0(proj_setup, ")")
+  return(cli::cli_alert(proj_setup))
 }
