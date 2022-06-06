@@ -92,6 +92,10 @@ qa_wb <- function(filepath, qafile) {
 
   sheet <- fs::path_file(filepath)
 
+
+  # Update/Add QA sheet ------
+
+
   has_existing_qafile <- fs::file_exists(qafile)
 
   if(has_existing_qafile) {
@@ -117,7 +121,7 @@ qa_wb <- function(filepath, qafile) {
       } else stop("User exited.") #TODO Do something better here
 
     } else { #Sheet does not exist but QA file does
-      cli::cli_alert_info('A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named "{sheet}") in the file: {qafile}', wrap = T)
+      cli::cli_alert_info('A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named {crayon::italic({sheet})}) in the file: {.file {qafile}}', wrap = T)
 
       qawb <- openxlsx::loadWorkbook(qafile)
 
@@ -155,7 +159,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
   if(!any(all_code %>%
           dplyr::pull(is_qa))) stop("The file does not contain any recognized QA tags. Tags should start with '# QA' or `#QA`.")
 
-  #Format QA tags.  See https://regex101.com/r/W68Elc/1
+  #Format QA tags.  See https://regex101.com/r/W68Elc/1 ----
   all_code <- all_code %>%
     dplyr::mutate(code = dplyr::if_else(is_qa,
                          stringr::str_replace(code, "(\\s*)(#\\s?QA)(:?\\s?)\\s?(\\d{0,5}\\s?)(\\|?\\s?)(\\s?.*)", "\\1# QA: \\4\\| \\6"), code)) %>%
@@ -166,15 +170,14 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
     dplyr::mutate(duplicates = duplicates * is_duplicate)  #set non-dupes value to 0 by multiplying by FALSE
 
 
-  #Check for duplicate QA IDs and fix if user approves
-
+  #Check for duplicate QA IDs and fix if user approves ----
   if(any(all_code$is_duplicate)) {
 
-    cli::cli_alert_danger("Duplicate QA ID's detected.  Would you like to automatically replace them with unique IDs? Doing so may unlink responses to QA if they exist.\n\n\n", wrap = T) #TODO: Once I pull data from an existing sheet, should check on existence of responses to existing IDs that would be changed.
+    cli::cli_alert_danger("Duplicate QA ID's detected.  Would you like to automatically replace them with unique IDs? Doing so may unlink responses to these QAs if they exist in the QA sheet.\n\n\n", wrap = T) #TODO: Once I pull data from an existing sheet, should check on existence of responses to existing IDs that would be changed.
 
     print(all_code %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::filter(is_duplicate) %>% dplyr::select(line, code, qa_id, duplicates) %>% dplyr::arrange(qa_id, line)) #Show duplicates and counts
 
-    replace_dupes <- usethis::ui_yeah("\n\nReplace duplicate QA ID's?", shuffle = F, yes = "Yes, automatically replace IDs", no = "No, do not change IDs (I will change them manually")
+    replace_dupes <- usethis::ui_yeah("\n\nReplace duplicate QA ID's?", shuffle = F, yes = "Yes, automatically replace IDs", no = "No, do not change IDs (I will change them manually.")
 
     if(replace_dupes) {
       available_ids <- dplyr::setdiff(seq(1000, 9999), all_code$qa_id) #don't suggest ids that exist
@@ -194,17 +197,17 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
       rewrite_code <- T #Set flag for if the file needs to be written to.
 
     } else stop("User exited") #TODO Exit without error
-  }
+  } else cli::cli_alert_success("Checking for duplicate QA ID's.")
 
 
-  #Check for QA tags and QA tags without IDs
+  #Check for QA tags and QA tags without IDs ----
   if(any(all_code$is_missing_id)) {
 
-    cli::cli_alert_danger("The file is missing QA ID numbers for one or more QA tags.  Would you like them to be added automatically? This will modify your script.\n\n", wrap = T)
+    cli::cli_alert_danger("The file is missing QA ID numbers for one or more QA tags.  Would you like them to be added automatically? This will modify your script.", wrap = T)
 
     print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
 
-    add_ids <- usethis::ui_yeah("\n\nAdd QA ID numbers to {crayon::bold(fs::path_file(script_qa))}?", yes = "Yes, add QA ID numbers.", no = "No, do not add QA ID numbers.", shuffle = F)
+    add_ids <- usethis::ui_yeah(cli::cli_text("\n\nAdd QA ID numbers to {.file (fs::path_file(script_qa))}?"), yes = "Yes, add QA ID numbers.", no = "No, do not add QA ID numbers.", shuffle = F)
     if(add_ids) {
       available_ids <- dplyr::setdiff(seq(1000, 9999), all_code$qa_id)
       new_ids <- tibble::enframe(sample(available_ids, nrow(all_code %>% dplyr::filter(is_missing_id)), replace = F), name = "missing_join_id", value = "qa_id")
@@ -222,8 +225,12 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
       rewrite_code <- T #Set flag for if the file needs to be written to.
 
-    } else stop("User exited") #TODO exit but not error
-  }
+    } else {
+        cli::cli_alert_info("Please add IDs manually to the lines above and re-run {.code qa()}. Alternatively, re-run {.code qa()} and select the option to automatically add missing IDs when prompted.", wrap = T)
+        stop_quietly()
+      }
+    #TODO exit but not error
+  } else cli::cli_alert_success("Checking for missing QA ID's.")
 
   all_code <- all_code %>%
     dplyr::select(-dplyr::matches(c("is_duplicate", "duplicates", "is_missing_id", "dupe_join_id", "missing_join_id")))
@@ -233,7 +240,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
     fs::file_copy(filepath, fs::path(fs::path_dir(filepath), "backup", paste0(fs::path_sanitize(lubridate::now()), " - ", fs::path_file(filepath))))
 
     readr::write_lines(all_code$code, filepath)
-    cli::cli_alert_success("Your script has been modified. If it is currently open, you will be prompted to reload it. A backup has been created in the 'backups' subdirectory.", wrap = T)
+    cli::cli_alert_success("Your script QA IDs have been modified. A backup has been created in the 'backups' subdirectory.", wrap = T)
   }
 
   if(filetype == "rmd") {
@@ -360,5 +367,14 @@ sheetNamesIndex <- function(qawb, lookup) {
       dplyr::pull(name)
   } else stop("Sheet name or index number does not exist in workbook.")
 }
+
+
+
+stop_quietly <- function() {
+  opt <- options(show.error.messages = FALSE)
+  on.exit(options(opt))
+  stop()
+}
+
 
 
