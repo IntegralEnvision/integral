@@ -298,7 +298,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
   if(has_headers) {
 
-    add#Determine the location of QA lines within sections
+    #Determine the location of QA lines within sections
     m_ind <- qa_lines %>%
       dplyr::select(line) %>%
       tibble::add_column(table = "qa") %>%
