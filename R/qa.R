@@ -356,7 +356,6 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
     colnum <- readr::parse_number(levcol)
 
     for(i in seq(merge_rows)) {
-      print(i)
       openxlsx::mergeCells(qawb, sheet, rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum)
       openxlsx::addStyle(qawb, sheet, style = openxlsx::createStyle(valign = "center"), rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum, stack = T)
     }
