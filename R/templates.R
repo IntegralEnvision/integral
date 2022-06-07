@@ -118,7 +118,7 @@ ic_new_git <- function(dirpath) {
     ,"templates/example_project/ic.gitignore"
   )
 
-  ic_copy_file(paste(dirpath, ",gitignore", sep = "/"), gitfile_path, open = F)
+  ic_copy_file(paste(dirpath, ".gitignore", sep = "/"), gitfile_path, open = F)
 
   # reset the working directory to whatever we came in with
   setwd(w)
