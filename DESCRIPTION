@@ -12,10 +12,19 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports: 
     cli,
+    fs,
     dplyr (>= 1.0.9),
+    stringr,
+    openxlsx,
+    tibble,
+    stringr,
     lifecycle,
     magrittr,
     readr,
     rstudioapi,
-    tidyselect (>= 1.0)
+    tidyselect (>= 1.0),
+    usethis,
+    crayon,
+    tidyr,
+    testthat
 URL: https://integralenvision.github.io/integral
