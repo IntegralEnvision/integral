@@ -53,7 +53,8 @@ qa <- function(filepath) {
 
   qa_update_sheet(qawb, parsed_qa, filepath, qafile)
 
-  openxlsx::openXL(qawb)
+  #openxlsx::openXL(qawb)
+  system2("open", qafile)
 
   }
 
