@@ -115,7 +115,7 @@ ic_new_git <- function(dirpath) {
 
   gitfile_path <- fs::path_package(
     "integral"
-    ,"templates/example_project/.gitignore"
+    ,"templates/example_project/ic.gitignore"
   )
 
   ic_copy_file(paste(dirpath, ",gitignore", sep = "/"), gitfile_path, open = F)
