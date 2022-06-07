@@ -21,7 +21,7 @@ ic_copy_file <- function(filepath, rfile_path, open = F) {
 
     # add cli warning
     error = function(cond) {
-      message(cli::cli_warn("File already exists! File creation canceled."))
+      cli::cli_alert_danger("File already exists! File creation canceled.")
     }
   )
 
