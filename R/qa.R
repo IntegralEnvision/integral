@@ -54,7 +54,9 @@ qa <- function(filepath) {
   qa_update_sheet(qawb, parsed_qa, filepath, qafile)
 
   #openxlsx::openXL(qawb)
-  system2("open", qafile)
+  if(get_system() == "linux") {
+    cli::cli_alert_danger("The created QA file doesn't open automatically on Linux until {crayon::bold('Eben')} fixes it. You gotta do it yourself.")
+  } else system2("open", paste0("'", qafile, "'"))
 
   }
 
