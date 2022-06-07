@@ -40,7 +40,7 @@ ic_new_proj <- function(path = "", create_dirs = T,
   proj_setup <- paste0("ic_new_proj(path = ", "'", path, "'")
 
   if (create_dirs) {
-    d <- c("input", "output")
+    d <- c("inputs", "outputs")
     func <- function(x) {
       suppressWarnings(dir.create(paste(path,
         x,
@@ -51,7 +51,7 @@ ic_new_proj <- function(path = "", create_dirs = T,
 
     proj_setup <- paste(proj_setup, "create_dirs = T", sep = ", ")
 
-    cli::cli_alert_success("Input, output folders created")
+    cli::cli_alert_success("Inputs, outputs folders created")
   }
 
   if (create_rproj) {
