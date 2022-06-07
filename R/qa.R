@@ -63,7 +63,7 @@ qa_file <- function(filepath) { #TODO add status messages as to what is happenin
 
   code_path <- fs::path_dir(filepath)
 
-  project_path <- rstudioapi::getActiveProject()
+  if(rstudioapi::isAvailable()) project_path <- rstudioapi::getActiveProject() else project_path <- code_path
 
   if(is.null(project_path)) project_path <- code_path #if outside of an Rproj, we just use the parent dir name.
 
@@ -131,7 +131,7 @@ qa_wb <- function(filepath, qafile) {
 
   } else { #No QA sheet exists yet
 
-    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created: {qafile}, and a worksheet for the script {sheet} will be added.", wrap = T)
+    cli::cli_alert_info("A QA file for this script was not detected. A new one will be created and a worksheet for the script {sheet} will be added: {qafile}.", wrap = T)
 
     qawb <- openxlsx::loadWorkbook(fs::path_package("integral", "extdata/QA_Template_Coded_Analysis.xlsx"))
 
@@ -154,7 +154,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
   #Detect QA tags
   all_code <- all_code %>%
-    dplyr::mutate(is_qa = stringr::str_detect(code, "\\s*#\\s?QA") & !str_detect(code, "^#+.*-{4,}")) # matches any #QA (with varied spacing) unless is has 4 or more dashes
+    dplyr::mutate(is_qa = stringr::str_detect(code, "\\s*#\\s?QA") & !stringr::str_detect(code, "^#+.*-{4,}")) # matches any #QA (with varied spacing) unless is has 4 or more dashes
 
   if(!any(all_code %>%
           dplyr::pull(is_qa))) stop("The file does not contain any recognized QA tags. Tags should start with '# QA' or `#QA`.")
@@ -168,6 +168,39 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
     dplyr::add_count(qa_id, name = "duplicates") %>%
     dplyr::mutate(is_duplicate = duplicates > 1 & is_qa & !is_missing_id) %>%
     dplyr::mutate(duplicates = duplicates * is_duplicate)  #set non-dupes value to 0 by multiplying by FALSE
+
+
+  #Check for QA tags and QA tags without IDs ----
+  if(any(all_code$is_missing_id)) {
+
+    cli::cli_alert_danger("The file is missing QA ID numbers for one or more QA tags.  Would you like them to be added automatically? This will modify your script.", wrap = T)
+
+    print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
+
+    add_ids <- usethis::ui_yeah(cli::cli_text("\n\nAdd QA ID numbers to {.file (fs::path_file(script_qa))}?"), yes = "Yes, add QA ID numbers.", no = "No, do not add QA ID numbers.", shuffle = F)
+    if(add_ids) {
+      available_ids <- dplyr::setdiff(seq(1000, 9999), all_code$qa_id)
+      new_ids <- tibble::enframe(sample(available_ids, nrow(all_code %>% dplyr::filter(is_missing_id)), replace = F), name = "missing_join_id", value = "qa_id")
+
+      all_code <- all_code %>%
+        dplyr::group_by(is_missing_id) %>%
+        dplyr::mutate(missing_join_id = cumsum(is_missing_id)) %>%
+        dplyr::ungroup() %>%
+        dplyr::rows_update(new_ids, by = "missing_join_id") %>%
+        dplyr::mutate(code = dplyr::if_else(is_missing_id, stringr::str_replace(code, "\\|", paste0(qa_id, " \\|")), code))
+
+      cli::cli_alert_success("QA ID numbers have been added.", wrap = T)
+
+      print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
+
+      rewrite_code <- T #Set flag for if the file needs to be written to.
+
+    } else {
+      cli::cli_alert_info("Please add IDs manually to the lines above and re-run {.code qa()}. Alternatively, re-run {.code qa()} and select the option to automatically add missing IDs when prompted.", wrap = T)
+      stop_quietly()
+    }
+    #TODO exit but not error
+  } else cli::cli_alert_success("No missing QA ID's found.")
 
 
   #Check for duplicate QA IDs and fix if user approves ----
@@ -197,40 +230,8 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
       rewrite_code <- T #Set flag for if the file needs to be written to.
 
     } else stop("User exited") #TODO Exit without error
-  } else cli::cli_alert_success("Checking for duplicate QA ID's.")
+  } else cli::cli_alert_success("No duplicate QA ID's found.")
 
-
-  #Check for QA tags and QA tags without IDs ----
-  if(any(all_code$is_missing_id)) {
-
-    cli::cli_alert_danger("The file is missing QA ID numbers for one or more QA tags.  Would you like them to be added automatically? This will modify your script.", wrap = T)
-
-    print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
-
-    add_ids <- usethis::ui_yeah(cli::cli_text("\n\nAdd QA ID numbers to {.file (fs::path_file(script_qa))}?"), yes = "Yes, add QA ID numbers.", no = "No, do not add QA ID numbers.", shuffle = F)
-    if(add_ids) {
-      available_ids <- dplyr::setdiff(seq(1000, 9999), all_code$qa_id)
-      new_ids <- tibble::enframe(sample(available_ids, nrow(all_code %>% dplyr::filter(is_missing_id)), replace = F), name = "missing_join_id", value = "qa_id")
-
-      all_code <- all_code %>%
-        dplyr::group_by(is_missing_id) %>%
-        dplyr::mutate(missing_join_id = cumsum(is_missing_id)) %>%
-        dplyr::ungroup() %>%
-        dplyr::rows_update(new_ids, by = "missing_join_id") %>%
-        dplyr::mutate(code = dplyr::if_else(is_missing_id, stringr::str_replace(code, "\\|", paste0(qa_id, " \\|")), code))
-
-      cli::cli_alert_success("QA ID numbers have been added.", wrap = T)
-
-      print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
-
-      rewrite_code <- T #Set flag for if the file needs to be written to.
-
-    } else {
-        cli::cli_alert_info("Please add IDs manually to the lines above and re-run {.code qa()}. Alternatively, re-run {.code qa()} and select the option to automatically add missing IDs when prompted.", wrap = T)
-        stop_quietly()
-      }
-    #TODO exit but not error
-  } else cli::cli_alert_success("Checking for missing QA ID's.")
 
   all_code <- all_code %>%
     dplyr::select(-dplyr::matches(c("is_duplicate", "duplicates", "is_missing_id", "dupe_join_id", "missing_join_id")))
@@ -257,25 +258,32 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
     dplyr::mutate(is_code_header = stringr::str_detect(code, "^#+.*-{4,}")) %>%
     dplyr::mutate(is_text_header = is_text_chunk & stringr::str_detect(code, "(#+)\\s(.*?)")) %>%
     dplyr::filter(is_code_header | is_text_header) %>%
-    dplyr::filter(!str_detect(code, "COPYRIGHT|PURPOSE|PROJECT INFORMATION|HISTORY|NOTES")) %>% #Remove codeless header sections
+    dplyr::filter(!stringr::str_detect(code, "COPYRIGHT|PURPOSE|PROJECT INFORMATION|HISTORY|NOTES")) %>% #Remove codeless header sections
     dplyr::mutate(code = stringr::str_remove_all(code, "-{4,}") %>%
                     stringr::str_squish()) %>%
     dplyr::mutate(section_title = stringr::str_extract(code, "(?<=#\\s).*")) %>%
     dplyr::mutate(section_level = stringr::str_count(code, "#")) %>%
     dplyr::select(line, section_title, section_level)
 
-  section_depth <- headers %>% dplyr::summarize(section_depth = max(section_level)) %>% dplyr::pull(section_depth)
-
   wh <- headers %>% #wide headers
     tidyr::pivot_wider(names_from = section_level, values_from = section_title, names_prefix = "level_")
 
-  for(i in seq(section_depth)) {
-    wh <- wh %>%
-      tidyr::fill(paste0("level_", i), .direction = "down") %>%
-      dplyr::group_by_at(paste0("level_", i), .add = T)
-  }
+  has_headers <- nrow(wh) > 0
 
-  wh <- wh %>% dplyr::ungroup()
+  if(has_headers) { #If there are any section headers, fill down to next one
+
+    section_depth <- headers %>% dplyr::summarize(section_depth = max(section_level)) %>% dplyr::pull(section_depth)
+
+
+
+    for(i in seq(section_depth)) {
+      wh <- wh %>%
+        tidyr::fill(paste0("level_", i), .direction = "down") %>%
+        dplyr::group_by_at(paste0("level_", i), .add = T)
+    }
+
+    wh <- wh %>% dplyr::ungroup()
+  }
 
 
   for(missingcol in dplyr::setdiff(c("level_1", "level_2", "level_3", "level_4"), names(wh))) { #add empty columns to keep column alignment in worksheet
@@ -288,28 +296,40 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
     dplyr::filter(is_qa) %>%
     dplyr::mutate(comment = stringr::str_extract(code, "(?<=\\|\\s).*"))
 
-  #Determine the location of QA lines within sections
-  m_ind <- qa_lines %>%
-    dplyr::select(line) %>%
-    tibble::add_column(table = "qa") %>%
-    dplyr::bind_rows(wh %>%
-                dplyr::select(line) %>%
-                tibble::add_column(table = "section")) %>%
-    dplyr::arrange(line) %>%
-    dplyr::mutate(grouping = cumsum(table == "section"))
+  if(has_headers) {
 
-  wh <- wh %>%
-    dplyr::left_join(m_ind %>%
-                dplyr::filter(table == "section"), by = "line") %>%
-    dplyr::select(tidyselect::starts_with("level_"), grouping)
+    add#Determine the location of QA lines within sections
+    m_ind <- qa_lines %>%
+      dplyr::select(line) %>%
+      tibble::add_column(table = "qa") %>%
+      dplyr::bind_rows(wh %>%
+                         dplyr::select(line) %>%
+                         tibble::add_column(table = "section")) %>%
+      dplyr::arrange(line) %>%
+      dplyr::mutate(grouping = cumsum(table == "section"))
 
-  qa_lines <- qa_lines %>%
-    dplyr::left_join(m_ind %>%
-                dplyr::filter(table == "qa"), by = "line") %>%
-    dplyr::select(-c(table))
+    wh <- wh %>%
+      dplyr::left_join(m_ind %>%
+                         dplyr::filter(table == "section"), by = "line") %>%
+      dplyr::select(tidyselect::starts_with("level_"), grouping)
 
-  parsed_qa <- wh %>%
-    dplyr::left_join(qa_lines, by = "grouping") %>%
+    qa_lines <- qa_lines %>%
+      dplyr::left_join(m_ind %>%
+                         dplyr::filter(table == "qa"), by = "line") %>%
+      dplyr::select(-c(table))
+
+    parsed_qa <- wh %>%
+      dplyr::left_join(qa_lines, by = "grouping")
+
+  } else { #add empty columns for sections
+
+    cols_wh <- wh %>% dplyr::select(-line) %>% names()
+
+    parsed_qa <- dplyr::bind_cols(setNames(rep(list(NA), length(cols_wh)), cols_wh), qa_lines)
+
+  }
+
+  parsed_qa <- parsed_qa %>%
     dplyr::select(tidyselect::starts_with("level_"), line, qa_id, comment)
 
   if(include_empty_sections) {
@@ -327,7 +347,7 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
 
   openxlsx::removeCellMerge(qawb, sheet, rows = 14:100, cols = 1:4) #TODO: finish this with the sheetNamesIndex?
 
-  openxlsx::writeData(qawb, sheet, parsed_qa, startRow = 14, colNames = F)
+  openxlsx::writeData(qawb, sheet, parsed_qa, startRow = 14, colNames = F, borders = "all")
 
 
   for(levcol in c("level_1", "level_2", "level_3", "level_4")) {
@@ -336,6 +356,7 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
     colnum <- readr::parse_number(levcol)
 
     for(i in seq(merge_rows)) {
+      print(i)
       openxlsx::mergeCells(qawb, sheet, rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum)
       openxlsx::addStyle(qawb, sheet, style = openxlsx::createStyle(valign = "center"), rows = merge_rows[[i]]["start"]:merge_rows[[i]]["end"], cols = colnum, stack = T)
     }
