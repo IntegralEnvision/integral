@@ -82,7 +82,7 @@ ic_new_proj <- function(path = "", create_dirs = T,
   if (switch_proj) {
     rstudioapi::openProject(
       path = path,
-      newSession = ask("Would you like to open the project in a new session?")
+      newSession <- ask("Would you like to open the project in a new session?")
     )
     proj_setup <- paste(proj_setup, "switch_proj = T",
       "newSession = ", newSession,
