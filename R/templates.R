@@ -17,11 +17,12 @@ ic_copy_file <- function(filepath, rfile_path, open = F) {
   tryCatch(
     {
       fs::file_copy(rfile_path, filepath, overwrite = F)
+      cli::cli_alert_success(paste0(basename(filepath), " created"))
     },
 
     # add cli warning
     error = function(cond) {
-      cli::cli_alert_danger("File already exists! File creation canceled.")
+      cli::cli_alert_danger("File already exists!", paste0(basename(filepath), " creation canceled."))
     }
   )
 

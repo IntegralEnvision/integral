@@ -66,8 +66,6 @@ ic_new_proj <- function(path = "", create_dirs = T,
     )
 
     proj_setup <- paste(proj_setup, "create_rproj = T", sep = ", ")
-
-    cli::cli_alert_success(".RProj file created")
   }
 
   # create git
@@ -75,8 +73,6 @@ ic_new_proj <- function(path = "", create_dirs = T,
     ic_new_git(path)
 
     proj_setup <- paste(proj_setup, "create_git = T", sep = ", ")
-
-    cli::cli_alert_success("git repository created")
   }
 
   if (switch_proj) {
