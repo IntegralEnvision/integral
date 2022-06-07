@@ -154,7 +154,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
   #Detect QA tags
   all_code <- all_code %>%
-    dplyr::mutate(is_qa = stringr::str_detect(code, "\\s*#\\s?QA"))
+    dplyr::mutate(is_qa = stringr::str_detect(code, "\\s*#\\s?QA") & !str_detect(code, "^#+.*-{4,}")) # matches any #QA (with varied spacing) unless is has 4 or more dashes
 
   if(!any(all_code %>%
           dplyr::pull(is_qa))) stop("The file does not contain any recognized QA tags. Tags should start with '# QA' or `#QA`.")
@@ -253,9 +253,11 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
   } else all_code <- all_code %>% tibble::add_column(is_text_chunk = F)
 
   headers <- all_code %>%
-    dplyr::mutate(is_code_header = stringr::str_detect(code, "(#+)[^\\t]([a-zA-Z0-9\\(\\)&\\s]*)(?=-+)")) %>%
+    #dplyr::mutate(is_code_header = stringr::str_detect(code, "(#+)[^\\t]([a-zA-Z0-9\\(\\)&\\s]*)(?=-+)")) %>% #https://regex101.com/r/L9A1VJ/1
+    dplyr::mutate(is_code_header = stringr::str_detect(code, "^#+.*-{4,}")) %>%
     dplyr::mutate(is_text_header = is_text_chunk & stringr::str_detect(code, "(#+)\\s(.*?)")) %>%
     dplyr::filter(is_code_header | is_text_header) %>%
+    dplyr::filter(!str_detect(code, "COPYRIGHT|PURPOSE|PROJECT INFORMATION|HISTORY|NOTES")) %>% #Remove codeless header sections
     dplyr::mutate(code = stringr::str_remove_all(code, "-{4,}") %>%
                     stringr::str_squish()) %>%
     dplyr::mutate(section_title = stringr::str_extract(code, "(?<=#\\s).*")) %>%
