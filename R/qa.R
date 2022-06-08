@@ -349,8 +349,9 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
   sheet <- fs::path_file(filepath)
 
   openxlsx::removeCellMerge(qawb, sheet, rows = 14:100, cols = 1:4) #TODO: finish this with the sheetNamesIndex?
+  suppressWarnings(openxlsx::deleteNamedRegion(qawb, "populated_data"))
 
-  openxlsx::writeData(qawb, sheet, parsed_qa, startRow = 14, colNames = F, borders = "all")
+  openxlsx::writeData(qawb, sheet, parsed_qa, startRow = 14, colNames = F, borders = "all", name = "populated_data")
 
 
   for(levcol in c("level_1", "level_2", "level_3", "level_4")) {
@@ -370,7 +371,7 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
   }
 
 
-  openxlsx::activeSheet(qawb) <- sheet
+  openxlsx::activeSheet(qawb) <- sheet #TODO put sheet after Instructions. #openxlsx::worksheetOrder(), but do I have to overwrite?
 
   openxlsx::saveWorkbook(qawb, qafile, overwrite = TRUE)
 }
