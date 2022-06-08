@@ -370,6 +370,8 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
 
   }
 
+  openxlsx::addStyle(qawb, sheet, style = openxlsx::createStyle(wrapText = T), rows = 14:200, cols = 7, stack = T, gridExpand = T)
+
 
   openxlsx::activeSheet(qawb) <- sheet #TODO put sheet after Instructions. #openxlsx::worksheetOrder(), but do I have to overwrite?
 
