@@ -90,8 +90,11 @@ ic_new_proj <- function(path = "", create_dirs = T,
       path = path,
       newSession <- ask("Would you like to open the project in a new session?")
     )
+    sess_response <- "F"
+    if (newSession) {sess_response <- "T"}
+
     proj_setup <- paste(proj_setup, "switch_proj = T",
-      "newSession = ", newSession,
+      paste0("newSession = ", sess_response),
       sep = ", "
     )
   } else {
