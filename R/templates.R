@@ -22,7 +22,9 @@ ic_copy_file <- function(filepath, rfile_path, open = F) {
 
     # add cli warning
     error = function(cond) {
-      cli::cli_alert_danger("File already exists!", paste0(basename(filepath), " creation canceled."))
+      cli::cli_alert_danger(paste("File already exists!"
+                                  ,paste0(basename(filepath), " creation canceled.")
+                                  ,sep = " "))
     }
   )
 
@@ -108,6 +110,13 @@ ic_new_git <- function(dirpath) {
   # error if directory doesn't exist
   if (!dir.exists(dirpath)) {stop(cli::format_error("Git creation path not a directory!"))}
 
+  if (dir.exists(paste(dirpath,
+                        ".git",
+                        sep = "/"))) {
+    response = ask("A git repository already exists. Do you want to reinitialize it?", default = F)
+  }
+
+  if (response) {
   # switch the working directory to the path
   w <- getwd()
   setwd(dirpath)
@@ -123,4 +132,6 @@ ic_new_git <- function(dirpath) {
 
   # reset the working directory to whatever we came in with
   setwd(w)
+  # end response
+  }
 }

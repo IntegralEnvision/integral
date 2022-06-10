@@ -42,16 +42,26 @@ ic_new_proj <- function(path = "", create_dirs = T,
   if (create_dirs) {
     d <- c("inputs", "outputs")
     func <- function(x) {
-      suppressWarnings(dir.create(paste(path,
+      if (!dir.exists(paste(path,
+                            x,
+                            sep = "/"))) {
+      dir.create(paste(path,
         x,
         sep = "/"
-      )))
+      ))
+        cli::cli_alert_success(paste(x, "folder created", sep = " "))
+      } else{
+        cli::cli_alert_danger(paste("Folder already exists!"
+                                    ,paste0(x, " folder creation canceled.")
+                                    ,sep = " "))
+      }
     }
+
     lapply(d, func)
 
     proj_setup <- paste(proj_setup, "create_dirs = T", sep = ", ")
 
-    cli::cli_alert_success("Inputs, outputs folders created")
+
   }
 
   if (create_rproj) {
