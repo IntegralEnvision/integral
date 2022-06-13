@@ -17,5 +17,6 @@ Imports:
     magrittr,
     readr,
     rstudioapi,
-    tidyselect (>= 1.0)
+    tidyselect (>= 1.0),
+    tools
 URL: https://integralenvision.github.io/integral
