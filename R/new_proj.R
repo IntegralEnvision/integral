@@ -32,8 +32,23 @@ ic_new_proj <- function(path = "", create_dirs = T,
 
   # if no path is supplied than ask for it
   if (path == "") {
-    path <- convert_winpath(readline("What is the directory path to create the project in?: "))
+    path <- convert_winpath(readline(paste0("What is the directory path to create the project in?"
+    ," If blank, a dialog will be shown: ")))
   }
+
+  # if still blank prompt for a path
+  if (path == "") {
+    path <- rstudioapi::selectDirectory()
+    path <- gsub("~", path.expand("~"), path)
+    cli::cli_alert_success(paste( "Project directory selected:", path, sep = " "))
+  }
+
+  # check if the directory is empty
+  if (length(path) > 1) {
+    response <- ask("Project directory is not empty! Would you like to continue?", default = F)
+    if (response == F) {return(cli::cli_alert_danger("Project creation canceled by user."))}
+  }
+
   # create the path
   suppressWarnings(dir.create(path))
 

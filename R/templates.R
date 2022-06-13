@@ -1,3 +1,51 @@
+#' Create a new file interactively
+#' `r lifecycle::badge('stable')`
+#' @description Finds a new file from user inout
+#' @param ext file extension to check for. Can be R, Rmd etc
+#' @param startpath Optional start directory
+#' @param open Should the file be open (True/False)
+#' @examples
+#' \dontrun{
+#' find_file("Rmd")
+#'
+find_file <- function(ext, startdir = rstudioapi::getActiveProject()) {
+  if (rstudioapi::isAvailable()) {
+    filepath <- rstudioapi::selectFile(caption = "Save File"
+      ,label = paste0("Save ", ext)
+      ,existing = FALSE
+      ,path = startdir
+    )
+
+    filepath <- gsub("~", path.expand("~"), filepath)
+  }
+
+  while (!tools::file_ext(filepath) == ext) {
+    cli::cli_alert(paste0("File extension is not .", ext, " Please save a . ", ext))
+    Sys.sleep(0.5)
+
+    filepath <- rstudioapi::selectFile(
+      caption = "Save File",
+      label = paste0("Save ", ext),
+      existing = FALSE
+    )
+
+    filepath <- gsub("~", path.expand("~"), filepath)
+
+    if (length(filepath) == 0) {
+      filepath <- "zzz"
+    }
+
+  }
+
+
+  if (filepath == "") {
+    return(cli::cli_alert_danger("Filepath not provided"))
+  }
+
+  return(filepath)
+}
+
+
 #' Start a new file with header
 #' `r lifecycle::badge('experimental')`
 #' @description Creates a new file with header. Function is not exported.
@@ -22,12 +70,12 @@ ic_copy_file <- function(filepath, rfile_path, open = F) {
 
     # add cli warning
     error = function(cond) {
-      cli::cli_alert_danger(paste("File already exists!"
-                                  ,paste0(basename(filepath), " creation canceled.")
-                                  ,sep = " "))
+      cli::cli_alert_danger(paste("File already exists!",
+        paste0(basename(filepath), " creation canceled."),
+        sep = " "
+      ))
     }
   )
-
   if (open) {
     file.edit(filepath)
   }
@@ -56,22 +104,30 @@ ic_new_script <- function(filepath, open = F) {
 
 #' @rdname ic_new_script
 #' @export
-ic_new_r_file <- function(filepath, open = F) {
+ic_new_r_file <- function(filepath = "", open = F) {
   rfile_path <- fs::path_package(
     "integral",
     "templates/example_project/rfile_w_header.R"
   )
+
+  if (filepath == "") {
+    filepath <- find_file("R")
+  }
 
   ic_copy_file(filepath, rfile_path, open = F)
 }
 
 #' @rdname ic_new_script
 #' @export
-ic_new_python_file <- function(filepath, open = F) {
+ic_new_python_file <- function(filepath = "", open = F) {
   rfile_path <- fs::path_package(
     "integral",
     "templates/example_project/rfile_w_header.R"
   )
+
+  if (filepath == "") {
+    filepath <- find_file("py")
+  }
 
   ic_copy_file(filepath, rfile_path, open = F)
 }
@@ -87,7 +143,10 @@ ic_new_python_file <- function(filepath, open = F) {
 #' ig_new_rmd_file("myrmd.Rmd")
 #' }
 #' @export
-ic_new_rmd_file <- function(filepath, open = F) {
+ic_new_rmd_file <- function(filepath = "", open = F) {
+  if (filepath == "") {
+      filepath <- find_file("Rmd")
+  }
   rmdfile_path <- fs::path_package(
     "integral",
     "templates/example_project/Example_Rmarkdown.Rmd"
@@ -108,30 +167,34 @@ ic_new_rmd_file <- function(filepath, open = F) {
 ic_new_git <- function(dirpath) {
 
   # error if directory doesn't exist
-  if (!dir.exists(dirpath)) {stop(cli::format_error("Git creation path not a directory!"))}
+  if (!dir.exists(dirpath)) {
+    stop(cli::format_error("Git creation path not a directory!"))
+  }
 
+  response <- T
   if (dir.exists(paste(dirpath,
-                        ".git",
-                        sep = "/"))) {
-    response = ask("A git repository already exists. Do you want to reinitialize it?", default = F)
+    ".git",
+    sep = "/"
+  ))) {
+    response <- ask("A git repository already exists. Do you want to reinitialize it?", default = F)
   }
 
   if (response) {
-  # switch the working directory to the path
-  w <- getwd()
-  setwd(dirpath)
-  system("git init")
-  system("git checkout --orphan main")
+    # switch the working directory to the path
+    w <- getwd()
+    setwd(dirpath)
+    system("git init")
+    system("git checkout --orphan main")
 
-  gitfile_path <- fs::path_package(
-    "integral"
-    ,"templates/example_project/ic.gitignore"
-  )
+    gitfile_path <- fs::path_package(
+      "integral",
+      "templates/example_project/ic.gitignore"
+    )
 
-  ic_copy_file(paste(dirpath, ".gitignore", sep = "/"), gitfile_path, open = F)
+    ic_copy_file(paste(dirpath, ".gitignore", sep = "/"), gitfile_path, open = F)
 
-  # reset the working directory to whatever we came in with
-  setwd(w)
-  # end response
+    # reset the working directory to whatever we came in with
+    setwd(w)
+    # end response
   }
 }
