@@ -3,8 +3,8 @@
 on:
   push:
     paths: ["**.[rR]", "**.[rR]md", "**.[rR]markdown", "**.[rR]nw"]
-  pull_request:
-    paths: ["**.[rR]", "**.[rR]md", "**.[rR]markdown", "**.[rR]nw"]
+  #pull_request:
+  #  paths: ["**.[rR]", "**.[rR]md", "**.[rR]markdown", "**.[rR]nw"]
 
 name: Style
 
