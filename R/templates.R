@@ -1,4 +1,4 @@
-#' Create a new file interactively
+#' Find a new file interactively
 #' `r lifecycle::badge('stable')`
 #' @description Finds a new file from user inout
 #' @param ext file extension to check for. Can be R, Rmd etc
