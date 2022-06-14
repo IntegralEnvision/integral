@@ -1,4 +1,4 @@
-#This is currently commented out because it refers to the non-private integral
+# This is currently commented out because it refers to the non-private integral
 
 # .onLoad <- function(...) {
 #   try(check_ic_up_to_date())
