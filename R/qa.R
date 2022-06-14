@@ -36,7 +36,13 @@ qa <- function(filepath) {
     )
   }
 
+  # fix for user directories
+  filepath <- gsub("~", path.expand("~"), filepath)
+
   filepath <- fs::path_real(filepath)
+
+  # fix for user directories
+  filepath <- gsub("~", path.expand("~"), filepath)
 
   if(!fs::file_exists(filepath)) stop(cli::cli_alert_danger(paste0("File `", filepath, "` does not exist. If it is not in the root project directory, specify the path relative to the root project directory."), wrap = T))
 
@@ -58,10 +64,10 @@ qa <- function(filepath) {
     # set the sytem path a la https://askubuntu.com/a/1374700
     Sys.setenv("LD_LIBRARY_PATH"=paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
     system2("xdg-open", paste0("'", qafile, "'"))
-    } else system2("open", paste0("'", qafile, "'"))
-
+    }else {
+      system2("open", qafile)
   }
-
+}
 qa_file <- function(filepath) { #TODO add status messages as to what is happening
 
   code_file <- fs::path_file(filepath)
