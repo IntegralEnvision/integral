@@ -6,7 +6,9 @@
 ic_update <- function() {
   old_version <- packageVersion("integral")
 
-  if(remotes:::local_sha("integral") == remotes:::remote_sha(structure(remotes:::package2remote("integral"), class = "github_remote"))) return(cli::cli_alert_success("Package is already up to date."))
+  if (remotes:::local_sha("integral") == remotes:::remote_sha(structure(remotes:::package2remote("integral"), class = "github_remote"))) {
+    return(cli::cli_alert_success("Package is already up to date."))
+  }
 
   cli::cli_alert_info("Unloading and updating \`integral\`...")
   devtools::unload("integral")
@@ -16,20 +18,19 @@ ic_update <- function() {
 
   new_version <- packageVersion("integral")
 
-  if(old_version != new_version) {
-    #integral::ic_news() #Removed for now.
-    #See: https://github.com/jimhester/devtools/commit/f2f077b6c8c8180ae71c53d6fb6744368c5225b7
-    #and: https://github.com/r-lib/devtools/issues/942
+  if (old_version != new_version) {
+    # integral::ic_news() #Removed for now.
+    # See: https://github.com/jimhester/devtools/commit/f2f077b6c8c8180ae71c53d6fb6744368c5225b7
+    # and: https://github.com/r-lib/devtools/issues/942
     cli::cat_line()
 
     print(cli::rule(
       center = paste0("Major Update"),
       line_col = "red"
     ))
-    #cli::cli_alert_info("New features added. Run \`ic_news()\` to view notes.")
+    # cli::cli_alert_info("New features added. Run \`ic_news()\` to view notes.")
     ic_news()
     cli::cli_alert_info("Run \`ic_news(all = T)\` to view previous update news.")
-
   } else {
     cli::cat_line()
 
@@ -52,11 +53,9 @@ ic_update <- function() {
 #' @param all Logical. Show all previous news in viewer. Defaults to FALSE.
 #' @export
 ic_news <- function(all = FALSE) {
-
-  if(all) {
+  if (all) {
     news(package = "integral")
   } else {
-
     newsdb <- news(Version == as.character(packageVersion("integral")), package = "integral")
 
     cli::cat_line()
@@ -71,14 +70,12 @@ ic_news <- function(all = FALSE) {
       unlist() %>%
       stringr::str_remove("\\\n") %>%
       stringr::str_squish() %>%
-      .[-1] #end up with an empty first line
+      .[-1] # end up with an empty first line
 
     cli::cat_line()
     cli::cli_li(newstext)
     cli::cat_line()
-
   }
-
 }
 
 
@@ -123,9 +120,12 @@ is_citrix <- function() {
 get_system <- function() {
   x <- Sys.info()["nodename"]
 
-  if(stringr::str_detect(x, "APP\\d+")) return("citrix") else
-    if(stringr::str_detect(x, "rstudio")) return("linux") else
-      return("local")
-
+  if (stringr::str_detect(x, "APP\\d+")) {
+    return("citrix")
+  } else
+  if (stringr::str_detect(x, "rstudio")) {
+    return("linux")
+  } else {
+    return("local")
+  }
 }
-
