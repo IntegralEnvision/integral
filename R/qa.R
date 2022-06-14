@@ -68,8 +68,12 @@ qa_file <- function(filepath) { #TODO add status messages as to what is happenin
 
   code_path <- fs::path_dir(filepath)
 
-  if(rstudioapi::isAvailable()) project_path <- rstudioapi::getActiveProject() else project_path <- code_path
-
+  if(rstudioapi::isAvailable()) {
+    project_path <- rstudioapi::getActiveProject()
+    if (!grepl(code_path, project_path, fixed = T)) {
+      project_path <- code_path
+    }
+  }
   if(is.null(project_path)) project_path <- code_path #if outside of an Rproj, we just use the parent dir name.
 
     project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
