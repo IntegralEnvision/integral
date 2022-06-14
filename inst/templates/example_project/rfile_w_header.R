@@ -1,7 +1,6 @@
 #
 # Copyright: Copyright 2022, Integral Consulting Inc. All rights reserved.
 #
-# Title: Example_project.R
 # Purpose: Example of a project database
 #
 # Project Information:
