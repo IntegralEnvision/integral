@@ -55,8 +55,10 @@ qa <- function(filepath) {
 
   #openxlsx::openXL(qawb)
   if(get_system() == "linux") {
-    cli::cli_alert_danger("The created QA file doesn't open automatically on Linux until {crayon::bold('Eben')} fixes it. You gotta do it yourself.")
-  } else system2("open", paste0("'", qafile, "'"))
+    # set the sytem path a la https://askubuntu.com/a/1374700
+    Sys.setenv("LD_LIBRARY_PATH"=paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
+    system2("xdg-open", paste0("'", qafile, "'"))
+    } else system2("open", paste0("'", qafile, "'"))
 
   }
 
@@ -70,7 +72,10 @@ qa_file <- function(filepath) { #TODO add status messages as to what is happenin
 
   if(is.null(project_path)) project_path <- code_path #if outside of an Rproj, we just use the parent dir name.
 
-  project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
+    project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
+
+    qafile <- fs::path(project_path, "QA", paste0("QA_", project_name, ".xlsx"))
+    fs::dir_create(fs::path_dir(qafile)) #function ignores command if dir already exists
 
   if(code_path == project_path) { #If we're working with a script in the project root, it gets a QA sheet with the same name as the project
 
