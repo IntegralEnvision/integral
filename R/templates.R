@@ -9,6 +9,7 @@
 #' find_file("Rmd")
 #' }
 #'
+
 find_file <- function(ext, startdir = rstudioapi::getActiveProject()) {
   if (rstudioapi::isAvailable()) {
     filepath <- rstudioapi::selectFile(caption = "Save File"
