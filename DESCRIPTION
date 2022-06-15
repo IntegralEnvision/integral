@@ -13,25 +13,20 @@ RoxygenNote: 7.2.0
 Imports: 
     cli,
     fs,
-<<<<<<< HEAD
     dplyr (>= 1.0.9),
     stringr,
     openxlsx,
     tibble,
     stringr,
-=======
->>>>>>> origin/main
     lifecycle,
     magrittr,
     readr,
     rstudioapi,
     tidyselect (>= 1.0),
-<<<<<<< HEAD
     usethis,
     crayon,
     tidyr,
-    testthat
-=======
+    testthat,
     tools
->>>>>>> origin/main
+
 URL: https://integralenvision.github.io/integral
