@@ -13,8 +13,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# integral
-
 # integral <a href='https://github.com/IntegralEnvision/integral'><img src='integral.png' align="right" height="138.5" /></a>
 
 <!-- badges: start -->
@@ -37,11 +35,13 @@ You can install the development version of integral from [GitHub](https://github
 # credentials::set_github_pat()
 remotes::install_github('IntegralEnvision/integral-private')
 ```
+## News
+
+See the lates news about the integral package [here](./NEWS.md)
 
 ## License
 
 Although the repository is private to encourage code updates the code is MIT licensed.
-
 
 ## Contributing
 
