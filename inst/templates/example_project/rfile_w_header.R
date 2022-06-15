@@ -1,7 +1,7 @@
 #
 # Copyright: Copyright 2022, Integral Consulting Inc. All rights reserved.
 #
-# Purpose: Example of a project database
+# Purpose:
 #
 # Project Information:
 #   Name:
@@ -9,7 +9,7 @@
 #
 # History:
 # Date	     Remarks
-# 2022-04-27 Don't forget to fill this out. Eben Pendleton
+# YYYY-MM-DD
 #
 
 # PACKAGES & SPECIAL FUNCTIONS ----
