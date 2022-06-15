@@ -1,8 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# integral
-
 # integral <a href='https://github.com/IntegralEnvision/integral'><img src='integral.png' align="right" height="138.5" /></a>
 
 <!-- badges: start -->
@@ -17,19 +15,19 @@ This is a beta package for **PRIVATE** Integral functions.
 ## Installation
 
 You can install the development version of integral from
-GitHub with:
+[GitHub](https://github.com/) with:
 
 ``` r
-# install.packages(c("usethis", "remotes"))
+# install.packages("use_this", "remotes")
 # Use the GitHub no reply email if you choose
 # usethis::use_git_config(user.name = <GitHub Username>, user.email = <GitHub Email>)
-# This is run once per GitHub user. Store the token in a safe place.
 # usethis::create_github_token()
-# This you will likely have to run everytime on Citrix, Linux and locally before running the remotes command
 # credentials::set_github_pat()
 remotes::install_github('IntegralEnvision/integral-private')
 ```
+
 ## News
+
 See the lates news about the integral package [here](./NEWS.md)
 
 ## License
