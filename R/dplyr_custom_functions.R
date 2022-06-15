@@ -23,9 +23,9 @@ tp <- function(.data = .Last.value, rows = 10) {
 #' @export
 fct_case_when <- function(...) {
   args <- as.list(match.call())
-  levels <- sapply(args[-1], function(f) f[[3]])  # extract RHS of formula
+  levels <- sapply(args[-1], function(f) f[[3]]) # extract RHS of formula
   levels <- levels[!is.na(levels)]
-  ordered(dplyr::case_when(...), levels=levels)
+  ordered(dplyr::case_when(...), levels = levels)
 }
 
 #' Remove variables from tibble

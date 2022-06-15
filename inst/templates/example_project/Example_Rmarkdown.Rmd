@@ -1,0 +1,33 @@
+---
+title: "Rmarkdown Title"
+author: "Copyright 2022, Integral Consulting Inc. All rights reserved."
+date: "`r Sys.Date()`"
+output: 
+---
+
+# PURPOSE
+Add your text here.
+
+# PROJECT INFORMATION
+Name:
+Number:
+
+# HISTORY
+YYYY-MM-DD History message Author
+
+# SETUP
+```{r setup, include=FALSE}
+
+
+```
+
+# DATA
+
+```{r data}
+
+```
+
+# ANALYSIS
+ 
+```{r analysis}
+```
