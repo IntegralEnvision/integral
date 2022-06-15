@@ -40,7 +40,7 @@ ic_new_proj <- function(path = "", create_dirs = T,
   if (path == "") {
     path <- rstudioapi::selectDirectory()
     path <- gsub("~", path.expand("~"), path)
-    if (!path == "") {
+    if (length(path) > 0) {
     cli::cli_alert_success(paste( "Project directory selected:", path, sep = " "))
     } else {
       return(cli::cli_alert_danger("Project path selection canceled by user."))
