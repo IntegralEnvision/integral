@@ -29,6 +29,8 @@ GitHub with:
 # credentials::set_github_pat()
 remotes::install_github('IntegralEnvision/integral-private')
 ```
+## News
+See the lates news about the integral package [here](./NEWS.md)
 
 ## License
 
