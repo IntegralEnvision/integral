@@ -12,11 +12,12 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports: 
     cli,
+    dplyr,
+    ggplot2,
     fs,
     lifecycle,
     magrittr,
     officer,
-    dplyr,
     readr,
     rstudioapi,
     rvg,
