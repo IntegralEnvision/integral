@@ -21,6 +21,13 @@
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/pptfig.html">pptfig overview and examples</a>
+    <a class="dropdown-item" href="../articles/xlsxtable.html">xlsxtable</a>
+  </div>
+</li>
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
@@ -68,8 +75,8 @@
 <li>Added interactive helper <code><a href="../reference/common_vars.html">common_vars()</a></code>, which shows common variable names between two or more tibbles.</li>
 <li>Added interactive helper <code><a href="../reference/wc.html">wc()</a></code> (write clip) which copies an object to the clipboard. If no object is passed, it defaults to <code>.Last.value</code>.</li>
 <li>Added <code><a href="../reference/huck.html">huck()</a></code>, a negation of <code><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">purrr::pluck()</a></code> which discards an element from a list using tidyselect specifications.</li>
-<li>Added <code><a href="../reference/deselect.html">deselect()</a></code>, a negation of <code>dplyr::select()</code> (ie <code>select(-c(...))</code>) since wrapping tidyselect vars in c() annoys me.</li>
-<li>Added <code><a href="../reference/fct_case_when.html">fct_case_when()</a></code>, an implementation of <code>dplyr::case_when()</code> where the output is an ordered factor in the order of the conditions.</li>
+<li>Added <code><a href="../reference/deselect.html">deselect()</a></code>, a negation of <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select()</a></code> (ie <code>select(-c(...))</code>) since wrapping tidyselect vars in c() annoys me.</li>
+<li>Added <code><a href="../reference/fct_case_when.html">fct_case_when()</a></code>, an implementation of <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when()</a></code> where the output is an ordered factor in the order of the conditions.</li>
 <li>Added <code><a href="../reference/zscore.html">zscore()</a></code> as a convenience function wrapper around <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code> that returns a vector instead of a matrix.</li>
 </ul></div>
     <div class="section level2">

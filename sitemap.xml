@@ -4,6 +4,15 @@
     <loc>https://integralenvision.github.io/integral/404.html</loc>
   </url>
   <url>
+    <loc>https://integralenvision.github.io/integral/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/articles/pptfig.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/articles/xlsxtable.html</loc>
+  </url>
+  <url>
     <loc>https://integralenvision.github.io/integral/authors.html</loc>
   </url>
   <url>
@@ -34,7 +43,13 @@
     <loc>https://integralenvision.github.io/integral/reference/deselect.html</loc>
   </url>
   <url>
+    <loc>https://integralenvision.github.io/integral/reference/determine_path.html</loc>
+  </url>
+  <url>
     <loc>https://integralenvision.github.io/integral/reference/fct_case_when.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/reference/find_file.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral/reference/get_system.html</loc>
@@ -100,7 +115,16 @@
     <loc>https://integralenvision.github.io/integral/reference/pipe.html</loc>
   </url>
   <url>
+    <loc>https://integralenvision.github.io/integral/reference/pptfig.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/reference/ppttheme.html</loc>
+  </url>
+  <url>
     <loc>https://integralenvision.github.io/integral/reference/quote_values.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/reference/read_pptx_template.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral/reference/signif_column.html</loc>
@@ -115,6 +139,9 @@
     <loc>https://integralenvision.github.io/integral/reference/str_between.html</loc>
   </url>
   <url>
+    <loc>https://integralenvision.github.io/integral/reference/theme_integral.html</loc>
+  </url>
+  <url>
     <loc>https://integralenvision.github.io/integral/reference/tp.html</loc>
   </url>
   <url>
@@ -125,6 +152,9 @@
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral/reference/write_csv_wlog.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/reference/xlsxtable.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral/reference/xview.html</loc>
