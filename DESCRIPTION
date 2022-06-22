@@ -16,6 +16,7 @@ Imports:
     lifecycle,
     magrittr,
     officer,
+    dplyr,
     readr,
     rstudioapi,
     rvg,
