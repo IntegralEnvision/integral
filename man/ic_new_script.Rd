@@ -9,9 +9,9 @@
 \usage{
 ic_new_script(filepath, open = F)
 
-ic_new_r_file(filepath, open = F)
+ic_new_r_file(filepath = "", open = F)
 
-ic_new_python_file(filepath, open = F)
+ic_new_python_file(filepath = "", open = F)
 }
 \arguments{
 \item{filepath}{File to be created.}
