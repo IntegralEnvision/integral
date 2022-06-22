@@ -15,8 +15,11 @@ Imports:
     fs,
     lifecycle,
     magrittr,
+    officer,
     readr,
     rstudioapi,
+    rvg,
     tidyselect (>= 1.0),
-    tools
+    tools,
+    whereami
 URL: https://integralenvision.github.io/integral
