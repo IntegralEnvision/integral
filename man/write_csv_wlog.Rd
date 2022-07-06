@@ -21,6 +21,8 @@ A wrapper for write_csv that adds a project-level log with pertinent info into f
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
+\dontrun{
 df <- data.frame(fishes <- c("red", "white", "blue"))
 write_csv_wlog(df, tempfile())
+}
 }

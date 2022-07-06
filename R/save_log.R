@@ -3,15 +3,15 @@
 #' @description A wrapper for write_csv that adds a project-level log with pertinent info into file_log.csv
 #' `r lifecycle::badge('stable')`
 #' @return starting or adding a file_log.csv at project-level, as well as saving csv as expected
-#'
 #' @param x A data frame or tibble to write to disk.
 #' @param file File or connection to write to.
 #' @param ... Additional arguments from readr::write_csv()
-#'
 #' @examples
+#' \dontrun{
 #' df <- data.frame(fishes <- c("red", "white", "blue"))
 #' write_csv_wlog(df, tempfile())
-
+#' }
+#' @export
 write_csv_wlog <- function(x, file, ...){
   readr::write_csv(x, file, ...)
 
