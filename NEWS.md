@@ -1,4 +1,6 @@
 # integral 0.0.4
+* Patch to fix save_csv_wlog() function and export to namespace
+* Added copy_file_wlog() function
 
 # Integral 0.0.3
 * added ic_new_proj(), ic_new_r_file(), ic_new_python_file(), ic_new_rmd_file(), 

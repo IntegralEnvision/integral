@@ -25,5 +25,7 @@ Imports:
     rvg,
     tidyselect (>= 1.0),
     tools,
-    whereami
+    whereami,
+    tidyr,
+    testthat
 URL: https://integralenvision.github.io/integral

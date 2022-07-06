@@ -56,7 +56,7 @@ write_csv_wlog <- function(x, file, ...){
 #' @examples
 #' \dontrun{
 #' .old_wd <- setwd(tempdir())
-#' file_create("foo")
+#' fs::file_create("foo")
 #' copy_file_wlog("foo", "bar")
 #' }
 #' @export
@@ -90,6 +90,3 @@ copy_file_wlog <- function(path, new_path, overwrite = FALSE){
 
   } else {message("No .Rproj file found in working directory, no save log written")}
 } # fxn close
-
-
-copy_file_wlog("foo", "bar2", overwrite = T)
