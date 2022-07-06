@@ -1,3 +1,5 @@
+# integral 0.0.4
+
 # Integral 0.0.3
 * added ic_new_proj(), ic_new_r_file(), ic_new_python_file(), ic_new_rmd_file(), 
 ic_new_script() and ic_new_git() for project and file creation.

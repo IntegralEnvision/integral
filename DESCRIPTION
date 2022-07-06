@@ -1,6 +1,6 @@
 Package: integral
 Title: Integral Consulting Public Package
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(
     person("Jonathan", "Zadra", email = "jzadra@integral-corp.com", role = c("aut", "cre")),
     person("Eben", "Pendleton", email = "ependleton@integral-corp.com", role = "aut"),
