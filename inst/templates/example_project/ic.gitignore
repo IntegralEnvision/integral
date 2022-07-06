@@ -89,6 +89,7 @@ po/*~
 __pycache__/
 *.py[cod]
 *$py.class
+venv/
 
 # Selenium files
 *geckodriver.log

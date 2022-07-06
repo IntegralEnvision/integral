@@ -20,7 +20,12 @@ starting or adding a file_log.csv at project-level, as well as saving csv as exp
 A wrapper for write_csv that adds a project-level log with pertinent info into file_log.csv
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
+\details{
+Write csv with log
+}
 \examples{
+\dontrun{
 df <- data.frame(fishes <- c("red", "white", "blue"))
 write_csv_wlog(df, tempfile())
+}
 }

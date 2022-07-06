@@ -1,0 +1,220 @@
+---
+title: "pptfig overview and examples"
+author: "Eben Pendleton"
+date: "2021-02-15"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pptfig overview and examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+## Introduction
+Welcome to an overview and examples for Integral's PowerPoint theme, __ppttheme()__
+and figure function, __pptfig()__.
+The first step is to load the library.
+```{r setup}
+# load the library
+library(integral)
+```
+The library has two functions, ppttheme() which is a theme associated with 
+ggplot2 and pptfig() which handles placing the figures in
+the PowerPoint template. 
+
+## ppttheme()
+The current ppttheme() is shown below. 
+```{r}
+#' theme for PowerPoint slide
+ppttheme <- function() {
+  return(ggplot2::theme(text = ggplot2::element_text(family = "sans")) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(
+      legend.title = ggplot2::element_blank(), legend.text = ggplot2::element_text(color = "black", size = 8),
+      legend.background = ggplot2::element_rect(size = .5, linetype = "solid", color = "black")
+    ) +
+    ggplot2::theme(
+      panel.grid.minor = ggplot2::element_blank(),
+      panel.background = ggplot2::element_blank(),
+      axis.line = ggplot2::element_line(colour = "black", size = 1)
+    ) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(color = "black", size = 8, vjust = 0.5, angle = 0)) +
+    ggplot2::theme(axis.text.y = ggplot2::element_text(color = "black", size = 8, vjust = 0.5, angle = 0)) +
+    ggplot2::theme(axis.title.x = ggplot2::element_text(color = "black", size = 9, face = "bold")) +
+    ggplot2::theme(axis.title.y = ggplot2::element_text(color = "black", size = 9, face = "bold")) +
+    ggplot2::theme(plot.title = ggplot2::element_text(size = 10, hjust = 0.5, face = "bold")) +
+    ggplot2::theme(axis.ticks = ggplot2::element_line(size = 1)) +
+    ggplot2::theme(axis.line = ggplot2::element_line(size = 1)) +
+    ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white")) +
+    ggplot2::theme(panel.border = ggplot2::element_rect(fill = NA, size = 0.25)) +
+    ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 9)) +
+    ggplot2::theme(plot.margin = ggplot2::unit(c(0.5, 0.5, .5, 0.5), "cm")))
+}
+```
+
+This theme is loaded from the library in the example below
+```{r}
+theme <- integral::ppttheme()
+```
+
+## pptfig()
+pptfig() handles placing the figures in
+the PowerPoint template. 
+
+An example using letter and landscape is below. 
+```{r}
+# used to read data for this example
+library(dataRetrieval)
+# library in this vignette
+library(integral)
+# library for graphics creation
+library(ggplot2)
+# library to convert graphics to Office compatible graphic
+library(rvg)
+
+###Theme
+theme <- integral::ppttheme()
+###Data
+Q <- dataRetrieval::readNWISuv(site = "01114500", parameterCd = "00060", startDate = as.Date("2020-01-01"))
+
+###Figure
+p <- ggplot() +
+  geom_path(data = Q, aes(x = dateTime, y = X_00060_00000)) +
+  geom_hline(yintercept = 200, color = "red", size = 1.5) +
+  annotate("text", x = as.POSIXct("2020-04-01"), y = 200, label = "Line", vjust = 1.8) +
+  labs(title = "USGS Stream Gage 01114500, 2020", x = NULL, y = "Discharge (cfs)") +
+  theme
+
+###pptfig
+### landscape 11 x 8.5
+orientation <- "L"
+size <- "letter"
+fig <- rvg::dml(ggobj = p)
+section <- "X"
+fig.num <- 1
+doc.title.1 <- "Discharge at USGS Stream Gage 01114500"
+doc.title.2 <- "Project Description 1"
+doc.title.3 <- "Project Description 2"
+draft <- "DRAFT"
+note <- "Note: Data pulled using readNWISuv."
+author <- "Eben Pendleton"
+
+my_pres <- read_pptx_template(size, orientation)
+
+my_pres <- pptfig(my_pres, size, orientation, fig, section, fig.num, note, author, doc.title.1,
+                  doc.title.2, doc.title.3, draft)
+
+print(my_pres, "OutputL11x8.5.pptx")
+```
+
+
+An example using letter and legal presentations sizes is below.
+```{r}
+# used to read data for this example
+library(dataRetrieval)
+# library in this vignette
+library(integral)
+# library for graphics creation
+library(ggplot2)
+# library to convert graphics to Office compatible graphic
+library(rvg)
+
+###Theme
+theme <- integral::ppttheme()
+###Data
+Q <- dataRetrieval::readNWISuv(site = "01114500", parameterCd = "00060", startDate = as.Date("2020-01-01"))
+
+###Figure
+p <- ggplot() +
+  geom_path(data = Q, aes(x = dateTime, y = X_00060_00000)) +
+  geom_hline(yintercept = 200, color = "red", size = 1.5) +
+  annotate("text", x = as.POSIXct("2020-04-01"), y = 200, label = "Line", vjust = 1.8) +
+  labs(title = "USGS Stream Gage 01114500, 2020", x = NULL, y = "Discharge (cfs)") +
+  theme
+
+###pptfig
+### landscape 11 x 8.5
+orientation <- "L"
+size <- "letter"
+fig <- rvg::dml(ggobj = p)
+section <- "X"
+fig.num <- 1
+doc.title.1 <- "Discharge at USGS Stream Gage 01114500"
+doc.title.2 <- "Project Description 1"
+doc.title.3 <- "Project Description 2"
+draft <- "DRAFT"
+note <- "Note: Data pulled using readNWISuv."
+author <- "Eben Pendleton"
+my_pres <- read_pptx_template(size, orientation)
+
+my_pres <- pptfig(my_pres, size, orientation, fig, section, fig.num, note, author, doc.title.1,
+                  doc.title.2, doc.title.3, draft)
+
+print(my_pres, "OutputL11x8.5.pptx")
+
+### portrait 8.5 x 11
+size <- "letter"
+orientation <- "P"
+fig <- rvg::dml(ggobj = p)
+section <- "X"
+fig.num <- 1
+doc.title.1 <- "Discharge at USGS Stream Gage 01114500"
+doc.title.2 <- "Project Description 1"
+doc.title.3 <- "Project Description 2"
+draft <- "DRAFT"
+note <- "Note: Data pulled using readNWISuv."
+author <- "Eben Pendleton"
+
+my_pres <- read_pptx_template(size, orientation)
+
+my_pres <- pptfig(my_pres, size, orientation, fig, section, fig.num, note, author, doc.title.1,
+                  doc.title.2, doc.title.3, draft)
+print(my_pres, "OutputP8.5x11.pptx")
+
+# ledger
+# landscape 17 x 11
+size <- "ledger"
+orientation <- "L"
+fig <- rvg::dml(ggobj = p)
+section <- "X"
+fig.num <- 1
+doc.title.1 <- "Discharge at USGS Stream Gage 01114500"
+doc.title.2 <- "Project Description 1"
+doc.title.3 <- "Project Description 2"
+draft <- "DRAFT"
+note <- "Note: Data pulled using readNWISuv."
+author <- "Eben Pendleton"
+
+my_pres <- read_pptx_template(size, orientation)
+
+my_pres <- pptfig(my_pres, size, orientation, fig, section, fig.num, note, author, doc.title.1,
+                  doc.title.2, doc.title.3, draft)
+
+print(my_pres, "OutputL17x11.pptx")
+#
+# ### portrait 11 x 17
+size <- "ledger"
+orientation <- "P"
+fig <- rvg::dml(ggobj = p)
+section <- "X"
+fig.num <- 1
+doc.title.1 <- "Discharge at USGS Stream Gage 01114500"
+doc.title.2 <- "Project Description 1"
+doc.title.3 <- "Project Description 2"
+draft <- "DRAFT"
+note <- "Note: Data pulled using readNWISuv."
+author
+
+my_pres <- read_pptx_template(size, orientation)
+my_pres <- pptfig(my_pres, size, orientation, fig, section, fig.num, note, author, doc.title.1,
+                  doc.title.2, doc.title.3, draft)
+print(my_pres, "OutputP11x17.pptx")
+```
+
+
+

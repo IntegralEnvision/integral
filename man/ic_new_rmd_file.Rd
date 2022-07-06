@@ -4,7 +4,7 @@
 \alias{ic_new_rmd_file}
 \title{Start a new RMarkdown document with Integral header}
 \usage{
-ic_new_rmd_file(filepath, open = F)
+ic_new_rmd_file(filepath = "", open = F)
 }
 \arguments{
 \item{filepath}{File to be created.}
