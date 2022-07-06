@@ -16,6 +16,11 @@ Imports:
     dplyr,
     ggplot2,
     fs,
+    dplyr (>= 1.0.9),
+    stringr,
+    openxlsx,
+    tibble,
+    stringr,
     lifecycle,
     magrittr,
     officer,
@@ -24,8 +29,10 @@ Imports:
     rstudioapi,
     rvg,
     tidyselect (>= 1.0),
-    tools,
     whereami,
+    usethis,
+    crayon,
     tidyr,
-    testthat
+    testthat,
+    tools
 URL: https://integralenvision.github.io/integral
