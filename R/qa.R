@@ -56,8 +56,8 @@ qa <- function(filepath) {
   if (get_system() == "linux") {
     cli::cli_alert_info("Temporarily not opening the workbook for testing on linux")
     # set the sytem path a la https://askubuntu.com/a/1374700
-    #Sys.setenv("LD_LIBRARY_PATH" = paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
-    #system2("xdg-open", paste0("'", qafile, "'"))
+    # Sys.setenv("LD_LIBRARY_PATH" = paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
+    # system2("xdg-open", paste0("'", qafile, "'"))
   } else {
     system2("open", qafile)
   }
@@ -70,7 +70,7 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
 
   if (rstudioapi::isAvailable()) {
     project_path <- rstudioapi::getActiveProject()
-    if (!stringr::str_detect(code_path, project_path)) { #If an Rstudio project is active, but the file is not in it or a subdir
+    if (!stringr::str_detect(code_path, project_path)) { # If an Rstudio project is active, but the file is not in it or a subdir
       cli::cli_alert_warning("Warning: The script file being QA'd is not in the active RStudio project directory.")
       project_path <- code_path
     }
