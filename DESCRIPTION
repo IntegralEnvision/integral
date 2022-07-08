@@ -1,6 +1,6 @@
 Package: integral
 Title: Integral Consulting Public Package
-Version: 0.0.2.9006
+Version: 0.0.4
 Authors@R: c(
     person("Jonathan", "Zadra", email = "jzadra@integral-corp.com", role = c("aut", "cre")),
     person("Eben", "Pendleton", email = "ependleton@integral-corp.com", role = "aut"),
@@ -12,6 +12,9 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports: 
     cli,
+    dataRetrieval,
+    dplyr,
+    ggplot2,
     fs,
     dplyr (>= 1.0.9),
     stringr,
@@ -20,11 +23,16 @@ Imports:
     stringr,
     lifecycle,
     magrittr,
+    officer,
+    openxlsx,
     readr,
     rstudioapi,
+    rvg,
     tidyselect (>= 1.0),
+    whereami,
     usethis,
     crayon,
     tidyr,
-    testthat
+    testthat,
+    tools
 URL: https://integralenvision.github.io/integral

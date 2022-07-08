@@ -1,3 +1,13 @@
+# integral 0.0.4
+* Patch to fix save_csv_wlog() function and export to namespace
+* Added copy_file_wlog() function
+
+# Integral 0.0.3
+* added ic_new_proj(), ic_new_r_file(), ic_new_python_file(), ic_new_rmd_file(), 
+ic_new_script() and ic_new_git() for project and file creation.
+* They are supported by ic_new_script() for creating none Rmarkdown files, 
+convert_winpath() to convert Windows paths and a series of ask() functions.
+
 # integral 0.0.2.9006
 
 * Added experimental helper functions for searching Stack Overflow and Google

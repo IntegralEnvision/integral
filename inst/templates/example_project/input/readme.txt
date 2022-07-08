@@ -1,0 +1,1 @@
+This folder contains project input files. This file can be modified as needed for each projects. Its a placeholder for the project folder structure in git.
