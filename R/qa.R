@@ -54,9 +54,10 @@ qa <- function(filepath) {
 
   # openxlsx::openXL(qawb)
   if (get_system() == "linux") {
+    cli::cli_alert_info("Temporarily not opening the workbook for testing on linux")
     # set the sytem path a la https://askubuntu.com/a/1374700
-    Sys.setenv("LD_LIBRARY_PATH" = paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
-    system2("xdg-open", paste0("'", qafile, "'"))
+    #Sys.setenv("LD_LIBRARY_PATH" = paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
+    #system2("xdg-open", paste0("'", qafile, "'"))
   } else {
     system2("open", qafile)
   }
@@ -70,18 +71,17 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
   if (rstudioapi::isAvailable()) {
     project_path <- rstudioapi::getActiveProject()
     if (!stringr::str_detect(code_path, project_path)) { #If an Rstudio project is active, but the file is not in it or a subdir
-      cli::cli_alert_warning("Warning: The file being QA'd is not in the active RStudio project directory.")
+      cli::cli_alert_warning("Warning: The script file being QA'd is not in the active RStudio project directory.")
       project_path <- code_path
     }
-  }
-  if (is.null(project_path)) project_path <- code_path # if outside of an Rproj, we just use the parent dir name.
+  } else if (is.null(project_path)) project_path <- code_path # if outside of an Rproj, we just use the parent dir name.
 
   project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
 
   qafile <- fs::path(project_path, "QA", paste0("QA_", project_name, ".xlsx"))
   fs::dir_create(fs::path_dir(qafile)) # function ignores command if dir already exists
 
-  if (code_path == project_path) { # If we're working with a script in the project root, it gets a QA sheet with the same name as the project
+  if (code_path == project_path) { # If we're working with a script in the project root, it gets a QA sheet with the same name as the project. Same if the script is outside of the project path or there is no active project.
 
     qafile <- fs::path(code_path, "QA", paste0("QA_", project_name, ".xlsx"))
 
