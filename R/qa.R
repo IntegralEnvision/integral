@@ -35,20 +35,14 @@ qa <- function(filepath) {
     )
   }
 
-  # fix for user directories
-  filepath <- gsub("~", path.expand("~"), filepath)
-
   filepath <- fs::path_real(filepath)
-
-  # fix for user directories
-  filepath <- gsub("~", path.expand("~"), filepath)
 
   if (!fs::file_exists(filepath)) stop(cli::cli_alert_danger(paste0("File `", filepath, "` does not exist. If it is not in the root project directory, specify the path relative to the root project directory."), wrap = T))
 
   if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R, .Rmd, or .py file."), wrap = T))
 
 
-  # TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags.
+  # TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags. Currently this does not appear to be possible: https://github.com/rstudio/rstudioapi/issues/230
 
   qafile <- qa_file(filepath)
 
@@ -75,7 +69,8 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
 
   if (rstudioapi::isAvailable()) {
     project_path <- rstudioapi::getActiveProject()
-    if (!grepl(code_path, project_path, fixed = T)) {
+    if (!stringr::str_detect(code_path, project_path)) { #If an Rstudio project is active, but the file is not in it or a subdir
+      cli::cli_alert_warning("Warning: The file being QA'd is not in the active RStudio project directory.")
       project_path <- code_path
     }
   }
