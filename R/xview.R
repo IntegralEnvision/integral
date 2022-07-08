@@ -91,6 +91,12 @@ xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
 
   openxlsx::freezePane(wb, 1, firstRow = T, firstCol = T)
 
+  #Styles
+  numbers <-  c("cyan",  "darkorchid1", "white")
+  ordered <- c("#edf8b1", "#7fcdbb", "#2c7fb8")
+  logical_false <- createStyle(fontColour = "red")
+  logical_true <- createStyle(fontColour = "darkgreen")
+
   if(auto_conditional) {
     colclasses <- lapply(.data, class) %>%
       as_tibble %>%
@@ -100,6 +106,14 @@ xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
       dplyr::filter(name != "rowname") %>%
       dplyr::filter(name != "rownum")
 
+    character_limited <- .data %>% summarize(across(where(is.character), ~n_distinct(.))) %>%  pivot_longer(everything(), values_to = "distinct_char")
+
+    colclasses <- colclasses %>%
+      left_join(character_limited) %>%
+      rowwise() %>%
+      mutate(value = if_else(isTRUE(distinct_char <= 10), "character_limited", value)) %>%
+      ungroup()
+
     colclasses %>%
       dplyr::rowwise() %>%
       dplyr::group_split() %>%
@@ -107,15 +121,23 @@ xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
         switch(x$value,
                numeric = openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
                                                type = "colourScale",
-                                               style = c("cyan", "white", "darkorchid1")),
+                                               style = numbers),
 
                integer = openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
                                                type = "colourScale",
-                                               style = c("cyan", "white", "darkorchid1")),
+                                               style = numbers),
 
                ordered = openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
                                                type = "colourScale",
-                                               style = c("#edf8b1", "#7fcdbb", "#2c7fb8")),
+                                               style = ordered),
+               logical = {
+                 openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
+                                                          rule = "=='TRUE'", style = logical_true)
+                 openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1,
+                                                 rule = "=='FALSE'", style = logical_false)
+               },
+
+               character_limited = openxlsx::conditionalFormatting(wb, 1, cols = x$colnum, rows = 2:nrow(.data) + 1, style = ordered, type = "colourScale") #FIXME This is incomplete, will probably need to assign styling to specific cells rather than using conditional formatting.
         )
       })
   }
