@@ -265,7 +265,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
   headers <- all_code %>%
     # dplyr::mutate(is_code_header = stringr::str_detect(code, "(#+)[^\\t]([a-zA-Z0-9\\(\\)&\\s]*)(?=-+)")) %>% #https://regex101.com/r/L9A1VJ/1
-    dplyr::mutate(is_code_header = stringr::str_detect(code, "^#+.*-{4,}")) %>%
+    dplyr::mutate(is_code_header = stringr::str_detect(code, "^\\s*#+.*-{4,}")) %>%
     dplyr::mutate(is_text_header = is_text_chunk & stringr::str_detect(code, "(#+)\\s(.*?)")) %>%
     dplyr::filter(is_code_header | is_text_header) %>%
     dplyr::filter(!stringr::str_detect(code, "COPYRIGHT|PURPOSE|PROJECT INFORMATION|HISTORY|NOTES")) %>% # Remove codeless header sections
