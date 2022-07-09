@@ -59,12 +59,12 @@ qa <- function(filepath) {
     #Sys.setenv("LD_LIBRARY_PATH" = paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
     #system2("xdg-open", paste0("'", qafile, "'"))
   } else {
-    system2("open", qafile)
+    system2("open", paste0("'", qafile, "'"))
   }
 }
 qa_file <- function(filepath) { # TODO add status messages as to what is happening
 
-  code_file <- fs::path_file(filepath)
+  #code_file <- fs::path_file(filepath) #not used?
 
   code_path <- fs::path_dir(filepath)
 
