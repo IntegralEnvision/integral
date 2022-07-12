@@ -6,7 +6,7 @@
 #'
 #' To use, tag QA review items by commenting:
 #'
-#'    QA: Review comment / request"
+#'    QA: Review comment / request
 #'
 #' @section Function Process:
 #'
