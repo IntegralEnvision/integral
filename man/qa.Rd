@@ -16,7 +16,7 @@ Scrape an .R or .Rmd file for QA tags, and populate the Integral QA sheet for sc
 
 To use, tag QA review items by commenting:
 
-QA: Review comment / request"
+QA: Review comment / request
 }
 \section{Function Process}{
 
