@@ -18,7 +18,7 @@ Imports:
     fs,
     dplyr (>= 1.0.9),
     stringr,
-    openxlsx (< 4.2.5),
+    openxlsx,
     tibble,
     stringr,
     lifecycle,
