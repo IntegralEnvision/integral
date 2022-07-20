@@ -6,7 +6,7 @@
 #'
 #' To use, tag QA review items by commenting:
 #'
-#'    QA: Review comment / request"
+#'    QA: Review comment / request
 #'
 #' @section Function Process:
 #'
@@ -35,20 +35,16 @@ qa <- function(filepath) {
     )
   }
 
-  # fix for user directories
-  filepath <- gsub("~", path.expand("~"), filepath)
+
+  if (!fs::file_exists(filepath)) return(cli::cli_alert_danger("{.path {filepath}} does not exist. If it is not in the root project directory, specify the path relative to the root project directory.", wrap = T))
 
   filepath <- fs::path_real(filepath)
 
-  # fix for user directories
-  filepath <- gsub("~", path.expand("~"), filepath)
+  if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) return(cli::cli_alert_danger("{filepath} is not an .R, .Rmd, or .py file."), wrap = T)
 
-  if (!fs::file_exists(filepath)) stop(cli::cli_alert_danger(paste0("File `", filepath, "` does not exist. If it is not in the root project directory, specify the path relative to the root project directory."), wrap = T))
+  if (is_unsaved(filepath, quiet = T)) return(cli::cli_alert_danger("{filepath} has unsaved changes. Please save before running {.fun qa}.", wrap = T))
 
-  if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) stop(cli::cli_alert_danger(paste0("File `", filepath, "` is not an .R, .Rmd, or .py file."), wrap = T))
-
-
-  # TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags.
+  # TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags. Currently this does not appear to be possible: https://github.com/rstudio/rstudioapi/issues/230
 
   qafile <- qa_file(filepath)
 
@@ -60,35 +56,39 @@ qa <- function(filepath) {
 
   # openxlsx::openXL(qawb)
   if (get_system() == "linux") {
+    cli::cli_alert_info("Temporarily not opening the workbook for testing on linux")
     # set the sytem path a la https://askubuntu.com/a/1374700
-    Sys.setenv("LD_LIBRARY_PATH" = paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
-    system2("xdg-open", paste0("'", qafile, "'"))
+    # Sys.setenv("LD_LIBRARY_PATH" = paste0("/usr/lib/libreoffice/program:/usr/lib/x86_64-linux-gnu/:$", "LD_LIBRARY_PATH"))
+    # system2("xdg-open", paste0("'", qafile, "'"))
   } else {
-    system2("open", qafile)
+    system2("open", paste0("'", qafile, "'"))
   }
 }
+
+
+
+
+
 qa_file <- function(filepath) { # TODO add status messages as to what is happening
 
-  code_file <- fs::path_file(filepath)
+  #code_file <- fs::path_file(filepath) #not used?
 
   code_path <- fs::path_dir(filepath)
 
   if (rstudioapi::isAvailable()) {
     project_path <- rstudioapi::getActiveProject()
-    if (!grepl(code_path, project_path, fixed = T)) {
+    if (!stringr::str_detect(code_path, project_path)) { # If an Rstudio project is active, but the file is not in it or a subdir
+      cli::cli_alert_warning("Warning: The script file being QA'd is not in the active RStudio project directory.")
       project_path <- code_path
     }
-  }
-  if (is.null(project_path)) project_path <- code_path # if outside of an Rproj, we just use the parent dir name.
+  } else if (is.null(project_path)) project_path <- code_path # if outside of an Rproj, we just use the parent dir name.
 
   project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
 
-  qafile <- fs::path(project_path, "QA", paste0("QA_", project_name, ".xlsx"))
-  fs::dir_create(fs::path_dir(qafile)) # function ignores command if dir already exists
 
-  if (code_path == project_path) { # If we're working with a script in the project root, it gets a QA sheet with the same name as the project
+  if (code_path == project_path) { # If we're working with a script in the project root, it gets a QA sheet with the same name as the project. Same if the script is outside of the project path or there is no active project.
 
-    qafile <- fs::path(code_path, "QA", paste0("QA_", project_name, ".xlsx"))
+    qafile <- fs::path(code_path, "qa", paste0("qa_", project_name, ".xlsx"))
 
     fs::dir_create(fs::path_dir(qafile)) # function ignores command if dir already exists
   } else if (stringr::str_detect(code_path, project_path)) { # If the script is in a subdir of project root, it gets a QA sheet with the name of the subdir.
@@ -96,7 +96,7 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
     code_subfolder <- stringr::str_remove(code_path, project_path) %>%
       stringr::str_remove("/")
 
-    qafile <- fs::path(code_path, "QA", paste0("QA_", code_subfolder, ".xlsx"))
+    qafile <- fs::path(code_path, "qa", paste0("qa_", code_subfolder, ".xlsx"))
 
     fs::dir_create(fs::path_dir(qafile)) # function ignores command if dir already exists
   }
@@ -104,33 +104,56 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
   return(qafile)
 }
 
+
+
+
 qa_wb <- function(filepath, qafile) {
+
   sheet <- fs::path_file(filepath)
 
-
   # Update/Add QA sheet ------
-
 
   has_existing_qafile <- fs::file_exists(qafile)
 
   if (has_existing_qafile) {
-    if (sheet %in% openxlsx::getSheetNames(qafile)) {
-      cli::cli_alert_warning("A QA file and code review worksheet for this script already exists. If you continue, the worksheet code review section will be over-written (checklist and other sheets will not be affected).", wrap = T) # TODO: Check if there is any user-entered changes that will be deleted, and either make sure they aren't by lining up the QA tags, or prompt the user about this.  For now we are prompting every time regarding overwrite.
+    if (sheet %in% openxlsx::getSheetNames(qafile)) { #Has existing sheet for the script
+      cli::cli_alert_warning("A QA file and code review worksheet for this script already exists. If you continue, the worksheet will be over-written (other sheets in the workbook will not be affected).", wrap = T) # TODO: Check if there is any user-entered changes that will be deleted, and either make sure they aren't by lining up the QA tags, or prompt the user about this.  For now we are prompting every time regarding overwrite.
 
       user_overwrite <- usethis::ui_yeah("Do you want to proceed and overwrite the existing QA code review section?", shuffle = F)
 
       if (user_overwrite) {
+
+
+
+        #The below code creats a backup within the workbook.  I am switching to creating a copy of the whole file in ./archive
+
+            # qawb <- openxlsx::loadWorkbook(qafile)
+            #
+            # backup_sheet <- paste(sheet, lubridate::now()) %>% stringr::str_remove_all("-|:") # TODO: Need to limit chars to 31, so need better naming
+            # backup_sheet <- abbreviate(backup_sheet, 31) # FIXME temporary until above is fixed!
+            #
+            # openxlsx::cloneWorksheet(qawb, backup_sheet, clonedSheet = sheet)
+            #
+            # openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, backup_sheet)] <- "hidden"
+
+        #This code replaces it for now to just copy teh whole file to the archive subdir.
+
+        fs::dir_create(fs::path(fs::path_dir(qafile), "archive")) #If exists, nothing happens
+
+        archive_name <- paste0(fs::path_ext_remove(fs::path_file(qafile)), "_", lubridate::now() %>% stringr::str_remove_all("-|:"), ".xlsx")
+        fs::file_copy(qafile, fs::path(fs::path_dir(qafile), "archive", archive_name))
+
         qawb <- openxlsx::loadWorkbook(qafile)
 
-        backup_sheet <- paste(sheet, lubridate::now()) %>% stringr::str_remove_all("-|:") # TODO: Need to limit chars to 31, so need better naming
-        backup_sheet <- abbreviate(backup_sheet, 31) # FIXME temporary until above is fixed!
+        openxlsx::activeSheet(qawb) <- 1 #If active sheet is left on the removed one, it gives errors. This does not happen for the openxlsx example sheet, so somethign is wrong, but this seems to fix.
 
-        openxlsx::cloneWorksheet(qawb, backup_sheet, clonedSheet = sheet)
+        openxlsx::removeWorksheet(qawb, sheetNamesIndex(qawb, sheet))
+        openxlsx::cloneWorksheet(qawb, sheet, clonedSheet = "Code_Review_Template")
+        openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, sheet)] <- "visible"
 
-        openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, backup_sheet)] <- "hidden"
       } else {
-        stop("User exited.")
-      } # TODO Do something better here
+        stop_quietly()
+      }
     } else { # Sheet does not exist but QA file does
       cli::cli_alert_info("A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named {crayon::italic({sheet})}) in the file: {.file {qafile}}", wrap = T)
 
@@ -151,6 +174,8 @@ qa_wb <- function(filepath, qafile) {
 
   return(qawb)
 }
+
+
 
 qa_parse <- function(filepath, include_empty_sections = TRUE) {
   filetype <- tools::file_ext(filepath) %>% stringr::str_to_lower()
@@ -208,7 +233,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
       cli::cli_alert_info("Please add IDs manually to the lines above and re-run {.code qa()}. Alternatively, re-run {.code qa()} and select the option to automatically add missing IDs when prompted.", wrap = T)
       stop_quietly()
     }
-    # TODO exit but not error
+
   } else {
     cli::cli_alert_success("No missing QA ID's found.")
   }
@@ -239,8 +264,8 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
       rewrite_code <- T # Set flag for if the file needs to be written to.
     } else {
-      stop("User exited")
-    } # TODO Exit without error
+      stop_quietly()
+    }
   } else {
     cli::cli_alert_success("No duplicate QA ID's found.")
   }
@@ -270,7 +295,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
   headers <- all_code %>%
     # dplyr::mutate(is_code_header = stringr::str_detect(code, "(#+)[^\\t]([a-zA-Z0-9\\(\\)&\\s]*)(?=-+)")) %>% #https://regex101.com/r/L9A1VJ/1
-    dplyr::mutate(is_code_header = stringr::str_detect(code, "^#+.*-{4,}")) %>%
+    dplyr::mutate(is_code_header = stringr::str_detect(code, "^\\s*#+.*-{4,}")) %>%
     dplyr::mutate(is_text_header = is_text_chunk & stringr::str_detect(code, "(#+)\\s(.*?)")) %>%
     dplyr::filter(is_code_header | is_text_header) %>%
     dplyr::filter(!stringr::str_detect(code, "COPYRIGHT|PURPOSE|PROJECT INFORMATION|HISTORY|NOTES")) %>% # Remove codeless header sections
@@ -306,7 +331,6 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
   for (missingcol in dplyr::setdiff(c("level_1", "level_2", "level_3", "level_4"), names(wh))) { # add empty columns to keep column alignment in worksheet
     wh <- wh %>% tibble::add_column(!!rlang::sym(missingcol) := NA_character_)
   }
-
 
   qa_lines <- all_code %>%
     dplyr::select(-c(is_text_chunk)) %>% # TODO: check that the new code for dupes and missings works with RMD, we didn't filter text chunks
@@ -357,13 +381,19 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
   return(parsed_qa)
 }
 
+
+
+
+
+
+
 qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
   sheet <- fs::path_file(filepath)
 
   openxlsx::removeCellMerge(qawb, sheet, rows = 14:100, cols = 1:4) # TODO: finish this with the sheetNamesIndex?
-  suppressWarnings(openxlsx::deleteNamedRegion(qawb, "populated_data"))
+  #suppressWarnings(openxlsx::deleteNamedRegion(qawb, paste0(sheet, "_populated_data")))
 
-  openxlsx::writeData(qawb, sheet, parsed_qa, startRow = 14, colNames = F, borders = "all", name = "populated_data")
+  openxlsx::writeData(qawb, sheet, parsed_qa, startRow = 14, colNames = F, borders = "all") #, name = "populated_data"
 
 
   for (levcol in c("level_1", "level_2", "level_3", "level_4")) {
@@ -391,6 +421,10 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
 }
 
 
+
+
+
+
 # Internal function to translate sheet name to sheet index for openxlsx functions that don't accept names.
 sheetNamesIndex <- function(qawb, lookup) {
   name_ind <- tibble::enframe(names(qawb), name = "index", value = "name")
@@ -408,6 +442,19 @@ sheetNamesIndex <- function(qawb, lookup) {
     stop("Sheet name or index number does not exist in workbook.")
   }
 }
+
+#Internal function to make useful named ranges table
+df_named_ranges <- function(qawb) {
+
+  reg <- openxlsx::getNamedRegions(qawb)
+
+  df_reg <- tibble(sheet = attr(reg, "sheet"),
+                   name = reg,
+                   position = attr(reg, "position"))
+
+  return(df_reg)
+
+  }
 
 
 
