@@ -85,8 +85,6 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
 
   project_name <- stringr::str_extract(project_path, "(?!(.*\\/)).*")
 
-  qafile <- fs::path(project_path, "qa", paste0("qa_", project_name, ".xlsx"))
-  fs::dir_create(fs::path_dir(qafile)) # function ignores command if dir already exists
 
   if (code_path == project_path) { # If we're working with a script in the project root, it gets a QA sheet with the same name as the project. Same if the script is outside of the project path or there is no active project.
 
