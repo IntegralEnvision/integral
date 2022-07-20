@@ -154,7 +154,7 @@ qa_wb <- function(filepath, qafile) {
         openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, sheet)] <- "visible"
 
       } else {
-        stop("User exited.") # TODO Do something better here
+        stop_quietly()
       }
     } else { # Sheet does not exist but QA file does
       cli::cli_alert_info("A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named {crayon::italic({sheet})}) in the file: {.file {qafile}}", wrap = T)
@@ -235,7 +235,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
       cli::cli_alert_info("Please add IDs manually to the lines above and re-run {.code qa()}. Alternatively, re-run {.code qa()} and select the option to automatically add missing IDs when prompted.", wrap = T)
       stop_quietly()
     }
-    # TODO exit but not error
+
   } else {
     cli::cli_alert_success("No missing QA ID's found.")
   }
@@ -266,8 +266,8 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
       rewrite_code <- T # Set flag for if the file needs to be written to.
     } else {
-      stop("User exited")
-    } # TODO Exit without error
+      stop_quietly()
+    }
   } else {
     cli::cli_alert_success("No duplicate QA ID's found.")
   }
