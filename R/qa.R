@@ -42,7 +42,9 @@ qa <- function(filepath) {
 
   if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) return(cli::cli_alert_danger("{filepath} is not an .R, .Rmd, or .py file."), wrap = T)
 
-  if (is_unsaved(filepath, quiet = T)) return(cli::cli_alert_danger("{filepath} has unsaved changes. Please save before running {.fun qa}.", wrap = T))
+  if(!is.null(rstudioapi::getActiveProject())) {
+    if (is_unsaved(filepath, quiet = T)) return(cli::cli_alert_danger("{filepath} has unsaved changes. Please save before running {.fun qa}.", wrap = T))
+    }
 
   # TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags. Currently this does not appear to be possible: https://github.com/rstudio/rstudioapi/issues/230
 
