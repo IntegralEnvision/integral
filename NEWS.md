@@ -1,3 +1,6 @@
+# integral 0.0.5
+* Added qa() function
+
 # integral 0.0.4
 * Patch to fix save_csv_wlog() function and export to namespace
 * Added copy_file_wlog() function
