@@ -35,13 +35,14 @@ qa <- function(filepath) {
     )
   }
 
+
+  if (!fs::file_exists(filepath)) return(cli::cli_alert_danger("{.path {filepath}} does not exist. If it is not in the root project directory, specify the path relative to the root project directory.", wrap = T))
+
   filepath <- fs::path_real(filepath)
 
-  if (!fs::file_exists(filepath)) stop(cli::cli_alert_danger("{filepath} does not exist. If it is not in the root project directory, specify the path relative to the root project directory."), wrap = T)
+  if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) return(cli::cli_alert_danger("{filepath} is not an .R, .Rmd, or .py file."), wrap = T)
 
-  if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) stop(cli::cli_alert_danger("{filepath} is not an .R, .Rmd, or .py file."), wrap = T)
-
-  if(is_unsaved(filepath, quiet = T)) stop(cli::cli_alert_danger("{filepath} has unsaved changes. Please save before running {.fun qa}.", wrap = T))
+  if (is_unsaved(filepath, quiet = T)) return(cli::cli_alert_danger("{filepath} has unsaved changes. Please save before running {.fun qa}.", wrap = T))
 
   # TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags. Currently this does not appear to be possible: https://github.com/rstudio/rstudioapi/issues/230
 
@@ -153,8 +154,8 @@ qa_wb <- function(filepath, qafile) {
         openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, sheet)] <- "visible"
 
       } else {
-        stop("User exited.")
-      } # TODO Do something better here
+        stop("User exited.") # TODO Do something better here
+      }
     } else { # Sheet does not exist but QA file does
       cli::cli_alert_info("A QA file for for the scripts in this directory already exists, but a worksheet for this script does not. It will be added as a new spreadsheet (named {crayon::italic({sheet})}) in the file: {.file {qafile}}", wrap = T)
 
