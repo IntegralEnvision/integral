@@ -131,3 +131,50 @@ get_system <- function() {
 }
 
 
+is_unsaved <- function(path, quiet = F) {
+  
+  rproj_path <- rstudioapi::getActiveProject()
+  
+  if(is.null(rproj_path)) {
+    stop(cli::cli_alert_danger("This function only works in RStudio within an active project."))
+    }
+  
+  proj_temp <- fs::path(rproj_path, ".Rproj.user/")
+  
+  if(!fs::dir_exists(proj_temp)) return(cli::cli_alert_danger("There is no .Rproj.user directory for this project.  This should not be possible. Talk to Jon"))
+  
+  # Get temporary files
+  files_temp <- fs::dir_ls(proj_temp, regexp = "[a-zA-Z0-9]{8}\\/sources\\/s-[a-zA-Z0-9]+\\/[a-zA-Z0-9]{8}$", recurse = T) #If this misses things, check that there may be 6 character dirs.
+  
+  if(length(files_temp) == 0) {
+    cli::cli_alert_info("File(s) have no unsaved changes.")
+    return(FALSE)
+  }
+  
+  lines <- files_temp %>% 
+    purrr::map(function(x) {
+      readLines(x, warn = F)
+    })
+  
+  unsaved_files <- lines %>% 
+    purrr::map(function(x) {
+      unsaved_changes <- any(stringr::str_detect(x, 'dirty": true'))
+      if(!unsaved_changes) return(character())
+      out <- x[stringr::str_detect(x, '"path":')]
+      out <- stringr::str_extract(out, '(?<=    \"path\": \").*(?=\",)')
+      return(out)
+    }) %>% unlist()
+
+  file_has_unsaved_changes <- fs::path_file(path) %in% fs::path_file(unsaved_files)
+  
+  if(file_has_unsaved_changes) {
+    if(!quiet) cli::cli_alert_danger("{filepath} has unsaved changes.", wrap = T)
+    return(invisible(TRUE))
+  } else if(!file_has_unsaved_changes) {
+    if(!quiet) cli::cli_alert_success("{filepath}: No unsaved changes detected.", wrap = T)
+    return(invisible(FALSE))
+  } else {
+    stop("Function did not return TRUE/FALSE.  Report to Jon.")
+  }
+  
+}

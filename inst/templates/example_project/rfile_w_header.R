@@ -13,6 +13,9 @@
 #
 
 # PACKAGES & SPECIAL FUNCTIONS ----
+library(tidyverse)
+library(integral)
+
 ## Additional Sections ----
 ### Even More Sections! ----
 
