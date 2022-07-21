@@ -214,7 +214,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
     print(all_code %>% dplyr::filter(is_qa & is_missing_id) %>% dplyr::mutate(code = stringr::str_squish(code)) %>% dplyr::select(line, code, qa_id))
 
-    add_ids <- usethis::ui_yeah(cli::cli_text("\n\nAdd QA ID numbers to {.file (fs::path_file(script_qa))}?"), yes = "Yes, add QA ID numbers.", no = "No, do not add QA ID numbers.", shuffle = F)
+    add_ids <- usethis::ui_yeah(cli::cli_text("\n\nAdd QA ID numbers to {filepath}?"), yes = "Yes, add QA ID numbers.", no = "No, do not add QA ID numbers.", shuffle = F)
     if (add_ids) {
       available_ids <- dplyr::setdiff(seq(1000, 9999), all_code$qa_id)
       new_ids <- tibble::enframe(sample(available_ids, nrow(all_code %>% dplyr::filter(is_missing_id)), replace = F), name = "missing_join_id", value = "qa_id")
