@@ -36,7 +36,7 @@ qa <- function(filepath) {
   }
 
 
-  if (!fs::file_exists(filepath)) return(cli::cli_alert_danger("{.path {filepath}} does not exist. If it is not in the root project directory, specify the path relative to the root project directory.", wrap = T))
+  if (!fs::file_exists(filepath)) return(cli::cli_alert_danger("{filepath} does not exist. If it is not in the root project directory, specify the path relative to the root project directory.", wrap = T))
 
   filepath <- fs::path_real(filepath)
 
