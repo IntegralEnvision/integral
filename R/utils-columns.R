@@ -10,8 +10,6 @@
 #' @examples
 #' letnum("A")
 #'
-#' History
-#' 2022-05 Eben Pendleton written.
 #' @export
 
 letnum <- function(x) {

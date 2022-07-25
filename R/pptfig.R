@@ -7,6 +7,7 @@
 # 2022-01-24. Added P & C label. Made blanks not print placeholder.
 #             Eben Pendleton
 # 2022-03-16. Switched to Windows paths. Eben Pendleton.
+# 20220725    Rename to ic_pptfig to match convention
 
 #' Function to place R generated figures into a PowerPoint Template
 
@@ -62,20 +63,20 @@ read_pptx_template <- function(size, orientation) {
 
 #' Function to place R generated figures into a PowerPoint Template
 #'
-#' @param my_pres from read_pptx_template function
-#' @param size Presentation size (letter or ledger)
-#' @param orientation Presentation orientation landscape (L) or Portrait (P)
-#' @param fig graphics object that is compactiable with officer
-#' @param section section number X-
-#' @param fignum figure number after the section-figure number
-#' @param note Figure notes text to include under figure
+#' @param my_pres template pptx, defaults to read from read_pptx_template function
+#' @param size Presentation size: letter (default) or ledger.
+#' @param orientation Presentation orientation: landscape (L, default) or Portrait (P)
+#' @param fig graphics object that is compatible with officer, defaults to last last_plot()
+#' @param section Optional section number
+#' @param fignum Figure number after the section-figure number
+#' @param note Optional figure notes text to include under figure
 #' @param author The script author
 #' @param doctitle1 Document Title 1
 #' @param doctitle2 Optional Document Title 2
 #' @param doctitle3 Optional Document Title 3
-#' @param draft Optional Bold red text to be included next to figure caption (ex. "DRAFT")
-#' @param pc Optional Privileged and Confidential label
-#' @param showpath Optional Show script path on page. Default is True
+#' @param draft Bold red text to be included next to figure caption, "DRAFT" is default
+#' @param pc Privileged and Confidential label, "Privileged and Confidential" is default
+#' @param showpath Show script path on page. Default is True
 #' @return PowerPoint presentation with added figure
 
 #' Note: function dml() creates an editable figure in PowerPoint
@@ -83,20 +84,7 @@ read_pptx_template <- function(size, orientation) {
 #' fig <- dml({grid.arrange(p1, p2, p3, p4, nrow = 4)})
 
 #' @examples
-#' size <- c("letter")
-#' orientation <- c("L")
-#' fig <- ggplot2::ggplot()
-#' section <- c("X")
-#' fignum <- c("1")
-#' note <- "Figure Note"
-#' author <- "Eben Pendleton"
-#' doctitle1 <- "Document Title"
-#' my_pres <- read_pptx_template(size, orientation)
-#' my_pres <- pptfig(my_pres, size, orientation, fig, section, fignum, note, author,
-#'   doctitle1,
-#'   doctitle2 = "", doctitle3 = "",
-#'   draft = "DRAFT"
-#' )
+#' #' my_pres <- ic_pptfig( fig = ggplot2::ggplot(), fignum = "1", author = "J. Doe", doctitle1 = "example figure")
 #'
 #' # Print presentation in calling script
 #' # print(my_pres, "Output_File-Name.pptx") #must end in .pptx
@@ -105,10 +93,25 @@ read_pptx_template <- function(size, orientation) {
 #' @importFrom magrittr %>%
 #' @export
 
-pptfig <-
-  function(my_pres, size, orientation, fig, section, fignum, note, author,
-           doctitle1, doctitle2 = "", doctitle3 = "",
-           draft = "DRAFT", pc = "Privileged and Confidential", showpath = T) {
+ic_pptfig <-
+  function(my_pres = NA,
+           size = "letter",
+           orientation = "L",
+           fig = last_plot(),
+           section = "",
+           fignum,
+           note = "",
+           author,
+           doctitle1,
+           doctitle2 = "",
+           doctitle3 = "",
+           draft = "DRAFT",
+           pc = "Privileged and Confidential",
+           showpath = T) {
+    #imports my_pres if not imported
+    if (is.na(my_pres)) {
+      my_pres = integral::read_pptx_template(size, orientation)
+    }
 
     # Formats for text
     fp_normal <- officer::fp_text(font.size = 9)
@@ -122,7 +125,7 @@ pptfig <-
     # Creating Figure Caption Text Block
     pars <- officer::block_list(
       officer::fpar(
-        officer::ftext(paste0("Figure ", section, "-", fignum, ".\n"), fp_bold),
+        officer::ftext(paste0("Figure ", section, fignum, ".\n"), fp_bold),
         officer::ftext(paste0(doctitle1, "\n"), fp_italic),
         officer::ftext(paste0(doctitle2, "\n"), fp_normal),
         officer::ftext(doctitle3, fp_normal)

@@ -22,6 +22,6 @@ Format a vector of numeric values according to the International System of Units
 }
 \examples{
 \dontrun{
-ggplot(diamonds, aes(x = price)) + geom_density() + scale_x_continuous(labels = scale_si_unit())
+ggplot(diamonds, aes(x = price)) + geom_density() + scale_x_continuous(labels = ic_scale_si_unit())
 }
 }

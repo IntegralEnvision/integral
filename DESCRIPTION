@@ -3,35 +3,45 @@ Title: Integral Consulting Public Package
 Version: 0.0.5
 Authors@R: c(
     person("Jonathan", "Zadra", email = "jzadra@integral-corp.com", role = c("aut", "cre")),
-    person("Eben", "Pendleton", email = "ependleton@integral-corp.com", role = "aut"),
     person("Katherine", "Heal", email = "kheal@integral-corp.com", role = "aut"))
-Description: This package contains convenience functions used by Integral Consulting
+Description: This package contains convenience functions used by Integral Consulting.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports: 
     cli,
-    dataRetrieval,
-    dplyr,
     ggplot2,
     fs,
     dplyr (>= 1.0.9),
     stringr,
     openxlsx,
     tibble,
-    stringr,
     lifecycle,
     magrittr,
     officer,
     readr,
     rstudioapi,
-    rvg,
+    rlang,
     tidyselect (>= 1.0),
     whereami,
     usethis,
     crayon,
     tidyr,
     testthat,
-    tools
+    tools,
+    here,
+    WriteXLS,
+    clipr,
+    devtools,
+    furrr,
+    lubridate, 
+    methods,
+    patchwork,
+    remotes,
+    visdat
+VignetteBuilder: knitr
+Suggests:
+    knitr,
+    rmarkdown
 URL: https://integralenvision.github.io/integral

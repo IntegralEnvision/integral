@@ -12,12 +12,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' ggplot(diamonds, aes(x = price)) + geom_density() + scale_x_continuous(labels = scale_si_unit())
+#' ggplot(diamonds, aes(x = price)) + geom_density() + scale_x_continuous(labels = ic_scale_si_unit())
 #' }
 
 ic_scale_si_unit <- function(sep = " ", ...) {
   # Based on code by Ben Tupper
   # https://stat.ethz.ch/pipermail/r-help/2012-January/299804.html
+  # TODO: fix "u" to greek mu (): Portable packages must use only ASCII characters in their R code
 
   function(x) {
     limits <- c(1e-24, 1e-21, 1e-18, 1e-15, 1e-12,
@@ -25,7 +26,7 @@ ic_scale_si_unit <- function(sep = " ", ...) {
                 1e6,   1e9,   1e12,  1e15,  1e18,
                 1e21,  1e24)
     prefix <- c("y",   "z",   "a",   "f",   "p",
-                "n",   "µ",   "m",   " ",   "k",
+                "n",   "u",   "m",   " ",   "k",
                 "M",   "G",   "T",   "P",   "E",
                 "Z",   "Y")
 

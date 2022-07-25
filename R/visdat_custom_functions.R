@@ -97,7 +97,7 @@ ic_visdat_grouped <- function(.data, ..., method = "vis_dat", .sample_frac = "au
         .data <- .data %>% dplyr::select(-group_name, -group_index)
 
         p <- .data %>%
-          dplyr::select(tidyselect:::where(is.numeric)) %>%
+          dplyr::select(tidyselect::where(is.numeric)) %>%
           visdat::vis_value() +
           ggplot2::labs(y = group_name) +
           ggplot2::theme(plot.margin = ggplot2::margin(0, 5.5, 0, 5.5, "pt"))
@@ -121,7 +121,7 @@ ic_visdat_grouped <- function(.data, ..., method = "vis_dat", .sample_frac = "au
         .data <- .data %>% dplyr::select(-group_name, -group_index)
 
         p <- .data %>%
-          dplyr::select(tidyselect:::where(is.numeric)) %>%
+          dplyr::select(tidyselect::where(is.numeric)) %>%
           visdat::vis_miss(show_perc = T, warn_large_data = F) +
           ggplot2::labs(y = group_name) +
           ggplot2::theme(plot.margin = ggplot2::margin(0, 5.5, 0, 5.5, "pt"))

@@ -13,19 +13,13 @@ ic_new_proj(
 )
 }
 \arguments{
+\item{path}{Path to new project.  Defaults to user input during function.}
+
 \item{create_dirs}{Y/n whether to create input, output and QA folders}
 
 \item{create_rproj}{Y/n whether to create a .Rproj file}
 
 \item{create_git}{Y/n whether to create a git repository}
-
-\item{create_rscript}{Y/n whether to create a R script file}
-
-\item{create_rmarkdown}{Y/n whether to create a R Markdown file}
-
-\item{create_pyscript}{Y/n whether to create a Python file}
-
-\item{create_files}{vector of files to create}
 
 \item{create_renv}{Y/n whether to create a renv
 

@@ -11,7 +11,6 @@
 "%ni%" <- Negate("%in%")
 
 
-
 #' @title Creating a new column with significance labels
 #' @name signif_column
 #' @author Indrajeet Patil

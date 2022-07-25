@@ -8,13 +8,10 @@
 #' standards
 #' `r lifecycle::badge('experimental')`
 #' @return path to new project
-
+#'
+#' @param path Path to new project.  Defaults to user input during function.
 #' @param create_dirs Y/n whether to create input, output and QA folders
 #' @param create_rproj Y/n whether to create a .Rproj file
-#' @param create_rscript Y/n whether to create a R script file
-#' @param create_rmarkdown Y/n whether to create a R Markdown file
-#' @param create_pyscript Y/n whether to create a Python file
-#' @param create_files vector of files to create
 #' @param create_git Y/n whether to create a git repository
 #' @param create_renv Y/n whether to create a renv
 #'
@@ -24,10 +21,12 @@
 #' new_proj()
 #' }
 #' @export
-ic_new_proj <- function(path = "", create_dirs = T,
-                        create_rproj = T,
-                        create_git = ask("Would you like to create a git repository?"),
-                        switch_proj = ask("Would you like to switch to the newly created project?")) {
+ic_new_proj <- function(
+    path = "",
+    create_dirs = T,
+    create_rproj = T,
+    create_git = ask("Would you like to create a git repository?"),
+    switch_proj = ask("Would you like to switch to the newly created project?")) {
   proj_setup <- "ic_new_proj("
 
   # if no path is supplied than ask for it

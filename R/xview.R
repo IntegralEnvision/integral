@@ -74,7 +74,7 @@ xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
   }
 
   if(add_rownames & tibble::has_rownames(.data)) .data <- .data %>% tibble::rownames_to_column() else
-    .data <- .data %>% mutate(rownum = dplyr::row_number(), .before = 1)
+    .data <- .data %>% dplyr::mutate(rownum = dplyr::row_number(), .before = 1)
 
 
 

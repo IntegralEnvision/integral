@@ -7,6 +7,8 @@
 huck(.data, ...)
 }
 \arguments{
+\item{.data}{a named list}
+
 \item{...}{Unquoted variable names to search for duplicates. This takes a tidyselect specification (starts_with, contains, ends_with, etc).}
 }
 \description{
@@ -14,7 +16,9 @@ huck(.data, ...)
 Opposite of \code{purrr::pluck()}.  Returns the original list without the element.
 }
 \examples{
-x <- lst(a = mtcars, b = diamonds, aaa = mtcars)
+obj1 <- list("a", list(1, elt = "foo"))
+obj2 <- list("b", list(2, elt = "bar"))
+x <- list(a = obj1, b = obj2)
 x \%>\% huck(a)
 x \%>\% huck(starts_with("a"))
 }

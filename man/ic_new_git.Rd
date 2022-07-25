@@ -8,7 +8,7 @@
 ic_new_git(dirpath)
 }
 \arguments{
-\item{filepath}{File to be created.}
+\item{dirpath}{File to be created.}
 }
 \description{
 Creates a new git repository at the given path

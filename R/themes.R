@@ -6,7 +6,7 @@
 
 #' theme for PDF
 #' @export
-theme_integral <- function() {
+ic_ggtheme <- function() {
 
   # From "M:\DataAnalysis\R\00_DataAnalysis_Resources\01_R_BestPractices\
   # GGPlot_UniversalThemeSettings\General-Theme.R"
@@ -34,7 +34,7 @@ theme_integral <- function() {
 #' @export
 
 # panel border is controlled in the master slide for now.
-ppttheme <- function() {
+ic_ppttheme <- function() {
   return(ggplot2::theme(text = ggplot2::element_text(family = "sans")) +
     ggplot2::theme_bw() +
     ggplot2::theme(

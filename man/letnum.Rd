@@ -20,6 +20,4 @@ number. Starts at 1. Limited to current Excel maximum of XFD (16,384 columns)
 \examples{
 letnum("A")
 
-History
-2022-05 Eben Pendleton written.
 }

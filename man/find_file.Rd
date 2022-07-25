@@ -10,9 +10,7 @@ find_file(ext, startdir = rstudioapi::getActiveProject())
 \arguments{
 \item{ext}{file extension to check for. Can be R, Rmd etc}
 
-\item{startpath}{Optional start directory}
-
-\item{open}{Should the file be open (True/False)}
+\item{startdir}{Optional start directory}
 }
 \description{
 Finds a new file from user inout

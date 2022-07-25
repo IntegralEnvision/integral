@@ -2,8 +2,7 @@
 #' `r lifecycle::badge('stable')`
 #' @description Finds a new file from user inout
 #' @param ext file extension to check for. Can be R, Rmd etc
-#' @param startpath Optional start directory
-#' @param open Should the file be open (True/False)
+#' @param startdir Optional start directory
 #' @examples
 #' \dontrun{
 #' find_file("Rmd")
@@ -160,7 +159,7 @@ ic_new_rmd_file <- function(filepath = "", open = F) {
 #' Start a new git repository with Integral gitignore
 #' `r lifecycle::badge('experimental')`
 #' @description Creates a new git repository at the given path
-#' @param filepath File to be created.
+#' @param dirpath File to be created.
 #' @examples
 #' \dontrun{
 #' ic_new_git("some directory path")

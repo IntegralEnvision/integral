@@ -6,7 +6,7 @@
 \alias{integral-package}
 \title{integral: Integral Consulting Public Package}
 \description{
-This package contains convenience functions used by Integral Consulting
+This package contains convenience functions used by Integral Consulting.
 }
 \seealso{
 Useful links:
@@ -20,7 +20,6 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Eben Pendleton \email{ependleton@integral-corp.com}
   \item Katherine Heal \email{kheal@integral-corp.com}
 }
 
