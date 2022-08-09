@@ -35,11 +35,12 @@ Imports:
     clipr,
     devtools,
     furrr,
-    lubridate, 
+    lubridate,
     methods,
     patchwork,
     remotes,
-    visdat
+    visdat,
+    utils
 VignetteBuilder: knitr
 Suggests:
     knitr,

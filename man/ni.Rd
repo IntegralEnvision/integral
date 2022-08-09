@@ -6,11 +6,6 @@
 \usage{
 x %ni% y
 }
-\arguments{
-\item{x}{vector or NULL: the values to check for non-match}
-
-\item{y}{vector or NULL: the values to be matched against}
-}
 \value{
 A logical vector, indicating if there was no match for each element of x. Values are TRUE or FALSE and never NA
 }

@@ -4,9 +4,9 @@
 #' Automatically unloads, updates, and reloads the integral package.
 #' @export
 ic_update <- function() {
-  old_version <- packageVersion("integral")
+  old_version <- utils::packageVersion("integral")
 
-  if (remotes::local_sha("integral") == remotes:::remote_sha(structure(remotes:::package2remote("integral"), class = "github_remote"))) {
+  if (remotes::local_sha("integral") == remotes::remote_sha(structure(remotes:::package2remote("integral"), class = "github_remote"))) {
     return(cli::cli_alert_success("Package is already up to date."))
   }
 
@@ -16,7 +16,7 @@ ic_update <- function() {
   library(integral)
   cli::cli_alert_success("Successfully updated \`integral\`")
 
-  new_version <- packageVersion("integral")
+  new_version <- utils::packageVersion("integral")
 
   if (old_version != new_version) {
     # integral::ic_news() #Removed for now.
@@ -54,14 +54,14 @@ ic_update <- function() {
 #' @export
 ic_news <- function(all = FALSE) {
   if (all) {
-    news(package = "integral")
+    utils::news(package = "integral")
   } else {
-    newsdb <- news(Version == as.character(packageVersion("integral")), package = "integral")
+    newsdb <- utils::news(Version == as.character(utils::packageVersion("integral")), package = "integral")
 
     cli::cat_line()
 
     print(cli::rule(
-      center = paste0("Update news for integral ", packageVersion("integral"), ""),
+      center = paste0("Update news for integral ", utils::packageVersion("integral"), ""),
       line_col = "yellow"
     ))
 

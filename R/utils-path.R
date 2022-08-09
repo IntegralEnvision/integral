@@ -2,7 +2,7 @@
 # 2022-05-04. Created Eben Pendleton.
 
 #' @title Utility Windows function
-#' @name ask
+#' @name convert_winpath
 #' @description A function to ask a yes/no question and return TRUE/FALSE
 #' `r lifecycle::badge('stable')`
 #' @return boolean response from Yes / No

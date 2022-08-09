@@ -97,7 +97,7 @@ ic_pptfig <-
   function(my_pres = NA,
            size = "letter",
            orientation = "L",
-           fig = last_plot(),
+           fig = ggplot2::last_plot(),
            section = "",
            fignum,
            note = "",

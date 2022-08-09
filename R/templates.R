@@ -60,9 +60,8 @@ find_file <- function(ext, startdir = rstudioapi::getActiveProject()) {
 #'   "templates/example_project/rfile_w_header.R"
 #' ))
 #' }
-#' @export
 #'
-ic_copy_file <- function(filepath, rfile_path, open = F) {
+ic_copy_script <- function(filepath, rfile_path, open = F) {
   tryCatch(
     {
       fs::file_copy(rfile_path, filepath, overwrite = F)
@@ -78,7 +77,7 @@ ic_copy_file <- function(filepath, rfile_path, open = F) {
     }
   )
   if (open) {
-    file.edit(filepath)
+    utils::file.edit(filepath)
   }
 }
 
@@ -100,7 +99,7 @@ ic_new_script <- function(filepath, open = F) {
     "templates/example_project/rfile_w_header.R"
   )
 
-  ic_copy_file(filepath, rfile_path, open = F)
+  ic_copy_script(filepath, rfile_path, open = F)
 }
 
 #' @rdname ic_new_script
@@ -115,7 +114,7 @@ ic_new_r_file <- function(filepath = "", open = F) {
     filepath <- find_file("R")
   }
 
-  ic_copy_file(filepath, rfile_path, open = F)
+  ic_copy_script(filepath, rfile_path, open = F)
 }
 
 #' @rdname ic_new_script
@@ -130,7 +129,7 @@ ic_new_python_file <- function(filepath = "", open = F) {
     filepath <- find_file("py")
   }
 
-  ic_copy_file(filepath, rfile_path, open = F)
+  ic_copy_script(filepath, rfile_path, open = F)
 }
 
 
@@ -153,7 +152,7 @@ ic_new_rmd_file <- function(filepath = "", open = F) {
     "templates/example_project/Example_Rmarkdown.Rmd"
   )
 
-  ic_copy_file(filepath, rmdfile_path, open = F)
+  ic_copy_script(filepath, rmdfile_path, open = F)
 }
 
 #' Start a new git repository with Integral gitignore
@@ -192,7 +191,7 @@ ic_new_git <- function(dirpath) {
       "templates/example_project/ic.gitignore"
     )
 
-    ic_copy_file(paste(dirpath, ".gitignore", sep = "/"), gitfile_path, open = F)
+    ic_copy_script(paste(dirpath, ".gitignore", sep = "/"), gitfile_path, open = F)
 
     # reset the working directory to whatever we came in with
     setwd(w)

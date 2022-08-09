@@ -17,6 +17,7 @@ quote_values <- function(...) {
 
 #' Write Clip shortcut
 #' @description
+#' @param x any text you'd like copied to clipboard
 #' `r lifecycle::badge('stable')`
 #' Copies an object to the clipboard. Defaults to .Last.value
 #' @export
@@ -103,18 +104,18 @@ idf <- function(.data, id = .last_id, glimpse = F) {
 #' @export
 common_vars <- function(...) {
 
-  objects <- lst(...)
+  objects <- tibble::lst(...)
 
   if(length(objects) < 2) stop("At least two objects required.")
 
-  varnames <- map(objects, function(var) {
-    enframe(names(var), name = NULL, value = "name")
-  }) %>% bind_rows(.id = "object")
+  varnames <- purrr::map(objects, function(var) {
+    tibble::enframe(names(var), name = NULL, value = "name")
+  }) %>% dplyr::bind_rows(.id = "object")
 
   varnames %>%
-    add_column(present = T) %>%
-    complete(name, object) %>%
-    pivot_wider(names_from = object, values_from = present)
+    tibble::add_column(present = T) %>%
+    tidyr::complete(name, object) %>%
+    tidyr::pivot_wider(names_from = object, values_from = present)
 }
 
 

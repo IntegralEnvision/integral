@@ -6,7 +6,11 @@
 \usage{
 wc(x = .Last.value)
 }
-\description{
+\arguments{
+\item{x}{any text you'd like copied to clipboard
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
-Copies an object to the clipboard. Defaults to .Last.value
+Copies an object to the clipboard. Defaults to .Last.value}
+}
+\description{
+Write Clip shortcut
 }

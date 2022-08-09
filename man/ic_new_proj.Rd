@@ -21,8 +21,7 @@ ic_new_proj(
 
 \item{create_git}{Y/n whether to create a git repository}
 
-\item{create_renv}{Y/n whether to create a renv
-
+\item{switch_projf}{Y/n whether to switch to newly created project
 Creates a new R Project and populates with Integral standards}
 }
 \value{

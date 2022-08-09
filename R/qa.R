@@ -450,7 +450,7 @@ df_named_ranges <- function(qawb) {
 
   reg <- openxlsx::getNamedRegions(qawb)
 
-  df_reg <- tibble(sheet = attr(reg, "sheet"),
+  df_reg <- tibble::tibble(sheet = attr(reg, "sheet"),
                    name = reg,
                    position = attr(reg, "position"))
 

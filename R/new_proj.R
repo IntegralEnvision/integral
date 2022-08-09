@@ -13,8 +13,7 @@
 #' @param create_dirs Y/n whether to create input, output and QA folders
 #' @param create_rproj Y/n whether to create a .Rproj file
 #' @param create_git Y/n whether to create a git repository
-#' @param create_renv Y/n whether to create a renv
-#'
+#' @param switch_projf Y/n whether to switch to newly created project
 #' Creates a new R Project and populates with Integral standards
 #' @examples
 #' \dontrun{
@@ -88,7 +87,7 @@ ic_new_proj <- function(
       "templates/example_project/example_proj.Rproj"
     )
 
-    ic_copy_file(paste(path, paste0(basename(path), ".Rproj"), sep = "/"),
+    ic_copy_script(paste(path, paste0(basename(path), ".Rproj"), sep = "/"),
       rprojfile_path,
       open = F
     )

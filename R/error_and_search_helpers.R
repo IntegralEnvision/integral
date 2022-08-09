@@ -8,7 +8,7 @@ so_last_error <- function() {
     stop("No error message available")
   }
 
-  query <- URLencode(paste("[r]", last_error))
+  query <- utils::URLencode(paste("[r]", last_error))
   browseURL(paste0("http://stackoverflow.com/search?q=", query))
 }
 
@@ -22,8 +22,8 @@ google_last_error <- function() {
   if (is.null(last_error)) {
     stop("No error message available")
   }
-  query <- URLencode(paste('tbs=qdr:y&q="R"+', last_error, "+-site%3Ardocumentation.org -site%3Ardrr.io"))
-  browseURL(paste0("https://www.google.com/search?", query))
+  query <- utils::URLencode(paste('tbs=qdr:y&q="R"+', last_error, "+-site%3Ardocumentation.org -site%3Ardrr.io"))
+  utils::browseURL(paste0("https://www.google.com/search?", query))
 }
 
 
@@ -41,13 +41,13 @@ google_last_error <- function() {
 stackoverflow <- function(search_terms) {
   if (missing(search_terms)) {
     cli::cli_alert_warning("No search terms passed. Opening Stackoverflow in browser.")
-    query <- URLencode("[r]")
-    browseURL(paste0("https://stackoverflow.com?q=", query))
+    query <- utils::URLencode("[r]")
+    utils::browseURL(paste0("https://stackoverflow.com?q=", query))
   }
   else {
     cli::cli_alert_info("Opening Stackoverflow search for \"", search_terms, "\" in browser")
-    query <- URLencode(paste("[r]", search_terms))
-    browseURL(paste0("https://stackoverflow.com/search?q=", query))
+    query <- utils::URLencode(paste("[r]", search_terms))
+    utils::browseURL(paste0("https://stackoverflow.com/search?q=", query))
   }
 }
 
@@ -72,8 +72,8 @@ google <- function(search_terms) {
   }
   else {
     cli::cli_alert_info(paste0("Opening Google search for \"", search_terms, "\" in browser"))
-    query <- URLencode(paste('tbs=qdr:y&q="R"+', search_terms, "+-site%3Ardocumentation.org -site%3Ardrr.io "))
-    browseURL(paste0("https://www.google.com/search?", query))
+    query <- utils::URLencode(paste('tbs=qdr:y&q="R"+', search_terms, "+-site%3Ardocumentation.org -site%3Ardrr.io "))
+    utils::browseURL(paste0("https://www.google.com/search?", query))
   }
 }
 
