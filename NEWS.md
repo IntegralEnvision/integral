@@ -1,7 +1,5 @@
 # integral 0.0.5
-* Added ic_qa() function
-* Added ic_save_csv_wlog() function (formerly save_csv_wlog())
-* Added copy_file_wlog() function (formerly save_csv_wlog())
+* Several bug patches and first packagedown documentation
 
 # integral 0.0.4
 * Patch to fix save_csv_wlog() function and export to namespace

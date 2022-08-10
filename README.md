@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# integral <a href='https://github.com/IntegralEnvision/integral'><img src='logos/integral.png' align="right" height="138.5" /></a>
+# integral <a href='https://github.com/IntegralEnvision/integral'><img src='man/figures/logos/integral.png' align="right" height="50" /></a>
 
 <!-- badges: start -->
 

@@ -13,17 +13,11 @@
 
 #' @param size Presentation size (letter or ledger)
 #' @param orientation Presentation orientation landscape (L) or Portrait (P)
-#' @return PowerPrint presentation template
+#' @return PowerPoint presentation template
 
 #' @examples
 #' size <- c("letter")
 #' orientation <- c("L")
-#' fig <- ggplot2::ggplot()
-#' section <- c("X")
-#' fignum <- c("1")
-#' note <- "Figure Note"
-#' author <- "Eben Pendleton"
-#' doctitle1 <- "Document Title"
 #' my_pres <- read_pptx_template(size, orientation)
 
 #' @importFrom dplyr case_when
@@ -109,7 +103,7 @@ ic_pptfig <-
            pc = "Privileged and Confidential",
            showpath = T) {
     #imports my_pres if not imported
-    if (is.na(my_pres)) {
+    if (is.na(my_pres)[1]) {
       my_pres = integral::read_pptx_template(size, orientation)
     }
 

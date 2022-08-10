@@ -1,7 +1,7 @@
 ---
 title: "pptfig overview and examples"
-author: "Eben Pendleton"
-date: "2021-02-15"
+author: "Eben Pendleton and Katherine Heal"
+date: "2022-08-10"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{pptfig overview and examples}
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 Welcome to an overview and examples for Integral's PowerPoint theme, __ic_ppttheme()__
-and figure function, __ic_ic_pptfig()__.
+and figure function, __ic_pptfig()__.
 The first step is to load the library.
 ```{r setup}
 # load the library
@@ -41,8 +41,6 @@ the PowerPoint template.
 
 An example using ic_ppttheme with defaults
 ```{r}
-# used to read data for this example
-library(dataRetrieval)
 # library in this vignette
 library(integral)
 # library for graphics creation
@@ -51,23 +49,25 @@ library(ggplot2)
 ### Set Theme
 theme <- integral::ic_ppttheme()
 
-###Data
-Q <- dataRetrieval::readNWISuv(site = "01114500", parameterCd = "00060", startDate = as.Date("2020-01-01"))
-
 ###Figure
 p <- ggplot() +
-  geom_path(data = Q, aes(x = dateTime, y = X_00060_00000)) +
-  geom_hline(yintercept = 200, color = "red", size = 1.5) +
-  annotate("text", x = as.POSIXct("2020-04-01"), y = 200, label = "Line", vjust = 1.8) +
-  labs(title = "USGS Stream Gage 01114500, 2020", x = NULL, y = "Discharge (cfs)") +
   theme
 
 ### Minimal example
 my_pres <- ic_pptfig(
+  my_pres = NA,
   fig = p, 
   fignum = 1, 
   author = "J. Doe", 
-  doctitle1 = "Discharge at USGS Stream Gage 01114500")
+  doctitle1 = "An Empty Plot in a Template")
+
+### Adding a second figure to the presentation
+my_pres <- ic_pptfig(
+  my_pres = my_pres,
+  fig = p, 
+  fignum = 1, 
+  author = "J. Doe", 
+  doctitle1 = "A Second Plot in a Template")
 
 # saves out the pptx file
 print(my_pres, "Output_default.pptx")
@@ -76,8 +76,6 @@ print(my_pres, "Output_default.pptx")
 
 An example using non-default settings is below.
 ```{r}
-# used to read data for this example
-library(dataRetrieval)
 # library in this vignette
 library(integral)
 # library for graphics creation
@@ -86,15 +84,8 @@ library(ggplot2)
 ###Theme
 theme <- integral::ic_ppttheme()
 
-###Data
-Q <- dataRetrieval::readNWISuv(site = "01114500", parameterCd = "00060", startDate = as.Date("2020-01-01"))
-
 ###Figure
 p <- ggplot() +
-  geom_path(data = Q, aes(x = dateTime, y = X_00060_00000)) +
-  geom_hline(yintercept = 200, color = "red", size = 1.5) +
-  annotate("text", x = as.POSIXct("2020-04-01"), y = 200, label = "Line", vjust = 1.8) +
-  labs(title = "USGS Stream Gage 01114500, 2020", x = NULL, y = "Discharge (cfs)") +
   theme
 
 ###pptfig
@@ -105,9 +96,9 @@ my_pres <- ic_pptfig(
   fig = p, 
   section = "D", 
   fignum = 1, 
-  note = "Note: Data pulled using readNWISuv.", 
+  note = "Note: This is an empty plot.", 
   author = "J. Doe", 
-  doctitle1 = "Discharge at USGS Stream Gage 01114500",
+  doctitle1 = "An Empty Plot",
   doctitle2 = "Project Description 1", 
   doctitle3 = "Project Description 2", 
   draft = "",

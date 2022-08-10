@@ -12,7 +12,7 @@ read_pptx_template(size, orientation)
 \item{orientation}{Presentation orientation landscape (L) or Portrait (P)}
 }
 \value{
-PowerPrint presentation template
+PowerPoint presentation template
 }
 \description{
 Function to place R generated figures into a PowerPoint Template
@@ -20,11 +20,5 @@ Function to place R generated figures into a PowerPoint Template
 \examples{
 size <- c("letter")
 orientation <- c("L")
-fig <- ggplot2::ggplot()
-section <- c("X")
-fignum <- c("1")
-note <- "Figure Note"
-author <- "Eben Pendleton"
-doctitle1 <- "Document Title"
 my_pres <- read_pptx_template(size, orientation)
 }
