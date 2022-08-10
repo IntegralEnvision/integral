@@ -1,174 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://integralenvision.github.io/integral/404.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/404.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/articles/index.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/articles/pptfig.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/articles/xlsxtable.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/authors.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/articles/pptfig.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/index.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/articles/xlsxtable.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/news/index.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/authors.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ask.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/index.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ask_confirm.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/news/index.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/askyn_confirm.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ask.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/askyn_letter.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ask_confirm.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/cheat.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/askyn_confirm.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/common_vars.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/askyn_letter.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/copy_file_wlog.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/cheat.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/deselect.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/common_vars.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/determine_path.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/convert_winpath.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/fct_case_when.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/copy_file_wlog.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/find_file.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/deselect.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/get_system.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/determine_path.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/google.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/fct_case_when.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/google_last_error.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/find_file.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/huck.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/get_system.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_copy_file.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/google.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_new_git.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/google_last_error.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_new_proj.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/huck.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_new_rmd_file.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_copy_script.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_new_script.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_ggtheme.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_news.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_new_git.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_scale_big_dollar.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_new_proj.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_scale_si_unit.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_new_rmd_file.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_update.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_new_script.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_visdat_grouped.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_news.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/idf.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_pptfig.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/index.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_ppttheme.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/integral-package.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_scale_big_dollar.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/is_citrix.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_scale_si_unit.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/letnum.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_update.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ni.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_visdat_grouped.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/pipe.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/idf.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/pptfig.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ppttheme.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/integral-package.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/qa.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/is_citrix.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/quote_values.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/letnum.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/read_pptx_template.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ni.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/signif_column.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/so_last_error.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/qa.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/stackoverflow.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/quote_values.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/str_between.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/read_pptx_template.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/theme_integral.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/signif_column.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/tp.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/so_last_error.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/view_df.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/stackoverflow.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/wc.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/str_between.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/write_csv_wlog.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/tp.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/xlsxtable.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/view_df.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/xview.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/wc.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/xview2.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/write_csv_wlog.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/zscore.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/xlsxtable.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral-private/reference/xview.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral-private/reference/xview2.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral-private/reference/zscore.html</loc>
   </url>
 </urlset>

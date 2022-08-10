@@ -60,19 +60,48 @@ Opposite of <code><a href="https://purrr.tidyverse.org/reference/pluck.html" cla
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>...</dt>
+    <dl><dt>.data</dt>
+<dd><p>a named list</p></dd>
+
+
+<dt>...</dt>
 <dd><p>Unquoted variable names to search for duplicates. This takes a tidyselect specification (starts_with, contains, ends_with, etc).</p></dd>
 
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">lst</span><span class="op">(</span>a <span class="op">=</span> <span class="va">mtcars</span>, b <span class="op">=</span> <span class="va">diamonds</span>, aaa <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lst(a = mtcars, b = diamonds, aaa = mtcars):</span> could not find function "lst"</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">obj1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">1</span>, elt <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">obj2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">2</span>, elt <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">obj1</span>, b <span class="op">=</span> <span class="va">obj2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">huck</span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rlang::names2(.data):</span> object 'x' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "b"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b[[2]][[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b[[2]]$elt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "bar"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">x</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">huck</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"a"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rlang::names2(.data):</span> object 'x' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "b"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b[[2]][[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $b[[2]]$elt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "bar"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -80,7 +109,7 @@ Opposite of <code><a href="https://purrr.tidyverse.org/reference/pluck.html" cla
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Jonathan Zadra, Eben Pendleton, Katherine Heal.</p>
+  <p></p><p>Developed by Jonathan Zadra, Katherine Heal.</p>
 </div>
 
 <div class="pkgdown-footer-right">
