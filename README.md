@@ -21,7 +21,7 @@ You can install the development version of integral from
 if (!require(remotes)) {
   install.packages("remotes")
 }
-remotes::install_github('IntegralEnvision/integral-private')
+remotes::install_github('IntegralEnvision/integral')
 ```
 
 ## News
