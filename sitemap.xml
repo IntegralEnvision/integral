@@ -49,9 +49,6 @@
     <loc>https://integralenvision.github.io/integral-private/reference/convert_winpath.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral-private/reference/copy_file_wlog.html</loc>
-  </url>
-  <url>
     <loc>https://integralenvision.github.io/integral-private/reference/deselect.html</loc>
   </url>
   <url>
@@ -74,6 +71,9 @@
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral-private/reference/huck.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_copy_file_wlog.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral-private/reference/ic_copy_script.html</loc>
@@ -103,16 +103,13 @@
     <loc>https://integralenvision.github.io/integral-private/reference/ic_ppttheme.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral-private/reference/ic_scale_big_dollar.html</loc>
-  </url>
-  <url>
-    <loc>https://integralenvision.github.io/integral-private/reference/ic_scale_si_unit.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_qa.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral-private/reference/ic_update.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral-private/reference/ic_visdat_grouped.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/ic_write_csv_wlog.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral-private/reference/idf.html</loc>
@@ -136,13 +133,16 @@
     <loc>https://integralenvision.github.io/integral-private/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral-private/reference/qa.html</loc>
-  </url>
-  <url>
     <loc>https://integralenvision.github.io/integral-private/reference/quote_values.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral-private/reference/read_pptx_template.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral-private/reference/scale_big_dollar.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral-private/reference/scale_si_unit.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral-private/reference/signif_column.html</loc>
@@ -163,10 +163,10 @@
     <loc>https://integralenvision.github.io/integral-private/reference/view_df.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral-private/reference/wc.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/visdat_grouped.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral-private/reference/write_csv_wlog.html</loc>
+    <loc>https://integralenvision.github.io/integral-private/reference/wc.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral-private/reference/xlsxtable.html</loc>
