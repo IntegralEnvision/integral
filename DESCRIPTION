@@ -45,4 +45,5 @@ VignetteBuilder: knitr
 Suggests:
     knitr,
     rmarkdown
-URL: https://integralenvision.github.io/integral
+URL: https://integralenvision.github.io/integral,
+    https://integralenvision.github.io/integral-private/
