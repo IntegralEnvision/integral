@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# integral <a href='https://github.com/IntegralEnvision/integral'><img src='man/figures/logos/integral.png' align="right" height="50" /></a>
+# integral <a href='https://github.com/IntegralEnvision/integral'><img src='man/figures/logos/integral.png' align="right" height="100" /></a>
 
 <!-- badges: start -->
 

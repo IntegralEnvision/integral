@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# integral <a href='https://github.com/IntegralEnvision/integral'><img src='man/figures/logos/integral.png' align="right" height="50" /></a>
+# integral <a href='https://github.com/IntegralEnvision/integral'><img src='man/figures/logos/integral.png' align="right" height="100" /></a>
 
 <!-- badges: start -->
 
@@ -10,7 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 <!-- badges: end -->
 
-This is a beta package for **PRIVATE** Integral functions.
+This is a beta package for Integral functions.
 
 ## Installation
 
@@ -18,21 +18,20 @@ You can install the development version of integral from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("use_this", "remotes")
-# Use the GitHub no reply email if you choose
-# usethis::use_git_config(user.name = <GitHub Username>, user.email = <GitHub Email>)
-# usethis::create_github_token()
-# credentials::set_github_pat()
+if (!require(remotes)) {
+  install.packages("remotes")
+}
 remotes::install_github('IntegralEnvision/integral-private')
 ```
 
 ## News
 
-See the lates news about the integral package [here](./NEWS.md)
+See the latest news about the integral package [here](./NEWS.md)
 
 ## License
 
-Although the repository is private to encourage code updates the code is MIT licensed.
+Although the repository is private to encourage code updates the code is
+MIT licensed.
 
 ## Contributing
 
