@@ -1,2 +1,2 @@
 df <- data.frame(fishes <- c("red", "white", "blue"))
-integral::write_csv_wlog(df, tempfile())
+integral::ic_write_csv_wlog(df, tempfile())
