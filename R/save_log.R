@@ -1,6 +1,6 @@
 #' Write csv with log
 #' @title Add to save log when csv is written
-#' @name write_csv_wlog
+#' @name ic_write_csv_wlog
 #' @description A wrapper for write_csv that adds a project-level log with pertinent info into file_log.csv
 #' `r lifecycle::badge('stable')`
 #' @return starting or adding a file_log.csv at project-level, as well as saving csv as expected
@@ -10,10 +10,10 @@
 #' @examples
 #' \dontrun{
 #' df <- data.frame(fishes <- c("red", "white", "blue"))
-#' write_csv_wlog(df, tempfile())
+#' ic_write_csv_wlog(df, tempfile())
 #' }
 #' @export
-write_csv_wlog <- function(x, file, ...){
+ic_write_csv_wlog <- function(x, file, ...){
   readr::write_csv(x, file, ...)
 
   # Check if working in a project
@@ -46,7 +46,7 @@ write_csv_wlog <- function(x, file, ...){
 
 #' Copy file with log
 #' @title Copy file and log where it was copied from
-#' @name copy_file_wlog
+#' @name ic_copy_file_wlog
 #' @description A wrapper for fs::file_copy() that adds a project-level log with pertinent info into file_log.csv
 #' `r lifecycle::badge('stable')`
 #' @return starting or adding a file_log.csv at project-level, as well as copying file as expected
@@ -57,10 +57,10 @@ write_csv_wlog <- function(x, file, ...){
 #' \dontrun{
 #' .old_wd <- setwd(tempdir())
 #' fs::file_create("foo")
-#' copy_file_wlog("foo", "bar")
+#' ic_copy_file_wlog("foo", "bar")
 #' }
 #' @export
-copy_file_wlog <- function(path, new_path, overwrite = FALSE){
+ic_copy_file_wlog <- function(path, new_path, overwrite = FALSE){
   fs::file_copy(path, new_path, overwrite)
 
   # Check if working in a project

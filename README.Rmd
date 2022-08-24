@@ -21,18 +21,16 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-This is a beta package for **PRIVATE** Integral functions.
+This is a beta package for Integral functions.
 
 ## Installation
 
 You can install the development version of integral from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("use_this", "remotes")
-# Use the GitHub no reply email if you choose
-# usethis::use_git_config(user.name = <GitHub Username>, user.email = <GitHub Email>)
-# usethis::create_github_token()
-# credentials::set_github_pat()
+if (!require(remotes)) {
+  install.packages("remotes")
+}
 remotes::install_github('IntegralEnvision/integral-private')
 ```
 ## News

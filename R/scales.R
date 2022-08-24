@@ -12,10 +12,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' ggplot(diamonds, aes(x = price)) + geom_density() + scale_x_continuous(labels = ic_scale_si_unit())
+#' ggplot(diamonds, aes(x = price)) + geom_density() + scale_x_continuous(labels = scale_si_unit())
 #' }
 
-ic_scale_si_unit <- function(sep = " ", ...) {
+scale_si_unit <- function(sep = " ", ...) {
   # Based on code by Ben Tupper
   # https://stat.ethz.ch/pipermail/r-help/2012-January/299804.html
   # TODO: fix "u" to greek mu (): Portable packages must use only ASCII characters in their R code
@@ -55,12 +55,12 @@ ic_scale_si_unit <- function(sep = " ", ...) {
 #' @return Character vector of formatted dollar values.
 #' @examples
 #' \dontrun{
-#' ic_scale_big_dollar(1000)
-#' ic_scale_big_dollar(1000000000)
-#' ic_scale_big_dollar(1000000000, suffix_n = T)
+#' scale_big_dollar(1000)
+#' scale_big_dollar(1000000000)
+#' scale_big_dollar(1000000000, suffix_n = T)
 #' }
 #' @export
-ic_scale_big_dollar <- function(x, sep = " ", suffix_n = F) {
+scale_big_dollar <- function(x, sep = " ", suffix_n = F) {
   x <- as.numeric(x)
   limits <- c(1, 1000, 1e+06, 1e+09, 1e+12)
   suffix <- c(" ", "k", "M", "B", "T")

@@ -20,11 +20,11 @@
 #' }
 #'
 #'
-#' @usage qa(filepath = "youfile.R")
+#' @usage ic_qa(filepath = "youfile.R")
 #'
 #' @param filepath The file to QA. Can include either an absolute path or a relative path (including "~" home references). If omitted, a file selection dialog box will appear.
 #' @export
-qa <- function(filepath) {
+ic_qa <- function(filepath) {
   if (rlang::is_missing(filepath)) {
     filepath <- rstudioapi::selectFile(
       caption = "Select File to QA",

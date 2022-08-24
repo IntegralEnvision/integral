@@ -1,3 +1,12 @@
+# integral 1.0.0
+* Repo is now public and can be installed more easily!
+* copy_file_wlog() and save_csv_wlog() renamed to ic_copy_file_wlog() and ic_save_csv_wlog() 
+* qa() renamed to ic_qa()
+* ic_scale_big_dollar() renamed to scale_big_dollar()
+* ic_scale_si_unit() renamed to scale_si_unit()
+* ic_visdat_grouped() renamed to ic_visdat_grouped()
+
+
 # integral 0.0.5
 * Several bug patches and first packagedown documentation
 

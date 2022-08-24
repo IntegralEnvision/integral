@@ -10,11 +10,11 @@
 #' @return visdat plot separated by grouping variable.
 #' @examples
 #' \dontrun{
-#' diamonds %>% ic_visdat_group(facet_group = cut)
+#' diamonds %>% visdat_grouped(facet_group = cut)
 #' }
 #' @export
 
-ic_visdat_grouped <- function(.data, ..., method = "vis_dat", .sample_frac = "auto") {
+visdat_grouped <- function(.data, ..., method = "vis_dat", .sample_frac = "auto") {
 
   is_pregrouped <- dplyr::is_grouped_df(.data) #Does the data already have grouping structure?
 
