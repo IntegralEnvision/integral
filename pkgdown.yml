@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   pptfig: pptfig.html
   xlsxtable: xlsxtable.html
-last_built: 2022-08-24T23:42Z
+last_built: 2022-09-06T15:57Z
 urls:
   reference: https://integralenvision.github.io/integral/reference
   article: https://integralenvision.github.io/integral/articles
