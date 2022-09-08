@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# integral <a href='https://github.com/IntegralEnvision/integral'><img src='man/figures/logos/integral.png' align="right" height="100" /></a>
+# integral <a href='https://github.com/IntegralEnvision/integral'><img src='man/figures/logos/gear_data.png' align="right" height="100" /></a>
 
 <!-- badges: start -->
 
@@ -30,8 +30,7 @@ See the latest news about the integral package [here](./NEWS.md)
 
 ## License
 
-Although the repository is private to encourage code updates the code is
-MIT licensed.
+The code is MIT licensed.
 
 ## Contributing
 
