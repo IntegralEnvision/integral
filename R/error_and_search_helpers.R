@@ -9,7 +9,7 @@ so_last_error <- function() {
   }
 
   query <- utils::URLencode(paste("[r]", last_error))
-  browseURL(paste0("http://stackoverflow.com/search?q=", query))
+  utils::browseURL(paste0("http://stackoverflow.com/search?q=", query))
 }
 
 
