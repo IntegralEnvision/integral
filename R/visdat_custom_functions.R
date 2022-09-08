@@ -12,6 +12,7 @@
 #' \dontrun{
 #' diamonds %>% visdat_grouped(facet_group = cut)
 #' }
+#' @importFrom rlang .data
 #' @export
 
 visdat_grouped <- function(.data, ..., method = "vis_dat", .sample_frac = "auto") {
@@ -64,10 +65,10 @@ visdat_grouped <- function(.data, ..., method = "vis_dat", .sample_frac = "auto"
   if(method == "dat") {
     plist <- .data %>%
       furrr::future_map(function(...) {
-        .data <- as_tibble(...)
+        .data <- tibble::as_tibble(...)
 
-        group_name <- .data %>% dplyr::distinct(group_name) %>% pull(group_name)
-        group_index <- .data %>% dplyr::distinct(group_index) %>% pull(group_index)
+        group_name <- .data %>% dplyr::distinct(group_name) %>% dplyr::pull(group_name)
+        group_index <- .data %>% dplyr::distinct(group_index) %>% dplyr::pull(group_index)
 
         .data <- .data %>% dplyr::select(-group_name, -group_index)
 
@@ -89,10 +90,10 @@ visdat_grouped <- function(.data, ..., method = "vis_dat", .sample_frac = "auto"
   if(method == "val") {
     plist <- .data %>%
       furrr::future_map(function(...) {
-        .data <- as_tibble(...)
+        .data <- tibble::as_tibble(...)
 
-        group_name <- .data %>% dplyr::distinct(group_name) %>% pull(group_name)
-        group_index <- .data %>% dplyr::distinct(group_index) %>% pull(group_index)
+        group_name <- .data %>% dplyr::distinct(group_name) %>% dplyr::pull(group_name)
+        group_index <- .data %>% dplyr::distinct(group_index) %>% dplyr::pull(group_index)
 
         .data <- .data %>% dplyr::select(-group_name, -group_index)
 
@@ -113,10 +114,10 @@ visdat_grouped <- function(.data, ..., method = "vis_dat", .sample_frac = "auto"
   if(method == "miss") {
     plist <- .data %>%
       furrr::future_map(function(...) {
-        .data <- as_tibble(...)
+        .data <- tibble::as_tibble(...)
 
-        group_name <- .data %>% dplyr::distinct(group_name) %>% pull(group_name)
-        group_index <- .data %>% dplyr::distinct(group_index) %>% pull(group_index)
+        group_name <- .data %>% dplyr::distinct(group_name) %>% dplyr::pull(group_name)
+        group_index <- .data %>% dplyr::distinct(group_index) %>% dplyr::pull(group_index)
 
         .data <- .data %>% dplyr::select(-group_name, -group_index)
 
