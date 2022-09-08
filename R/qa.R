@@ -23,6 +23,7 @@
 #' @usage ic_qa(filepath = "youfile.R")
 #'
 #' @param filepath The file to QA. Can include either an absolute path or a relative path (including "~" home references). If omitted, a file selection dialog box will appear.
+#' @importFrom rlang .data
 #' @export
 ic_qa <- function(filepath) {
   if (rlang::is_missing(filepath)) {
@@ -369,7 +370,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
       dplyr::select(-line) %>%
       names()
 
-    parsed_qa <- dplyr::bind_cols(setNames(rep(list(NA), length(cols_wh)), cols_wh), qa_lines)
+    parsed_qa <- dplyr::bind_cols(stats::setNames(rep(list(NA), length(cols_wh)), cols_wh), qa_lines)
   }
 
   parsed_qa <- parsed_qa %>%
