@@ -17,9 +17,11 @@ quote_values <- function(...) {
 
 #' Write Clip shortcut
 #' @description
-#' @param x any text you'd like copied to clipboard
 #' `r lifecycle::badge('stable')`
-#' Copies an object to the clipboard. Defaults to .Last.value
+#' Copies an object to the clipboard. Defaults to .Last.value#'
+#'
+#' @param x any text you'd like copied to clipboard
+#'
 #' @export
 wc <- function(x = .Last.value) {
   clipr::write_clip(x)
@@ -57,9 +59,9 @@ wc <- function(x = .Last.value) {
 #'   console) or non-diagnostic script code (i.e. anywhere that an object is
 #'   written vs just printed).
 #'
-#' @usage options(idf_data_key = "your_data_key_column")
+#' @section Note: Upon first use of the function it will ask for the bare (unquoted) name of the key column.  This can also be changed or set manually: \code{options(idf_data_key = "your_data_key_column")}, or by specifying a new \code{id} in the function call.
 #'
-#' df \%>\% idf(id = .last_id)
+#' @usage df \%>\% idf(id = .last_id)
 #'
 #' @param id A vector containing the key value(s) you want to filter. After the first time the function
 #'   is called with a specified key value, the value is stored in a hidden
