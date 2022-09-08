@@ -12,6 +12,7 @@ This package contains convenience functions used by Integral Consulting.
 Useful links:
 \itemize{
   \item \url{https://integralenvision.github.io/integral}
+  \item \url{https://integralenvision.github.io/integral-private/}
 }
 
 }

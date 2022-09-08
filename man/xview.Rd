@@ -4,12 +4,12 @@
 \alias{xview}
 \title{Show a table in Excel}
 \usage{
-xview(.data, add_rownames = TRUE)
+xview(.data, include_rownames = TRUE)
 }
 \arguments{
 \item{.data}{A table.}
 
-\item{add_rownames}{Logical. Convert rownames to column? Default: TRUE}
+\item{include_rownames}{Logical. Convert rownames to column? Default: TRUE}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

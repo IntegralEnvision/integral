@@ -4,8 +4,6 @@
 \alias{idf}
 \title{Interactive filter helper}
 \usage{
-options(idf_data_key = "your_data_key_column")
-
 df \%>\% idf(id = .last_id)
 }
 \arguments{
@@ -49,5 +47,9 @@ subsequent function calls.
  This function should not be used in non-interactive (ie in
 console) or non-diagnostic script code (i.e. anywhere that an object is
 written vs just printed).
+}
+
+\section{Note}{
+ Upon first use of the function it will ask for the bare (unquoted) name of the key column.  This can also be changed or set manually: \code{options(idf_data_key = "your_data_key_column")}, or by specifying a new \code{id} in the function call.
 }
 

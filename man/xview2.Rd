@@ -4,12 +4,12 @@
 \alias{xview2}
 \title{Show a table in Excel}
 \usage{
-xview2(.data, add_rownames = TRUE, auto_conditional = TRUE)
+xview2(.data, include_rownames = TRUE, auto_conditional = TRUE)
 }
 \arguments{
 \item{.data}{A table.}
 
-\item{add_rownames}{Logical. Convert rownames to column? Default: TRUE}
+\item{include_rownames}{Logical. Convert rownames to column? Default: TRUE}
 
 \item{auto_conditional}{Automatically add conditional formatting. Default: TRUE}
 }
