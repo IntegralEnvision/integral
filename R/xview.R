@@ -3,14 +3,14 @@
 #' `r lifecycle::badge('experimental')`
 #' Opens the table in a temporary file in excel.  Currently only works on Mac OS.
 #' @param .data A table.
-#' @param add_rownames Logical. Convert rownames to column? Default: TRUE
+#' @param include_rownames Logical. Convert rownames to column? Default: TRUE
 #' @examples
 #' \dontrun{
 #' diamonds %>% xview()
 #' }
 #' @export
 
-xview <- function (.data, add_rownames = TRUE) {
+xview <- function (.data, include_rownames = TRUE) {
 
   unique_filename_addition <- paste0(sample(c(letters, as.character(1:9)), 4), collapse = "") #Makes it so that excel will open a new window if this is run multiple times in a way that generates the same file name.
 
@@ -38,7 +38,7 @@ xview <- function (.data, add_rownames = TRUE) {
   #rownames(.data) = NULL
   #.data = data.frame(RowLabels = tmp, .data)
 
-  if(add_rownames & tibble::has_rownames(data)) .data <- .data %>% tibble::rownames_to_column()
+  if(include_rownames & tibble::has_rownames(.data)) .data <- .data %>% tibble::rownames_to_column()
 
   WriteAttempt <- try(
     WriteXLS::WriteXLS(as.character(bquote(.data)), ExcelFileName=preferredFilePath, FreezeRow=1, FreezeCol=1, BoldHeaderRow=T, AdjWidth=F, AutoFilter=T, row.names=F),
@@ -56,14 +56,13 @@ xview <- function (.data, add_rownames = TRUE) {
 #' `r lifecycle::badge('experimental')`
 #' Opens the table in a temporary file in excel.
 #' @param .data A table.
-#' @param add_rownames Logical. Convert rownames to column? Default: TRUE
+#' @param include_rownames Logical. Convert rownames to column? Default: TRUE
 #' @param auto_conditional Automatically add conditional formatting. Default: TRUE
 #' @examples
 #' \dontrun{
 #' diamonds %>% xview2()
 #' }
-#' @export
-xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
+xview2 <- function (.data, include_rownames = TRUE, auto_conditional = TRUE) {
 
 
   if(length(dim(.data))>2){
@@ -73,12 +72,12 @@ xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
     .data = as.data.frame(.data)
   }
 
-  if(add_rownames & tibble::has_rownames(.data)) .data <- .data %>% tibble::rownames_to_column() else
+  if(include_rownames & tibble::has_rownames(.data)) .data <- .data %>% tibble::rownames_to_column() else
     .data <- .data %>% dplyr::mutate(rownum = dplyr::row_number(), .before = 1)
 
 
 
-  if(add_rownames & tibble::has_rownames(data)) .data <- .data %>% tibble::rownames_to_column()
+  if(include_rownames & tibble::has_rownames(.data)) .data <- .data %>% tibble::rownames_to_column()
 
   wb <- openxlsx::createWorkbook()
 
@@ -99,20 +98,20 @@ xview2 <- function (.data, add_rownames = TRUE, auto_conditional = TRUE) {
 
   if(auto_conditional) {
     colclasses <- lapply(.data, class) %>%
-      as_tibble %>%
+      tibble::as_tibble() %>%
       dplyr::slice(1) %>%
       tidyr::pivot_longer(tidyselect::everything()) %>%
       dplyr::mutate(colnum = dplyr::row_number()) %>%
       dplyr::filter(name != "rowname") %>%
       dplyr::filter(name != "rownum")
 
-    character_limited <- .data %>% summarize(across(where(is.character), ~n_distinct(.))) %>%  pivot_longer(everything(), values_to = "distinct_char")
+    character_limited <- .data %>% dplyr::summarize(tibble::as_tibble(where(is.character), ~dplyr::n_distinct(.))) %>%  tidyr::pivot_longer(dplyr::everything(), values_to = "distinct_char")
 
     colclasses <- colclasses %>%
-      left_join(character_limited) %>%
-      rowwise() %>%
-      mutate(value = if_else(isTRUE(distinct_char <= 10), "character_limited", value)) %>%
-      ungroup()
+      dplyr::left_join(character_limited) %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(value = dplyr::if_else(isTRUE(distinct_char <= 10), "character_limited", value)) %>%
+      dplyr::ungroup()
 
     colclasses %>%
       dplyr::rowwise() %>%
