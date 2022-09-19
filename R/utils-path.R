@@ -31,7 +31,6 @@ convert_winpath <- function(x) {
 #' \dontrun{
 #' determine_path()
 #' }
-#' @export
 
 determine_path <- function() {
   if (!is.null(whereami::thisfile_source())) {
