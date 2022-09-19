@@ -103,7 +103,7 @@ ic_new_r_file <- function(filepath = "", open = TRUE) {
 ic_new_python_file <- function(filepath = "", open = TRUE) {
   rfile_path <- fs::path_package(
     "integral",
-    "templates/example_project/rfile_w_header.R"
+    "templates/example_project/pyfile_w_header.py"
   )
 
   if (filepath == "") {
