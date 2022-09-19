@@ -10,7 +10,7 @@ ic_new_r_file(filepath = "", open = TRUE)
 \arguments{
 \item{filepath}{File to be created.}
 
-\item{open}{Logical. Defaults to \code{T}}
+\item{open}{Logical. Defaults to \code{TRUE}}
 }
 \description{
 Creates a new script with header
