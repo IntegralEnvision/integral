@@ -17,26 +17,11 @@ find_file <- function(ext, startdir = rstudioapi::getActiveProject()) {
       ,path = startdir
     )
 
-    filepath <- gsub("~", path.expand("~"), filepath)
+    filepath <- fs::path_expand(filepath)
   }
 
-  while (!tools::file_ext(filepath) == ext) {
-    cli::cli_alert(paste0("File extension is not .", ext, " Please save a . ", ext))
-    Sys.sleep(0.5)
-
-    filepath <- rstudioapi::selectFile(
-      caption = "Save File",
-      label = paste0("Save ", ext),
-      existing = FALSE
-    )
-
-    filepath <- gsub("~", path.expand("~"), filepath)
-
-    if (length(filepath) == 0) {
-      filepath <- "zzz"
-    }
-
-  }
+  #Add extension if user did not
+  if (fs::path_ext(filepath) != ext ) filepath <- fs::path_ext_set(filepath, ext)
 
 
   if (filepath == "") {
@@ -77,34 +62,22 @@ ic_copy_script <- function(filepath, rfile_path, open = F) {
     }
   )
   if (open) {
-    utils::file.edit(filepath)
+    rstudioapi::navigateToFile(filepath)
   }
 }
 
-#' Start a new script file with Integral's header
+
+#' Start a new R script file with Integral's header
 #' `r lifecycle::badge('experimental')`
 #' @description Creates a new script with header
 #' @param filepath File to be created.
-#' @param open Open the file in the default editor (TRUE/FALSE)
+#' @param open Logical. Defaults to `T`
 #' @examples
 #' \dontrun{
-#' ic_new_script("myfile.R")
 #' ic_new_r_file("myfile.R")
-#' ic_new_python_file("myfile.py")
 #' }
 #' @export
-ic_new_script <- function(filepath, open = F) {
-  rfile_path <- fs::path_package(
-    "integral",
-    "templates/example_project/rfile_w_header.R"
-  )
-
-  ic_copy_script(filepath, rfile_path, open = F)
-}
-
-#' @rdname ic_new_script
-#' @export
-ic_new_r_file <- function(filepath = "", open = F) {
+ic_new_r_file <- function(filepath = "", open = TRUE) {
   rfile_path <- fs::path_package(
     "integral",
     "templates/example_project/rfile_w_header.R"
@@ -117,9 +90,17 @@ ic_new_r_file <- function(filepath = "", open = F) {
   ic_copy_script(filepath, rfile_path, open = F)
 }
 
-#' @rdname ic_new_script
+#' Start a new Python script file with Integral's header
+#' `r lifecycle::badge('experimental')`
+#' @description Creates a new script with header
+#' @param filepath File to be created.
+#' @param open Logical. Defaults to `T`
+#' @examples
+#' \dontrun{
+#' ic_new_python_file("myfile.py")
+#' }
 #' @export
-ic_new_python_file <- function(filepath = "", open = F) {
+ic_new_python_file <- function(filepath = "", open = TRUE) {
   rfile_path <- fs::path_package(
     "integral",
     "templates/example_project/rfile_w_header.R"
