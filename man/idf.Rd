@@ -4,7 +4,7 @@
 \alias{idf}
 \title{Interactive filter helper}
 \usage{
-df \%>\% idf(id = .last_id)
+idf(.data, id = .last_id, glimpse = FALSE)
 }
 \arguments{
 \item{id}{A vector containing the key value(s) you want to filter. After the first time the function
@@ -15,6 +15,11 @@ object and does not need to be specified again.}
 }
 \value{
 The data filtered by the key value on the key column stored in options("idf_data_key")
+#' @examples
+\dontrun{
+mtcars %>% idf(6)
+
+}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
