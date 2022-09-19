@@ -14,8 +14,6 @@
 #' \dontrun{
 #' ask("Do you like coding?")
 #' }
-#' @export
-# from renv. MIT License
 ask <- function(question, default = TRUE) {
   selection <- if (default) "[Y/n]" else "[y/N]"
   prompt <- sprintf("%s %s: ", question, selection)
@@ -37,8 +35,6 @@ if (!nzchar(response)) return(default)
 #' \dontrun{
 #' askyn_letter("Do you like coding?")
 #' }
-#' @export
-
 askyn_letter <- function(question, default = TRUE) {
   selection <- if (default) "[Y/n]" else "[y/N]"
   prompt <- sprintf("%s %s: ", question, selection)
@@ -67,9 +63,6 @@ askyn_letter <- function(question, default = TRUE) {
 #' \dontrun{
 #' ask_yn_confirm("Do you like coding?")
 #' }
-#' @export
-
-
 askyn_confirm <- function(question, default = TRUE) {
   confirm <- F
   response <- askyn_letter(question, default = default)
@@ -98,7 +91,6 @@ askyn_confirm <- function(question, default = TRUE) {
 #' \dontrun{
 #' ask_confirm("Where do you live?")
 #' }
-#' @export
 
 
 ask_confirm <- function(question) {
