@@ -61,13 +61,18 @@ wc <- function(x = .Last.value) {
 #'
 #' @section Note: Upon first use of the function it will ask for the bare (unquoted) name of the key column.  This can also be changed or set manually: \code{options(idf_data_key = "your_data_key_column")}, or by specifying a new \code{id} in the function call.
 #'
-#' @usage df \%>\% idf(id = .last_id)
+#' @usage idf(.data, id = .last_id, glimpse = FALSE)
 #'
 #' @param id A vector containing the key value(s) you want to filter. After the first time the function
 #'   is called with a specified key value, the value is stored in a hidden
 #'   object and does not need to be specified again.
 #' @param glimpse Print output using dplyr::glimpse, defaults to FALSE.
 #' @return The data filtered by the key value on the key column stored in options("idf_data_key")
+#' #' @examples
+#' \dontrun{
+#' mtcars %>% idf(6)
+#'
+#' }
 #' @export
 idf <- function(.data, id = .last_id, glimpse = F) {
 
