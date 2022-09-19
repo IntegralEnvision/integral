@@ -4,9 +4,11 @@
 #'
 #' Scrape an .R or .Rmd file for QA tags, and populate the Integral QA sheet for scripted analyses.
 #'
-#' To use, tag QA review items by commenting:
+#' To use, tag QA review items by adding QA comments throughout your script in the format:
 #'
-#'    QA: Review comment / request
+#'   `# QA: [your review comment or request]`
+#'
+#' When you are ready to fill the excel QA sheet, run `ic_qa()` and choose the script you have added QA comments to.
 #'
 #' @section Function Process:
 #'
