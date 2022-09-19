@@ -16,9 +16,6 @@
     <loc>https://integralenvision.github.io/integral/articles/pptfig.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/articles/xlsxtable.html</loc>
-  </url>
-  <url>
     <loc>https://integralenvision.github.io/integral/authors.html</loc>
   </url>
   <url>
@@ -88,10 +85,13 @@
     <loc>https://integralenvision.github.io/integral/reference/ic_new_proj.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_new_rmd_file.html</loc>
+    <loc>https://integralenvision.github.io/integral/reference/ic_new_python_file.html</loc>
   </url>
   <url>
-    <loc>https://integralenvision.github.io/integral/reference/ic_new_script.html</loc>
+    <loc>https://integralenvision.github.io/integral/reference/ic_new_r_file.html</loc>
+  </url>
+  <url>
+    <loc>https://integralenvision.github.io/integral/reference/ic_new_rmd_file.html</loc>
   </url>
   <url>
     <loc>https://integralenvision.github.io/integral/reference/ic_news.html</loc>
