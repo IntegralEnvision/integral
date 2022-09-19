@@ -94,7 +94,7 @@ ic_new_r_file <- function(filepath = "", open = TRUE) {
 #' `r lifecycle::badge('experimental')`
 #' @description Creates a new script with header
 #' @param filepath File to be created.
-#' @param open Logical. Defaults to `T`
+#' @param open Logical. Defaults to `TRUE`
 #' @examples
 #' \dontrun{
 #' ic_new_python_file("myfile.py")
@@ -110,7 +110,7 @@ ic_new_python_file <- function(filepath = "", open = TRUE) {
     filepath <- find_file("py")
   }
 
-  ic_copy_script(filepath, rfile_path, open = F)
+  ic_copy_script(filepath, rfile_path, open = open)
 }
 
 
