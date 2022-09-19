@@ -144,7 +144,7 @@ is_unsaved <- function(path, quiet = F) {
   if(!fs::dir_exists(proj_temp)) return(cli::cli_alert_danger("There is no .Rproj.user directory for this project.  This should not be possible. Talk to Jon"))
 
   # Get temporary files
-  files_temp <- fs::dir_ls(proj_temp, regexp = "[a-zA-Z0-9]{8}\\/sources\\/s-[a-zA-Z0-9]+\\/[a-zA-Z0-9]{8}$", recurse = T) #If this misses things, check that there may be 6 character dirs.
+  files_temp <- fs::dir_ls(proj_temp, regexp = "[a-zA-Z0-9]{8}\\/sources\\/(s|session)-[a-zA-Z0-9]+\\/[a-zA-Z0-9]{8}$", recurse = T) #If this misses things, check that there may be 6 character dirs.
 
   if(length(files_temp) == 0) {
     cli::cli_alert_info("File(s) have no unsaved changes.")
