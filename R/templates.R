@@ -71,7 +71,7 @@ ic_copy_script <- function(filepath, rfile_path, open = F) {
 #' `r lifecycle::badge('experimental')`
 #' @description Creates a new script with header
 #' @param filepath File to be created.
-#' @param open Logical. Defaults to `T`
+#' @param open Logical. Defaults to `TRUE`
 #' @examples
 #' \dontrun{
 #' ic_new_r_file("myfile.R")
@@ -87,7 +87,7 @@ ic_new_r_file <- function(filepath = "", open = TRUE) {
     filepath <- find_file("R")
   }
 
-  ic_copy_script(filepath, rfile_path, open = F)
+  ic_copy_script(filepath, rfile_path, open = open)
 }
 
 #' Start a new Python script file with Integral's header
