@@ -5,7 +5,7 @@ Authors@R: c(
     person("Jonathan", "Zadra", email = "jzadra@integral-corp.com", role = c("aut", "cre")),
     person("Katherine", "Heal", email = "kheal@integral-corp.com", role = "aut"))
 Description: This package contains convenience functions used by Integral Consulting.
-License: MIT + file LICENSE
+License: file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
