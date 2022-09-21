@@ -24,6 +24,16 @@ if (!require(remotes)) {
 remotes::install_github('IntegralEnvision/integral')
 ```
 
+## Issues
+
+Please file all bugs, issues, or feature requests
+[here](https://github.com/IntegralEnvision/integral/issues)
+
+## Source Code
+
+Source code for this package can be found
+[here](https://github.com/IntegralEnvision/integral)
+
 ## News
 
 See the latest news about the integral package [here](./NEWS.md)
