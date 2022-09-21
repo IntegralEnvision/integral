@@ -116,16 +116,13 @@ ic_pptfig <-
     fp_pc <- officer::fp_text(font.size = 6, bold = TRUE)
 	  fp_path <- officer::fp_text(font.size = 6)
 
-	  doctitle2_pad <- ifelse(doctitle2 == "", "", paste0("\n", doctitle2))
-	  doctitle3_pad <- ifelse(doctitle3 == "", "", paste0("\n", doctitle3))
-
     # Creating Figure Caption Text Block
     pars <- officer::block_list(
       officer::fpar(
         officer::ftext(paste0("Figure ", section, fignum, ".\n"), fp_bold),
-        officer::ftext(doctitle1, fp_italic),
-        officer::ftext(doctitle2_pad, fp_normal),
-        officer::ftext(doctitle3_pad, fp_normal)
+        officer::ftext(paste0(doctitle1, "\n"), fp_italic),
+        officer::ftext(paste0(doctitle2, "\n"), fp_normal),
+        officer::ftext(doctitle3, fp_normal)
       )
     )
 
