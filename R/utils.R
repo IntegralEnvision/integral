@@ -100,18 +100,6 @@ ic_news <- function(all = FALSE) {
 # }
 
 
-#' Check whether R is running on Citrix
-#' @description
-#' `r lifecycle::badge('experimental')`
-#' Returns TRUE if the current system is Citrix.
-#' @export
-is_citrix <- function() {
-  x <- Sys.info()["nodename"]
-
-
-  stringr::str_detect(x, "APP\\d+")
-}
-
 #' Determine which system R is running on
 #' @description
 #' `r lifecycle::badge('experimental')`
@@ -120,8 +108,9 @@ is_citrix <- function() {
 get_system <- function() {
   x <- Sys.info()["nodename"]
 
-  if (stringr::str_detect(x, "APP\\d+")) {
-    return("citrix")
+
+  if (stringr::str_detect(x, "AVD")) {
+    return("avd")
   } else
   if (stringr::str_detect(x, "rstudio")) {
     return("linux")
