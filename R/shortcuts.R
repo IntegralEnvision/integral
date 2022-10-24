@@ -2,9 +2,11 @@
 #' @description
 #' `r lifecycle::badge('experimental')`
 #' Shortcut to open a cheatsheet
-#' @param sheet Name of the cheatsheet, if known. Partial matches work as well. If NULL (default) a list is presented.
+#' @param sheet Bare, unquoted name of the cheat sheet, if known. Partial matches work as well. If NULL (default) a list is presented.
 #' @export
-cheat <- function(sheet = NULL) {
+cheat <- function(sheet) {
+  sheet <- rlang::ensym(sheet) %>% rlang::as_string()
+
   files <- dir(system.file("extdata/cheatsheets", package = "integral")) %>%
     tools::file_path_sans_ext()
 
@@ -24,9 +26,10 @@ cheat <- function(sheet = NULL) {
     sheet <- utils::select.list(choices = files)
   }
 
+  if(sheet == "") return(cli::cli_alert_info("User exited."))
 
   sheet <- paste0(sheet, ".pdf")
 
-  fpath <- system.file("extdata/cheatsheets", sheet, package = "integral")
+  fpath <- system.file("extdata/cheatsheets", sheet, package = "integral") %>% paste0("'", ., "'")
   system2("open", fpath)
 }
