@@ -4,3 +4,5 @@
 .Ruserdata
 docs
 token.txt
+inst/doc
+**/*.DS_Store
