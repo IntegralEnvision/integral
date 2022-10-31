@@ -6,7 +6,7 @@
 ic_update <- function() {
   old_version <- utils::packageVersion("integral")
 
-  if (remotes::local_sha("integral") == remotes::remote_sha(structure(remotes:::package2remote("integral"), class = "github_remote"))) {
+  if (remotes:::local_sha("integral") == remotes:::remote_sha(structure(remotes:::package2remote("integral"), class = "github_remote"))) {
     return(cli::cli_alert_success("Package is already up to date."))
   }
 
