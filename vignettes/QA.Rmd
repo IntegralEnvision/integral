@@ -1,0 +1,25 @@
+---
+title: "Automated QA for R/Python"
+author: "Jonathan Zadra"
+date: "2022-09-19"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{QA}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(integral)
+```
+
+#Introduction
+
+The `qa()` function automates the process of filling the Coded Analysis QA form 
