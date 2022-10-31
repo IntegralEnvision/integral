@@ -1,3 +1,8 @@
+# integral 1.0.1.9000
+* Refined cheat() to accept bare, unquoated cheat sheet names
+* Added git cheat sheet
+* Updated get_system() to detect AVD and remove old Citrix detection. Removed is_citrix().
+
 # integral 1.0.0
 * Repo is now public and can be installed more easily!
 * copy_file_wlog() and save_csv_wlog() renamed to ic_copy_file_wlog() and ic_save_csv_wlog() 
