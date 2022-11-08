@@ -116,6 +116,11 @@ qa_wb <- function(filepath, qafile) {
 
   sheet <- fs::path_file(filepath)
 
+  if(nchar(sheet > 31)) {
+    sheet <- stringr::str_sub(sheet, 1, 31)
+    cli::cli_alert_warning("Excel worksheets have a maximum of 31 characters allowed for the sheet name.  The sheet name has been truncated to {sheet}")
+  }
+
   # Update/Add QA sheet ------
 
   has_existing_qafile <- fs::file_exists(qafile)
