@@ -119,6 +119,11 @@ get_system <- function() {
   }
 }
 
+#internal function for opening files in external programs.  Works on both windows, mac, and linux.
+open_file <- function(file) {
+  system2("open", paste0("\"", file, "\""))
+  }
+
 
 is_unsaved <- function(path, quiet = F) {
 

@@ -31,5 +31,6 @@ cheat <- function(sheet) {
   sheet <- paste0(sheet, ".pdf")
 
   fpath <- system.file("extdata/cheatsheets", sheet, package = "integral")
-  system2("open", fpath)
+
+  open_file(fpath)
 }
