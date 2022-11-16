@@ -1,5 +1,5 @@
 # integral 1.0.1.9000
-* Refined cheat() to accept bare, unquoated cheat sheet names
+* Refined cheat() to accept bare, unquoted cheat sheet names
 * Added git cheat sheet
 * Updated get_system() to detect AVD and remove old Citrix detection. Removed is_citrix().
 
