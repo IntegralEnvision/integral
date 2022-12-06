@@ -1,3 +1,6 @@
+# integral 1.0.1.9001
+* Added str_squish_line_breaks() - an analogue of stringr::str_squish() that better handles line break characters (\n and \r)
+
 # integral 1.0.1.9000
 * Refined cheat() to accept bare, unquoted cheat sheet names
 * Added git cheat sheet
