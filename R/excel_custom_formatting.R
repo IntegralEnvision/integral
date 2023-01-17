@@ -25,9 +25,9 @@ read_wb <- function(fpath, fname = NULL, sheet = NULL) {
     {if(!is.null(fname)) .[basename(.) %in% fname] else .}
 
   # read workbook
-  map(
+  purrr::map(
     fnames,
-    ~ map(
+    ~ purrr::map(
       1:length(readxl::excel_sheets(.x)) %>%
         purrr::set_names(readxl::excel_sheets(.x)), # n worksheets
       ~ readxl::read_excel(.y, sheet = .x, col_names = FALSE),
@@ -35,7 +35,7 @@ read_wb <- function(fpath, fname = NULL, sheet = NULL) {
     ) %>%
       {if(!is.null(sheet)) .[[sheet]] else .}
   ) %>% purrr::set_names(basename(tools::file_path_sans_ext(fnames))) %>%
-    {if(!is.null(fname) & length(fname) == 1) pluck(., 1) else .}
+    {if(!is.null(fname) & length(fname) == 1) purrr::pluck(., 1) else .}
 
 }
 
@@ -86,7 +86,7 @@ get_breaks <- function(dat, col_num = 1, rm_grps = 1) {
 
 }
 
-#' Generate flatfile from crosstabbed (pivotted) data stored in an Excel spreadsheet.
+#' Generate flatfile from crosstabbed (pivoted) data stored in an Excel spreadsheet.
 #' @description
 #' `r lifecycle::badge('experimental')`
 #'
@@ -115,7 +115,7 @@ to_fff <- function(dat, my_vals, my_cols, my_hrow = NULL, hrows, drows = NULL, d
 
   # set all columns as char
   my_dat <- dat %>%
-    mutate(across(everything(), ~as.character(.x)))
+    dplyr::mutate(dplyr::across(tidyr::everything(), ~as.character(.x)))
 
   # set drows if not supplied
   if (is.null(drows)) {
@@ -141,7 +141,7 @@ to_fff <- function(dat, my_vals, my_cols, my_hrow = NULL, hrows, drows = NULL, d
   # get header names
   if (is.null(names(hrows))) {
     hrows <- my_dat[hrows,my_vals[1]] %>% # defaults to first value column
-      pull() %>%
+      dplyr::pull() %>%
       janitor::make_clean_names() %>%
       {purrr::set_names(x = hrows, nm = .)}
   }
@@ -163,13 +163,13 @@ to_fff <- function(dat, my_vals, my_cols, my_hrow = NULL, hrows, drows = NULL, d
   headers <- my_dat %>%
     tibble::as_tibble() %>%
     dplyr::slice(hrows) %>%
-    dplyr::select(seq(dcols[1], last(dcols), length(my_cols))) %>%
+    dplyr::select(seq(dcols[1], dplyr::last(dcols), length(my_cols))) %>%
     dplyr::bind_cols(id = names(hrows)) %>%
     tidyr::pivot_longer(cols = -id) %>%
     tidyr::pivot_wider(names_from = id, values_from = value) %>%
     { if(!is.null(to_fill)) tidyr::fill(., to_fill) else . } %>%
     dplyr::mutate(name = stringr::str_remove(name, "...")) %>%
-    { if(!is.null(hdate)) mutate(., !!as.name(hdate) := janitor::excel_numeric_to_date(as.numeric(!!as.name(hdate)))) else . }
+    { if(!is.null(hdate)) dplyr::mutate(., !!as.name(hdate) := janitor::excel_numeric_to_date(as.numeric(!!as.name(hdate)))) else . }
 
   # extract body
   body <- purrr::map_df(
@@ -179,7 +179,7 @@ to_fff <- function(dat, my_vals, my_cols, my_hrow = NULL, hrows, drows = NULL, d
       dplyr::select(c(my_vals, dcols)) %>%
       purrr::set_names(c(names(my_vals), paste0(rep(my_cols, n), "_", rep(1:n, each = length(my_cols))))) %>%
       tidyr::pivot_longer(cols = -my_vals, names_sep = "_", names_to = c(".value", "name")) %>%
-      {if(!is.null(gname)) dplyr::mutate(., !!as.name(gname) := my_dat[.x[1]-1,1] %>% pull()) else .}
+      {if(!is.null(gname)) dplyr::mutate(., !!as.name(gname) := my_dat[.x[1]-1,1] %>% dplyr::pull()) else .}
   )
 
   # combine body and headers
