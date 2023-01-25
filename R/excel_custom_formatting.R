@@ -43,7 +43,7 @@ read_wb <- function(fpath, fname = NULL, sheet = NULL) {
 #' @description
 #' `r lifecycle::badge('experimental')`
 #'
-#' @usage get_breaks(dat, col_num = 1, rm_grps = 1)
+#' @usage get_breaks(dat, col_num = 1, rem_grps = 1)
 #'
 #' @param dat Unformatted dataframe containing crosstabbed data.
 #' @param col_num Numeric value specifying column number to use for identifying breaks
@@ -51,7 +51,7 @@ read_wb <- function(fpath, fname = NULL, sheet = NULL) {
 #' @export
 
 # gets list of breaks for groups
-get_breaks <- function(dat, col_num = 1, rm_grps = 1) {
+get_breaks <- function(dat, col_num = 1, rem_grps = 1) {
 
   # set variables
   drows <- list()
@@ -77,9 +77,9 @@ get_breaks <- function(dat, col_num = 1, rm_grps = 1) {
     }
   }
 
-  # return without specified groups (if rm_grps supplied)
-  if (!is.null(rm_grps)) {
-    return(drows[-rm_grps])
+  # return without specified groups (if rem_grps supplied)
+  if (!is.null(rem_grps)) {
+    return(drows[-rem_grps])
   } else {
     return(drows)
   }
@@ -119,7 +119,7 @@ to_fff <- function(dat, my_vals, my_cols, my_hrow = NULL, hrows, drows = NULL, d
 
   # set drows if not supplied
   if (is.null(drows)) {
-    temp <- get_breaks(dat, col = 1, rm_grps = 1)
+    temp <- get_breaks(dat, col = 1, rem_grps = 1)
     drows <- seq(dplyr::last(hrows)+2, dplyr::last(temp[[length(temp)]]), 1)
   }
 
