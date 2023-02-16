@@ -107,19 +107,6 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
 }
 
 
-sheet_truncate <- function(filepath) {
-
-  sheet <- fs::path_file(filepath)
-
-  if(nchar(sheet) > 31) {
-    ext_len = nchar(path_ext(sheet))
-    sheet <- stringr::str_sub(sheet, 1, 30 - ext_len) %>%
-      paste0(., ".", fs::path_ext(filepath))
-    cli::cli_alert_warning("Excel worksheets have a maximum of 31 characters allowed for the sheet name.  The sheet name has been truncated to {sheet}")
-  }
-}
-
-
 qa_wb <- function(filepath, qafile, sheet) {
 
 
@@ -432,6 +419,20 @@ qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile, sheet) {
 }
 
 
+
+
+# Internal function to truncate sheet names that are too long for excel.
+sheet_truncate <- function(filepath) {
+
+  sheet <- fs::path_file(filepath)
+
+  if(nchar(sheet) > 31) {
+    ext_len = nchar(fs::path_ext(sheet))
+    sheet <- stringr::str_sub(sheet, 1, 30 - ext_len) %>%
+      paste0(., ".", fs::path_ext(filepath))
+    cli::cli_alert_warning("Excel worksheets have a maximum of 31 characters allowed for the sheet name.  The sheet name has been truncated to {sheet}")
+  }
+}
 
 
 
