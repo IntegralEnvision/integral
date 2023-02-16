@@ -432,6 +432,8 @@ sheet_truncate <- function(filepath) {
       paste0(., ".", fs::path_ext(filepath))
     cli::cli_alert_warning("Excel worksheets have a maximum of 31 characters allowed for the sheet name.  The sheet name has been truncated to {sheet}")
   }
+
+  return(sheet)
 }
 
 
