@@ -41,23 +41,24 @@ ic_qa <- function(filepath) {
 
   if (!fs::file_exists(filepath)) return(cli::cli_alert_danger("{filepath} does not exist. If it is not in the root project directory, specify the path relative to the root project directory.", wrap = T))
 
-  filepath <- fs::path_real(filepath)
+  filepath <- fs::path_abs(filepath)
 
   if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) return(cli::cli_alert_danger("{filepath} is not an .R, .Rmd, or .py file."), wrap = T)
 
   if(!is.null(rstudioapi::getActiveProject())) {
     if (is_unsaved(filepath, quiet = T)) return(cli::cli_alert_danger("{filepath} has unsaved changes. Please save before running {.fun qa}.", wrap = T))
-    }
+  }
 
   # TODO: Check whether file has unsaved changes, and even perhaps if it's been committed. If not, prompt the user to do so.  If they have unsaved changes, they will be lost by functions that modify the script QA tags. Currently this does not appear to be possible: https://github.com/rstudio/rstudioapi/issues/230
+  sheet <- sheet_truncate(filepath)
 
   qafile <- qa_file(filepath)
 
-  qawb <- qa_wb(filepath, qafile)
+  qawb <- qa_wb(filepath, qafile, sheet)
 
   parsed_qa <- qa_parse(filepath, include_empty_sections = T) # TODO: maybe add to args?
 
-  qa_update_sheet(qawb, parsed_qa, filepath, qafile)
+  qa_update_sheet(qawb, parsed_qa, filepath, qafile, sheet)
 
   # openxlsx::openXL(qawb)
   if (get_system() == "linux") {
@@ -69,10 +70,6 @@ ic_qa <- function(filepath) {
     open_file(qafile)
   }
 }
-
-
-
-
 
 qa_file <- function(filepath) { # TODO add status messages as to what is happening
 
@@ -110,16 +107,21 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
 }
 
 
-
-
-qa_wb <- function(filepath, qafile) {
+sheet_truncate <- function(filepath) {
 
   sheet <- fs::path_file(filepath)
 
-  if(nchar(sheet > 31)) {
-    sheet <- stringr::str_sub(sheet, 1, 31)
+  if(nchar(sheet) > 31) {
+    ext_len = nchar(path_ext(sheet))
+    sheet <- stringr::str_sub(sheet, 1, 30 - ext_len) %>%
+      paste0(., ".", fs::path_ext(filepath))
     cli::cli_alert_warning("Excel worksheets have a maximum of 31 characters allowed for the sheet name.  The sheet name has been truncated to {sheet}")
   }
+}
+
+
+qa_wb <- function(filepath, qafile, sheet) {
+
 
   # Update/Add QA sheet ------
 
@@ -137,14 +139,14 @@ qa_wb <- function(filepath, qafile) {
 
         #The below code creats a backup within the workbook.  I am switching to creating a copy of the whole file in ./archive
 
-            # qawb <- openxlsx::loadWorkbook(qafile)
-            #
-            # backup_sheet <- paste(sheet, lubridate::now()) %>% stringr::str_remove_all("-|:") # TODO: Need to limit chars to 31, so need better naming
-            # backup_sheet <- abbreviate(backup_sheet, 31) # FIXME temporary until above is fixed!
-            #
-            # openxlsx::cloneWorksheet(qawb, backup_sheet, clonedSheet = sheet)
-            #
-            # openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, backup_sheet)] <- "hidden"
+        # qawb <- openxlsx::loadWorkbook(qafile)
+        #
+        # backup_sheet <- paste(sheet, lubridate::now()) %>% stringr::str_remove_all("-|:") # TODO: Need to limit chars to 31, so need better naming
+        # backup_sheet <- abbreviate(backup_sheet, 31) # FIXME temporary until above is fixed!
+        #
+        # openxlsx::cloneWorksheet(qawb, backup_sheet, clonedSheet = sheet)
+        #
+        # openxlsx::sheetVisibility(qawb)[sheetNamesIndex(qawb, backup_sheet)] <- "hidden"
 
         #This code replaces it for now to just copy teh whole file to the archive subdir.
 
@@ -200,14 +202,14 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
     dplyr::mutate(is_qa = stringr::str_detect(code, "\\s*#\\s?QA") & !stringr::str_detect(code, "^#+.*-{4,}")) # matches any #QA (with varied spacing) unless is has 4 or more dashes
 
   if (!any(all_code %>%
-    dplyr::pull(is_qa))) {
+           dplyr::pull(is_qa))) {
     stop("The file does not contain any recognized QA tags. Tags should start with '# QA' or `#QA`.")
   }
 
   # Format QA tags.  See https://regex101.com/r/W68Elc/1 ----
   all_code <- all_code %>%
     dplyr::mutate(code = dplyr::if_else(is_qa,
-      stringr::str_replace(code, "(\\s*)(#\\s?QA)(:?\\s?)\\s?(\\d{0,5}\\s?)(\\|?\\s?)(\\s?.*)", "\\1# QA: \\4\\| \\6"), code
+                                        stringr::str_replace(code, "(\\s*)(#\\s?QA)(:?\\s?)\\s?(\\d{0,5}\\s?)(\\|?\\s?)(\\s?.*)", "\\1# QA: \\4\\| \\6"), code
     )) %>%
     dplyr::mutate(qa_id = stringr::str_extract(code, "(?<=# QA: )\\d+") %>% as.numeric()) %>%
     dplyr::mutate(is_missing_id = is.na(qa_id) & is_qa) %>%
@@ -310,7 +312,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
     dplyr::filter(is_code_header | is_text_header) %>%
     dplyr::filter(!stringr::str_detect(code, "COPYRIGHT|PURPOSE|PROJECT INFORMATION|HISTORY|NOTES")) %>% # Remove codeless header sections
     dplyr::mutate(code = stringr::str_remove_all(code, "-{4,}") %>%
-      stringr::str_squish()) %>%
+                    stringr::str_squish()) %>%
     dplyr::mutate(section_title = stringr::str_extract(code, "(?<=#\\s).*")) %>%
     dplyr::mutate(section_level = stringr::str_count(code, "#")) %>%
     dplyr::select(line, section_title, section_level)
@@ -354,19 +356,19 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
       dplyr::select(line) %>%
       tibble::add_column(table = "qa") %>%
       dplyr::bind_rows(wh %>%
-        dplyr::select(line) %>%
-        tibble::add_column(table = "section")) %>%
+                         dplyr::select(line) %>%
+                         tibble::add_column(table = "section")) %>%
       dplyr::arrange(line) %>%
       dplyr::mutate(grouping = cumsum(table == "section"))
 
     wh <- wh %>%
       dplyr::left_join(m_ind %>%
-        dplyr::filter(table == "section"), by = "line") %>%
+                         dplyr::filter(table == "section"), by = "line") %>%
       dplyr::select(tidyselect::starts_with("level_"), grouping)
 
     qa_lines <- qa_lines %>%
       dplyr::left_join(m_ind %>%
-        dplyr::filter(table == "qa"), by = "line") %>%
+                         dplyr::filter(table == "qa"), by = "line") %>%
       dplyr::select(-c(table))
 
     parsed_qa <- wh %>%
@@ -397,8 +399,7 @@ qa_parse <- function(filepath, include_empty_sections = TRUE) {
 
 
 
-qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile) {
-  sheet <- fs::path_file(filepath)
+qa_update_sheet <- function(qawb, parsed_qa, filepath, qafile, sheet) {
 
   openxlsx::removeCellMerge(qawb, sheet, rows = 14:100, cols = 1:4) # TODO: finish this with the sheetNamesIndex?
   #suppressWarnings(openxlsx::deleteNamedRegion(qawb, paste0(sheet, "_populated_data")))
@@ -444,13 +445,13 @@ sheetNamesIndex <- function(qawb, lookup) {
       dplyr::filter(name == !!lookup) %>%
       dplyr::pull(index)
   } else
-  if (is.numeric(lookup)) {
-    name_ind %>%
-      dplyr::filter(index == name_ind) %>%
-      dplyr::pull(name)
-  } else {
-    stop("Sheet name or index number does not exist in workbook.")
-  }
+    if (is.numeric(lookup)) {
+      name_ind %>%
+        dplyr::filter(index == name_ind) %>%
+        dplyr::pull(name)
+    } else {
+      stop("Sheet name or index number does not exist in workbook.")
+    }
 }
 
 #Internal function to make useful named ranges table
@@ -459,12 +460,12 @@ df_named_ranges <- function(qawb) {
   reg <- openxlsx::getNamedRegions(qawb)
 
   df_reg <- tibble::tibble(sheet = attr(reg, "sheet"),
-                   name = reg,
-                   position = attr(reg, "position"))
+                           name = reg,
+                           position = attr(reg, "position"))
 
   return(df_reg)
 
-  }
+}
 
 
 
@@ -473,3 +474,4 @@ stop_quietly <- function() {
   on.exit(options(opt))
   stop()
 }
+
