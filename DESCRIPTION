@@ -1,6 +1,6 @@
 Package: integral
 Title: Integral Consulting Public Package
-Version: 1.0.1.9001
+Version: 1.0.2.9001
 Authors@R: c(
     person("Jonathan", "Zadra", email = "jzadra@integral-corp.com", role = c("aut", "cre")),
     person("Katherine", "Heal", email = "kheal@integral-corp.com", role = "aut"))
@@ -8,7 +8,7 @@ Description: This package contains convenience functions used by Integral Consul
 License: file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports: 
     cli,
     ggplot2,

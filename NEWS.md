@@ -1,3 +1,7 @@
+# integral 1.0.2.9001
+* Potentially confusing change: ic_qa() has been updated to fix an issue with AVD file paths being changed to symbolic links to \\\\AFWS1W and with truncating long file names to work with Excel.  You may find that running ic_qa() on a file you have previously run it on will create a new sheet in your Excel QA form.  You can delete the old one.
+* When the package is loaded, it will now notify you if there is a newer version on github.
+
 # integral 1.0.1.9001
 * Added str_squish_line_breaks() - an analogue of stringr::str_squish() that better handles line break characters (\n and \r)
 
