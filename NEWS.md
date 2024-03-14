@@ -1,4 +1,4 @@
-# integral 1.0.2.9002
+# integral 1.0.2.9003
 * Added `slice_ht()`, a modified version of dplyr::slice_*() that pulls from the head and tail.
 
 
