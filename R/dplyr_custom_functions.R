@@ -28,21 +28,6 @@ fct_case_when <- function(...) {
   ordered(dplyr::case_when(...), levels = levels)
 }
 
-#' Ordered Factor case_match()
-#' @description
-#' `r lifecycle::badge('experimental')`
-#' Can replace `case_match()` syntax to output an ordered factor in the same order as the cases, useful for meaningful ordering in plots and tables.  This is because for `case_match()` the arguments are evaluated in order, so you must proceed from the most specific to the most general. Tables and plots will therefor be ordered by the evaluation order.
-#' @param .x 	A vector to match against.
-#' @param ... <dynamic-dots> A sequence of two-sided formulas: old_values ~ new_value. The right hand side (RHS) determines the output value for all values of .x that match the left hand side (LHS). See ?case_when for details.
-#' The LHS must evaluate to the same type of vector as .x. It can be any length, allowing you to map multiple .x values to the same RHS value. If a value is repeated in the LHS, i.e. a value in .x matches to multiple cases, the first match is used.
-#' The RHS inputs will be coerced to their common type. Each RHS input will be recycled to the size of .x.
-#' @param .default The value used when values in .x aren't matched by any of the LHS inputs. If NULL, the default, a missing value will be used.
-#' .default is recycled to the size of .x.
-#' @param .ptype An optional prototype declaring the desired output type. If not supplied, the output type will be taken from the common type of all RHS inputs and .default.
-#' @return An ordered factor vector with the same size as .x
-#' @importFrom magrittr "%>%"
-#' @export
-
 
 #' Remove variables from tibble
 #' @description
@@ -56,3 +41,20 @@ fct_case_when <- function(...) {
 deselect <- function(.data, ...) {
   dplyr::select(.data, -c(...))
 }
+
+#' Slice head and tail
+#' @description
+#' `r lifecycle::badge('experimental')`
+#' This is a modified version of dplyr::slice_* that allows slicing n rows from both head and tail.
+#' @param .data A data frame, or data frame extension (e.g. a tibble).
+#' @param n The number of rows to slice from both head and tail (e.g. n = 5 means 5 from head and 5 from tail). Defaults to 5.
+#' @param prop asdf
+#' @importFrom magrittr "%>%"
+#' @export
+slice_ht <- function(.data, n, prop) {
+  data_head <- dplyr::slice_head(.data, n = n, prop = prop)
+  data_tail <- dplyr::slice_tail(.data, n = n, prop = prop)
+  data_ht <- bind_rows(data_head, data_tail)
+  return(data_ht)
+}
+

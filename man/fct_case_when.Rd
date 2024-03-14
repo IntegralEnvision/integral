@@ -14,5 +14,5 @@ An ordered factor vector of length 1 or n, matching the length of the logical in
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Can replace \code{case_when()} syntax and outputs an ordered factor in the same order as the cases, useful for meaningful ordering in plots and tables.  This is because for \code{case_when()} the arguments are evaluated in order, so you must proceed from the most specific to the most general. Tables and plots will therefor be ordered by the evaluation order.
+Can replace \code{case_when()} syntax to output an ordered factor in the same order as the cases, useful for meaningful ordering in plots and tables.  This is because for \code{case_when()} the arguments are evaluated in order, so you must proceed from the most specific to the most general. Tables and plots will therefor be ordered by the evaluation order.
 }
