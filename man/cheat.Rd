@@ -7,9 +7,9 @@
 cheat(sheet)
 }
 \arguments{
-\item{sheet}{Bare, unquoted name of the cheat sheet, if known. Partial matches work as well. If NULL (default) a list is presented.}
+\item{sheet}{Bare, unquoted name of the cheat sheet, if known. Partial matches work as well. If no argument is provided a list is presented.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 Shortcut to open a cheatsheet
 }
