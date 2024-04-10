@@ -1,3 +1,7 @@
+# integral 1.0.2.9004
+* Added 2 new cheatsheets accessible through the `cheat()` function (quarto and devtools).
+* Fixed error in `cheat()` when no arguments are provided.
+
 # integral 1.0.2.9003
 * Added `slice_ht()`, a modified version of dplyr::slice_*() that pulls from the head and tail.
 
