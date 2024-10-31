@@ -38,11 +38,11 @@ ic_qa <- function(filepath) {
     )
   }
 
-
+  filepath <- stringr::str_replace_all(filepath,"C:","/")
   if (!fs::file_exists(filepath)) return(cli::cli_alert_danger("{filepath} does not exist. If it is not in the root project directory, specify the path relative to the root project directory.", wrap = T))
 
   filepath <- fs::path_abs(filepath)
-  filepath <- stringr::str_replace_all(filepath,"C:","/")
+
 
   if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) return(cli::cli_alert_danger("{filepath} is not an .R, .Rmd, or .py file."), wrap = T)
 
@@ -80,6 +80,8 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
 
   if (rstudioapi::isAvailable()) {
     project_path <- rstudioapi::getActiveProject()
+    project_path <- stringr::str_replace_all(project_path,"C:","/")
+
     if (!stringr::str_detect(code_path, project_path)) { # If an Rstudio project is active, but the file is not in it or a subdir
       cli::cli_alert_warning("Warning: The script file being QA'd is not in the active RStudio project directory.")
       project_path <- code_path
