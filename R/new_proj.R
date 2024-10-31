@@ -39,6 +39,7 @@ ic_new_proj <- function(
     path <- rstudioapi::selectDirectory()
     path <- gsub("~", path.expand("~"), path)
     path <- stringr::str_replace_all(path,"C:","/")
+    path <- ifelse(!grepl("^//",path),paste("/",path,sep=""),path)
     if (length(path) > 0) {
     cli::cli_alert_success(paste( "Project directory selected:", path, sep = " "))
     } else {
