@@ -80,7 +80,6 @@ qa_file <- function(filepath) { # TODO add status messages as to what is happeni
 
   if (rstudioapi::isAvailable()) {
     project_path <- rstudioapi::getActiveProject()
-    project_path <- stringr::str_replace_all(project_path,"C:","/")
 
     if (!stringr::str_detect(code_path, project_path)) { # If an Rstudio project is active, but the file is not in it or a subdir
       cli::cli_alert_warning("Warning: The script file being QA'd is not in the active RStudio project directory.")
