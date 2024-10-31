@@ -42,6 +42,7 @@ ic_qa <- function(filepath) {
   if (!fs::file_exists(filepath)) return(cli::cli_alert_danger("{filepath} does not exist. If it is not in the root project directory, specify the path relative to the root project directory.", wrap = T))
 
   filepath <- fs::path_abs(filepath)
+  filepath <- stringr::str_replace_all(filepath,"C:","/")
 
   if (!stringr::str_detect(stringr::str_to_lower(filepath), ".*\\.(r|rmd|py)$")) return(cli::cli_alert_danger("{filepath} is not an .R, .Rmd, or .py file."), wrap = T)
 
