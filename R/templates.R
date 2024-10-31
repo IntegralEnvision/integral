@@ -85,6 +85,7 @@ ic_new_r_file <- function(filepath = "", open = TRUE) {
 
   if (filepath == "") {
     filepath <- find_file("R")
+    filepath <- stringr::str_replace_all(filepath,"C:","/")
   }
 
   ic_copy_script(filepath, rfile_path, open = open)
@@ -108,6 +109,7 @@ ic_new_python_file <- function(filepath = "", open = TRUE) {
 
   if (filepath == "") {
     filepath <- find_file("py")
+    filepath <- stringr::str_replace_all(filepath,"C:","/")
   }
 
   ic_copy_script(filepath, rfile_path, open = open)
@@ -127,6 +129,7 @@ ic_new_python_file <- function(filepath = "", open = TRUE) {
 ic_new_rmd_file <- function(filepath = "", open = F) {
   if (filepath == "") {
       filepath <- find_file("Rmd")
+      filepath <- stringr::str_replace_all(filepath,"C:","/")
   }
   rmdfile_path <- fs::path_package(
     "integral",
@@ -146,6 +149,7 @@ ic_new_rmd_file <- function(filepath = "", open = F) {
 #' }
 #'
 ic_new_git <- function(dirpath) {
+  dirpath <- stringr::str_replace_all(dirpath,"C:","/")
 
   # error if directory doesn't exist
   if (!dir.exists(dirpath)) {
